@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Camera, Home, User } from "react-feather";
+import { User, ChevronRight } from "react-feather";
 
 // Images
 import LogoHD from "../assets/logo-EcoRide-white.svg";
@@ -80,7 +80,7 @@ const Header = ({ token }) => {
                   </Link>
                   {isProfilOpen && (
                     <>
-                      <ul className="dropdown-menu" onClick={closeDropdown}>
+                      <div className="dropdown-menu" onClick={closeDropdown}>
                         <div className="top-dropdown">
                           <p>
                             <span>Fanny</span>, il te reste
@@ -89,13 +89,23 @@ const Header = ({ token }) => {
                           <p>200</p>
                           <p>crédits</p>
                         </div>
-                        <li className="dropdown-item">Se connecter</li>
-                        <li className="dropdown-item">Créer un compte</li>
+                        <Link className="dropdown-item flex-row align-center space-between">
+                          Se connecter <ChevronRight size={16} color="red" />
+                        </Link>
+                        <Link className="dropdown-item flex-row align-center space-between">
+                          Créer un compte <ChevronRight size={16} color="red" />
+                        </Link>
 
-                        <li className="dropdown-item">Profil</li>
-                        <li className="dropdown-item">Vos trajets</li>
-                        <li className="dropdown-item">Se déconnecter</li>
-                      </ul>
+                        <Link className="dropdown-item flex-row align-center space-between">
+                          Profil <ChevronRight size={16} color="red" />
+                        </Link>
+                        <Link className="dropdown-item flex-row align-center space-between">
+                          Vos trajets <ChevronRight size={16} color="red" />
+                        </Link>
+                        <Link className="dropdown-item flex-row align-center space-between">
+                          Se déconnecter <ChevronRight size={16} color="red" />
+                        </Link>
+                      </div>
                     </>
                   )}
                 </li>
