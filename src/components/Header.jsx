@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Camera, Home, User } from "react-feather";
 
 // Images
 import LogoHD from "../assets/logo-EcoRide-white.svg";
@@ -55,6 +56,7 @@ const Header = ({ token }) => {
                 <Link className="btn-light" to={`/`}>
                   Accueil
                 </Link>
+
                 <Link className="btn-light" to={`/`}>
                   Contact
                 </Link>
@@ -74,7 +76,7 @@ const Header = ({ token }) => {
                     onClick={toggleDropdown}
                     ref={profilRef}
                   >
-                    Profil
+                    <User size={24} color="red" />
                   </Link>
                   {isProfilOpen && (
                     <>
