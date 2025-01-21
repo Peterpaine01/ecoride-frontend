@@ -30,19 +30,6 @@ body {
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 40px;
-  color: variables.$color-primary;
-}
-h2 {
-  font-size: 32px;
-}
-
-h3 {
-  font-size: 16px;
-  text-transform: uppercase;
-}
-
 .container {
   margin: 0 auto;
   max-width: 1200px;
@@ -60,4 +47,43 @@ h3 {
 
 .space-between {
   justify-content: space-between;
+}
+
+// Headings
+
+h1 {
+  font-size: 40px;
+  color: variables.$color-primary;
+}
+h2 {
+  font-size: 32px;
+}
+
+h3 {
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+//   Texts
+
+.text-big {
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.text-emphase {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.text-labor {
+  font-size: 16px;
+}
+
+.text-small {
+  font-size: 12px;
+}
+
+.text-tiny {
+  font-size: 10px;
 }

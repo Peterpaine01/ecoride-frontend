@@ -82,12 +82,13 @@ const Header = ({ token }) => {
                     <>
                       <div className="dropdown-menu" onClick={closeDropdown}>
                         <div className="top-dropdown">
-                          <p>
-                            <span>Fanny</span>, il te reste
+                          <p className="text-small">
+                            <span className="text-emphase">Fanny</span>, il te
+                            reste
                           </p>
                           <hr />
-                          <p>200</p>
-                          <p>crédits</p>
+                          <p className="text-big">200</p>
+                          <p className="text-tiny">crédits</p>
                         </div>
                         <Link className="dropdown-item flex-row align-center space-between">
                           Se connecter <ChevronRight size={16} color="red" />

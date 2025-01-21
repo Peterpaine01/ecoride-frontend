@@ -60,6 +60,7 @@ header {
   list-style: none;
   margin: 0;
   padding: 0;
+  align-items: center;
 }
 
 .nav-item {
@@ -75,12 +76,28 @@ header {
   cursor: pointer;
 }
 
-.nav-item button:hover {
-  color: #00bcd4;
-}
-
 .dropdown-btn {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border: 3px solid variables.$color-secondary;
+  &:hover {
+    color: #fff;
+    background-color: variables.$color-primary;
+    border-color: variables.$color-primary;
+    svg {
+      stroke: #fff;
+    }
+  }
+  svg {
+    width: 20px;
+    stroke: variables.$color-dark;
+  }
 }
 
 .dropdown-menu {
@@ -90,20 +107,20 @@ header {
   background-color: #fff;
   border-radius: 15px;
   border-top-right-radius: 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   list-style: none;
   margin: 0;
   padding: 10px 0;
   display: flex;
   flex-direction: column;
   z-index: 10;
-  width: 200px;
+  width: 222px;
 }
 
 .top-dropdown {
   padding: 10px 20px;
   color: variables.$color-dark;
-  hr {
+  .top-dropdown hr {
     border: none;
     border-top: 1px solid variables.$color-primary;
   }
@@ -116,7 +133,7 @@ header {
   white-space: nowrap;
 }
 
-.dropdown-item:hover {
-  background-color: #00bcd4;
-  color: #333;
+.dropdown-item a:hover {
+  color: variables.$color-bg-dark;
+  background-color: variables.$color-secondary;
 }
