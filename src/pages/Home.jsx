@@ -32,8 +32,8 @@ const Home = () => {
                 l’environnement et accessible à toutes et tous. Inspirés par les
                 initiatives du quotidien, nous mettons le covoiturage au service
                 de la planète. En favorisant le partage des trajets, nous
-                réduisons les émissions de CO₂ tout en limitant le nombre de
-                voitures sur les routes.
+                réduisons les émissions de CO<sup>2</sup> tout en limitant le
+                nombre de voitures sur les routes.
               </p>
 
               <p>
@@ -43,7 +43,44 @@ const Home = () => {
                 responsables grâce à des incitations et récompenses pour les
                 voyages verts Avec EcoRide, chaque trajet est une opportunité de
                 contribuer à la lutte contre le changement climatique tout en
-                créant des liens entre les passagers.{" "}
+                créant des liens entre les passagers.
+              </p>
+            </div>
+          </div>
+          <div className="section">
+            <div className="slogan">
+              <p>
+                <em>
+                  Ensemble, faisons de la mobilité durable une réalité au
+                  quotidien.
+                </em>
+              </p>
+            </div>
+          </div>
+          <div className="section flex-row two-column framed">
+            <div className="block-left">
+              <div className="">
+                <h2>Comment fonctionne EcoRide ?</h2>
+                <img
+                  src="/images/icon-EcoRide-primary.svg"
+                  alt="borne de rechargement pour voiture electrique"
+                />
+              </div>
+            </div>
+            <div className="block-right">
+              <p>
+                À la création de leur compte, chaque utilisateur reçoit 20
+                crédits offerts. Les conducteurs proposant de partager leur
+                véhicule fixent le nombre de crédits nécessaires par passager
+                pour un trajet. La plateforme prélève une commission de 2
+                crédits par passager, afin de garantir le bon fonctionnement du
+                service. Au début du trajet, le conducteur indique son démarrage
+                via l’application, puis le clôture une fois arrivé à
+                destination. Les passagers doivent ensuite valider le bon
+                déroulement du trajet sur la plateforme. Une fois cette
+                validation effectuée, les crédits convenus sont attribués au
+                conducteur. Avec EcoRide, simplicité et transparence sont au
+                cœur de chaque trajet partagé.
               </p>
             </div>
           </div>

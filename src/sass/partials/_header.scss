@@ -13,6 +13,7 @@ header {
   }
   .top-menu {
     position: fixed;
+    backdrop-filter: blur(1px);
     z-index: 100;
     height: 92px;
     width: 100%;
@@ -136,6 +137,10 @@ header {
   padding: 10px 20px;
   color: variables.$color-dark;
   margin-bottom: 10px;
+  p {
+    color: variables.$color-dark;
+    //padding: 5px 0;
+  }
   hr {
     border: none;
     border-top: 2px solid variables.$color-primary;
