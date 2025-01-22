@@ -1,5 +1,6 @@
 @use "./sass/partials/variables";
 @use "./sass/partials/header";
+@use "./sass/partials/home";
 
 // FONTS
 @import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
@@ -35,6 +36,14 @@ body {
   max-width: 1200px;
   padding: 0 20px;
 }
+.container-fluid {
+  width: 100%;
+  padding: 0 20px;
+}
+
+.section {
+  margin: 60px auto;
+}
 
 .flex-row {
   display: flex;
@@ -54,6 +63,7 @@ body {
 h1 {
   font-size: 40px;
   color: variables.$color-primary;
+  text-align: center;
 }
 h2 {
   font-size: 32px;
@@ -86,4 +96,24 @@ h3 {
 
 .text-tiny {
   font-size: 12px;
+}
+
+// Images
+
+img {
+  width: 100%;
+}
+
+// Mise en page
+
+.two-column {
+  gap: 40px;
+}
+
+.block-left,
+.block-right {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
