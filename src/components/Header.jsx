@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { User, ChevronRight } from "react-feather";
+import { User, ChevronRight, XCircle, Compass, UserPlus } from "react-feather";
 
 // Images
 import LogoHD from "../assets/logo-EcoRide-white.svg";
@@ -91,20 +91,38 @@ const Header = ({ token }) => {
                           <p className="text-tiny">crédits</p>
                         </div>
                         <Link className="dropdown-item flex-row align-center space-between">
-                          Se connecter <ChevronRight size={16} color="red" />
+                          <span className="flex-row align-center">
+                            <User /> Se connecter
+                          </span>
+                          <ChevronRight size={16} color="red" />
                         </Link>
                         <Link className="dropdown-item flex-row align-center space-between">
-                          Créer un compte <ChevronRight size={16} color="red" />
+                          <span className="flex-row align-center">
+                            <UserPlus /> Créer un compte
+                          </span>
+
+                          <ChevronRight size={16} color="red" />
                         </Link>
 
                         <Link className="dropdown-item flex-row align-center space-between">
-                          Profil <ChevronRight size={16} color="red" />
+                          <span className="flex-row align-center">
+                            <User /> Profil
+                          </span>
+                          <ChevronRight size={16} color="red" />
                         </Link>
                         <Link className="dropdown-item flex-row align-center space-between">
-                          Vos trajets <ChevronRight size={16} color="red" />
+                          <span className="flex-row align-center">
+                            <Compass /> Vos trajets
+                          </span>
+
+                          <ChevronRight size={16} color="red" />
                         </Link>
                         <Link className="dropdown-item flex-row align-center space-between">
-                          Se déconnecter <ChevronRight size={16} color="red" />
+                          <span className="flex-row align-center">
+                            <XCircle /> Se déconnecter
+                          </span>
+
+                          <ChevronRight size={16} color="red" />
                         </Link>
                       </div>
                     </>

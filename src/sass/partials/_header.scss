@@ -120,20 +120,40 @@ header {
 .top-dropdown {
   padding: 10px 20px;
   color: variables.$color-dark;
-  .top-dropdown hr {
+  margin-bottom: 10px;
+  hr {
     border: none;
     border-top: 1px solid variables.$color-primary;
+    margin-bottom: 10px;
+  }
+  p:first-child {
+    margin-bottom: 10px;
   }
 }
 
 .dropdown-item {
-  padding: 10px 20px;
+  padding: 10px 0px;
+  margin: 0 20px;
+  border-top: 1px solid variables.$color-secondary;
   color: variables.$color-dark;
   text-decoration: none;
   white-space: nowrap;
-}
-
-.dropdown-item a:hover {
-  color: variables.$color-bg-dark;
-  background-color: variables.$color-secondary;
+  display: flex;
+  align-items: center;
+  &:hover {
+    color: variables.$color-primary;
+    svg {
+      stroke: variables.$color-primary;
+    }
+  }
+  svg {
+    stroke: variables.$color-bg-dark;
+    width: 16px;
+  }
+  span {
+    gap: 10px;
+    svg {
+      width: 20px;
+    }
+  }
 }
