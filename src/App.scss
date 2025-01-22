@@ -72,6 +72,18 @@ h1 {
   font-weight: 700;
   color: variables.$color-primary;
   text-align: center;
+  position: relative;
+  line-height: 40px;
+  padding: 30px 0;
+  &:after {
+    position: absolute;
+    content: "";
+    width: 36px;
+    height: 7px;
+    background-color: variables.$color-primary;
+    bottom: 0;
+    left: calc(50% - 18px);
+  }
 }
 h2 {
   font-size: 32px;
