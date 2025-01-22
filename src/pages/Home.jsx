@@ -16,16 +16,24 @@ const Home = () => {
             <h1>Bienvenue sur EcoRide !</h1>
           </div>
           <div className="section flex-row two-column">
-            <div className="block-left">
+            <div className="block-left align-center">
               <div className="block-img">
                 <img
                   src="/images/side-view-blurry-woman-waiting-near-car.png"
                   alt="borne de rechargement pour voiture electrique"
                 />
               </div>
+              <div className="note">
+                <p>
+                  <span className="material-symbols-outlined eco-icon">
+                    eco
+                  </span>
+                  Voyage éco-responsable
+                </p>
+              </div>
             </div>
             <div className="block-right">
-              <h2>Mobilité écoresponsable</h2>
+              <h2>Mobilité éco-responsable</h2>
 
               <p>
                 Chez EcoRide, nous croyons en une mobilité plus respectueuse de
