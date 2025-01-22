@@ -40,16 +40,17 @@ header {
   }
   .menu-left {
     justify-content: space-between;
+    width: 40%;
   }
   a {
     color: #fff;
     text-decoration: none;
   }
   a.logo {
-    width: 113px;
+    width: 170px;
   }
   .logo-img {
-    width: 113px;
+    width: 170px;
   }
 }
 
@@ -66,14 +67,27 @@ header {
 .nav-item {
   margin: 0 15px;
   position: relative;
+  a:not(.dropdown-btn, .add-btn) {
+    padding: 5px 0px;
+    &:hover {
+      border-bottom: 3px solid variables.$color-primary;
+    }
+  }
 }
 
-.nav-item button {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1rem;
-  cursor: pointer;
+.add-btn {
+  background-color: variables.$color-primary;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  padding-left: 5px;
+  padding-right: 20px;
+  border-radius: 60px;
+  &:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .dropdown-btn {
@@ -90,6 +104,7 @@ header {
     color: #fff;
     background-color: variables.$color-primary;
     border-color: variables.$color-primary;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     svg {
       stroke: #fff;
     }
@@ -102,7 +117,7 @@ header {
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 15px);
   right: 0;
   background-color: #fff;
   border-radius: 15px;
@@ -114,7 +129,7 @@ header {
   display: flex;
   flex-direction: column;
   z-index: 10;
-  width: 222px;
+  width: 240px;
 }
 
 .top-dropdown {
@@ -123,8 +138,8 @@ header {
   margin-bottom: 10px;
   hr {
     border: none;
-    border-top: 1px solid variables.$color-primary;
-    margin-bottom: 10px;
+    border-top: 2px solid variables.$color-primary;
+    margin-bottom: 5px;
   }
   p:first-child {
     margin-bottom: 10px;

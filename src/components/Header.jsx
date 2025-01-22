@@ -1,9 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { User, ChevronRight, XCircle, Compass, UserPlus } from "react-feather";
+import {
+  User,
+  ChevronRight,
+  XCircle,
+  Compass,
+  UserPlus,
+  PlusCircle,
+} from "react-feather";
 
 // Images
-import LogoHD from "../assets/logo-EcoRide-white.svg";
+import LogoHD from "../assets/logo-EcoRide-white-vert.svg";
 
 // Je récupère les props
 const Header = ({ token }) => {
@@ -53,20 +60,21 @@ const Header = ({ token }) => {
                 />
               </Link>
               <nav className="flex-row">
-                <Link className="btn-light" to={`/`}>
-                  Accueil
-                </Link>
-
-                <Link className="btn-light" to={`/`}>
-                  Contact
-                </Link>
+                <ul className="nav-list">
+                  <li className="nav-item">
+                    <Link to={`/`}>Rechercher un trajet</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to={`/`}>Contact</Link>
+                  </li>
+                </ul>
               </nav>
             </div>
             <nav className="flex-row">
               <ul className="nav-list">
                 <li className="nav-item">
-                  <Link className="btn-light" to={`/`}>
-                    Ajouter un trajet
+                  <Link className="add-btn" to={`/publier-trajet`}>
+                    <PlusCircle size={31} /> Publier un trajet
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -150,7 +158,7 @@ const Header = ({ token }) => {
           <span></span>
         </label>
         <nav className="flex-parent menu-mobile">
-          <Link className="btn-light" to={`/`}>
+          <Link  to={`/`}>
             Accueil
           </Link>
         </nav>

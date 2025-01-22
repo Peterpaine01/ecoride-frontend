@@ -6,12 +6,14 @@ import "./App.scss";
 
 // Pages
 import Home from "./pages/Home";
+import PublishRide from "./pages/PublishRide";
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/publier-trajet" element={<PublishRide />} />
       </Routes>
     </Router>
   );
