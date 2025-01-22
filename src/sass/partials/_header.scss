@@ -69,7 +69,7 @@ header {
 
 .nav-item {
   position: relative;
-  a:not(.dropdown-btn, .add-btn) {
+  a:not(.dropdown-btn, .add-btn, .dropdown-item) {
     padding: 5px 0px;
     &:hover {
       border-bottom: 3px solid variables.$color-primary;

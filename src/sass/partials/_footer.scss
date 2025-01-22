@@ -1,0 +1,93 @@
+@use "variables";
+
+footer {
+  background-color: variables.$color-bg-dark;
+  margin-top: 130px;
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+  }
+  .block-menu {
+    height: 180px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+    .footer-logo {
+      width: 250px;
+    }
+    .nav-list {
+      display: flex;
+      position: relative;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 30px;
+      padding-left: 30px;
+      &:before {
+        position: absolute;
+        content: "";
+        height: 100%;
+        width: 7px;
+        background-color: variables.$color-primary;
+        left: 0;
+      }
+      a {
+        text-decoration: none;
+        color: #fff;
+      }
+    }
+  }
+  .block-social {
+    position: absolute;
+    height: 225px;
+    width: 245px;
+    background-color: variables.$color-dark;
+    box-shadow: 0 0px 20px rgba(0, 0, 0, 0.3);
+    right: 20px;
+    top: -20px;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    .social-wrapper {
+      border: 2px dotted variables.$color-primary;
+      width: 100%;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: variables.$color-secondary;
+      p {
+        text-transform: uppercase;
+        color: variables.$color-secondary;
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 20px;
+      }
+      .social-icons {
+        gap: 10px;
+        a {
+          color: variables.$color-secondary;
+          svg {
+            stroke-width: 1;
+          }
+        }
+      }
+    }
+  }
+  .container-fluid {
+    background-color: variables.$color-primary;
+    padding: 10px 10px;
+    p {
+      text-align: center;
+      color: variables.$color-dark;
+      font-weight: 400;
+    }
+  }
+}
