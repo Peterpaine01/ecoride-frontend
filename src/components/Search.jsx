@@ -16,7 +16,7 @@ const SearchBlock = () => {
   // Handle form values
   const [startLocation, setStartLocation] = useState();
   const [arrivalLocation, setArrivalLocation] = useState();
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [passengers, setPassengers] = useState(1);
 
   // Handle dropdown status
@@ -89,6 +89,7 @@ const SearchBlock = () => {
                 id="start-ride"
                 autoComplete="on"
                 placeholder="Départ"
+                value={startLocation}
               />
             </div>
             <div className="input-group">
@@ -102,24 +103,26 @@ const SearchBlock = () => {
                 id="end-ride"
                 autoComplete="on"
                 placeholder="Destination"
+                value={arrivalLocation}
               />
             </div>
           </div>
 
           <div className="search-right">
-            <div className="dropdown-button">
-              <button className="drop-btn" type="button">
-                <Calendar /> {selectedDate}
-              </button>
-              <div className="dropdown-menu flex-row align-center">
-                <DatePicker
-                  locale="fr"
-                  selected={selectedDate}
-                  onChange={handleDateChange}
-                  dateFormat="dd/MM/yyyy"
-                  placeholderText="Aujourd'hui"
-                />
-              </div>
+            <div className="input-group date-picker">
+              <label htmlFor="end-ride" className="label-hidden">
+                Date du départ
+              </label>
+
+              <Calendar size={28} />
+              <DatePicker
+                className="drop-btn"
+                locale="fr"
+                selected={selectedDate}
+                onChange={handleDateChange}
+                dateFormat="dd/MM/yyyy"
+                placeholderText="Aujourd'hui"
+              />
             </div>
 
             <div className="dropdown-button" ref={passengersRef}>
