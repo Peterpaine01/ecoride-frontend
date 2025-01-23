@@ -5,7 +5,7 @@ import LogoHD from "../assets/logo-EcoRide-secondary.svg";
 import { Facebook, Instagram, Linkedin } from "react-feather";
 
 // Je récupère les props
-const Footer = ({ logo, token }) => {
+const Footer = () => {
   return (
     <>
       <footer>

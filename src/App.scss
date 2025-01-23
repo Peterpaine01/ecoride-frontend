@@ -2,6 +2,7 @@
 @use "./sass/partials/header";
 @use "./sass/partials/home";
 @use "./sass/partials/footer";
+@use "./sass/partials/search";
 
 // FONTS
 @import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
@@ -39,6 +40,12 @@ body {
 }
 .container-fluid {
   width: 100%;
+  padding: 0 20px;
+}
+
+.container-narrow {
+  width: 1000px;
+  margin: 0 auto;
   padding: 0 20px;
 }
 
@@ -172,4 +179,44 @@ img {
 em {
   font-size: 24px;
   font-weight: 500;
+}
+
+// FORM
+
+.label-hidden {
+  border: 0px;
+  clip: rect(0px, 0px, 0px, 0px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0px;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+// ACCESSIBILITY
+*:focus-visible {
+  outline-color: variables.$color-accessibility;
+  outline-style: solid;
+  outline-offset: 0.25rem;
+  outline-width: 0.25rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  *:focus-visible {
+    animation: outline-bounce 0.5s;
+  }
+}
+
+@keyframes outline-bounce {
+  0% {
+    outline-offset: 0.25rem;
+  }
+  50% {
+    outline-offset: 0.5rem;
+  }
+  100% {
+    outline-offset: 0.25rem;
+  }
 }

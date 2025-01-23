@@ -12,6 +12,9 @@ import {
 // Images
 import LogoHD from "../assets/logo-EcoRide-white-vert.svg";
 
+// Component
+import SearchBlock from "./Search";
+
 // Je récupère les props
 const Header = ({ token }) => {
   const [isProfilOpen, setIsProfilOpen] = useState(false);
@@ -145,6 +148,7 @@ const Header = ({ token }) => {
           alt=""
           className="cover"
         />
+        <SearchBlock />
       </header>
       {/* burger menu */}
       {/* <div className="burger-menu">
