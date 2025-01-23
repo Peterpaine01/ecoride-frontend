@@ -80,18 +80,17 @@ const Header = ({ token }) => {
                     <PlusCircle size={31} /> Publier un trajet
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item" ref={profilRef}>
                   <Link
                     className="dropdown-btn"
                     to={`/`}
                     onClick={toggleDropdown}
-                    ref={profilRef}
                   >
                     <User size={24} color="red" />
                   </Link>
                   {isProfilOpen && (
                     <>
-                      <div className="dropdown-menu" onClick={closeDropdown}>
+                      <div className="dropdown-menu">
                         <div className="top-dropdown">
                           <p className="text-small">
                             <span className="text-emphase">Fanny</span>, il te

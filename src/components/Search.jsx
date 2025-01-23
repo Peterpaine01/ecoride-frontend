@@ -25,6 +25,10 @@ const SearchBlock = () => {
   // REF
   const passengersRef = useRef(null); // Référence au menu déroulant
 
+  const closeDropdown = () => {
+    setIsPassengersOpen(false);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -50,9 +54,6 @@ const SearchBlock = () => {
   };
 
   // Fonction pour fermer le menu si l'utilisateur clique ailleurs
-  const closeDropdown = () => {
-    setIsPassengersOpen(false);
-  };
 
   registerLocale("fr", fr);
 
@@ -78,7 +79,7 @@ const SearchBlock = () => {
         <form>
           <div className="search-left">
             <div className="input-group">
-              <label for="start-ride" className="label-hidden">
+              <label htmlFor="start-ride" className="label-hidden">
                 Départ
               </label>
               <Flag />
@@ -86,12 +87,12 @@ const SearchBlock = () => {
                 type="text"
                 name="start-ride"
                 id="start-ride"
-                autoComplete
+                autoComplete="on"
                 placeholder="Départ"
               />
             </div>
             <div className="input-group">
-              <label for="end-ride" className="label-hidden">
+              <label htmlFor="end-ride" className="label-hidden">
                 Destination
               </label>
               <Flag />
@@ -99,7 +100,7 @@ const SearchBlock = () => {
                 type="text"
                 name="end-ride"
                 id="end-ride"
-                autoComplete
+                autoComplete="on"
                 placeholder="Destination"
               />
             </div>
@@ -121,12 +122,11 @@ const SearchBlock = () => {
               </div>
             </div>
 
-            <div className="dropdown-button">
+            <div className="dropdown-button" ref={passengersRef}>
               <button
                 className="drop-btn"
                 type="button"
                 onClick={toggleDropdown}
-                ref={passengersRef}
               >
                 <Users /> {passengers} passager{passengers > 1 && "s"}
               </button>

@@ -139,7 +139,7 @@
     flex-direction: row;
     align-items: center;
     border: 2px solid variables.$color-primary;
-
+    overflow: hidden;
     border-radius: 5px;
     p {
       width: 30px;
