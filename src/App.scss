@@ -199,8 +199,8 @@ em {
 *:focus-visible {
   outline-color: variables.$color-accessibility;
   outline-style: solid;
-  outline-offset: 0.25rem;
-  outline-width: 0.25rem;
+  outline-offset: 0.2rem;
+  outline-width: 0.2rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
