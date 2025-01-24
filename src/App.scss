@@ -1,5 +1,6 @@
 @use "./sass/partials/variables";
 @use "./sass/partials/header";
+@use "./sass/partials/burgerMenu";
 @use "./sass/partials/home";
 @use "./sass/partials/footer";
 @use "./sass/partials/search";
@@ -58,6 +59,12 @@ body {
     line-height: 20px;
     hyphens: auto;
   }
+}
+
+.flex-parent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
 }
 
 .flex-row {

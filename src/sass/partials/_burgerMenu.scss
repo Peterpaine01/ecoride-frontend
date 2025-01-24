@@ -1,0 +1,108 @@
+@use "variables";
+
+.burger-menu-container {
+  position: relative;
+
+  // Styles pour l'icône du burger
+  .burger-icon {
+    width: 24px;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    z-index: 11;
+    position: relative;
+
+    .line {
+      height: 3px; /* Épaisseur des lignes */
+      background-color: #fff;
+      border-radius: 2px; /* Adoucir légèrement les lignes */
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      width: 100%;
+      position: absolute;
+      left: 0;
+    }
+
+    /* Lignes initiales */
+    .line-1 {
+      top: 0; /* Ligne du haut */
+      transition: all 0.2s;
+    }
+    .line-2 {
+      top: 50%; /* Ligne du milieu */
+      transform: translateY(-50%);
+      transition: all 0.2s;
+    }
+    .line-3 {
+      bottom: 0; /* Ligne du bas */
+      transition: all 0.2s;
+    }
+
+    // Quand le menu est ouvert, animation des barres
+    &.open {
+      .line-1 {
+        transform: rotate(45deg);
+        top: 50%; /* Aligner avec la ligne du milieu */
+        transform-origin: center; /* Pivot au centre */
+        transition: all 0.2s;
+      }
+      .line-2 {
+        opacity: 0; /* Masquer la ligne du milieu */
+        transition: all 0.2s;
+      }
+      .line-3 {
+        transform: rotate(-45deg);
+        top: 50%; /* Aligner avec la ligne du milieu */
+        transform-origin: center; /* Pivot au centre */
+        transition: all 0.2s;
+      }
+    }
+  }
+
+  // Styles pour l'overlay du menu
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: variables.$color-bg-dark;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-100%);
+    transition: transform 0.4s ease;
+    z-index: 10;
+
+    &.visible {
+      transform: translateY(0);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+
+      li {
+        margin: 20px 0;
+
+        a {
+          text-decoration: none;
+          color: white;
+          font-size: 28px;
+          font-family: variables.$main-font;
+          font-weight: 400;
+          transition: color 0.3s ease;
+          text-align: center;
+
+          &:hover {
+            color: variables.$color-accessibility;
+          }
+        }
+      }
+    }
+  }
+}

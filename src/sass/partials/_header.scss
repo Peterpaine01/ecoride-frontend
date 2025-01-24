@@ -5,10 +5,17 @@ header {
   width: 100%;
   position: relative;
   border-bottom: 4px variables.$color-bg-dark solid;
+  display: flex;
+
   .cover {
     width: 100%;
-    position: absolute;
-    bottom: 0;
+    height: 100%;
+    //position: absolute;
+    //bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
   }
   .top-menu {
     position: fixed;
@@ -175,5 +182,112 @@ header {
     svg {
       width: 20px;
     }
+  }
+}
+
+/* HEADER MOBILE */
+
+header {
+  .top-menu.mobile {
+    .container {
+      margin: 0;
+      width: 100%;
+    }
+  }
+}
+.mobile {
+  display: none;
+}
+
+/* BURGER MENU */
+
+nav.menu-mobile {
+  transform: translateY(-130%);
+  will-change: transform;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  flex-direction: column;
+  background-color: variables.$color-primary;
+  padding: 15px;
+  z-index: 90;
+  box-shadow: -1px 33px 30px -13px rgba(0, 0, 0, 0.19);
+  -webkit-box-shadow: -1px 33px 30px -13px rgba(0, 0, 0, 0.19);
+  -moz-box-shadow: -1px 33px 30px -13px rgba(0, 0, 0, 0.19);
+
+  border-bottom: 1px solid variables.$color-primary;
+}
+
+nav.menu-mobile a {
+  opacity: 0;
+  visibility: hidden;
+}
+
+nav.menu-mobile .btn-light {
+  border: 0;
+  border-bottom: 1px solid white;
+  border-radius: 0;
+  width: calc(100% - 8px);
+  text-align: center;
+  margin: 0 4px;
+  padding: 20px 0;
+}
+
+nav.menu-mobile .btn-solid {
+  border: 0;
+  border-radius: 0;
+  width: calc(100% - 8px);
+  text-align: center;
+  margin: 0 4px;
+  padding: 20px 0;
+}
+
+nav.menu-mobile .btn-outlined {
+  width: 100%;
+  text-align: center;
+}
+
+#icon-menu-burger.hamburger:checked + label ~ nav.menu-mobile {
+  transform: unset; /*on revient à l'état initial*/
+}
+
+#icon-menu-burger.hamburger:checked + label ~ nav.menu-mobile a {
+  visibility: visible;
+  opacity: 1;
+}
+
+// RESPONSIVE
+@media screen and (max-width: 1250px) {
+  header {
+    .cover {
+      img {
+        width: auto;
+        height: 100%;
+      }
+    }
+    .menu-left {
+      justify-content: space-between;
+      width: 45%;
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  header {
+    .menu-left {
+      justify-content: space-between;
+      width: 60%;
+    }
+  }
+}
+
+@media screen and (max-width: 890px) {
+  .desktop {
+    display: none;
+  }
+
+  .mobile {
+    display: flex;
   }
 }

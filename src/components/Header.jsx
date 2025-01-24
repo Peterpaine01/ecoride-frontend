@@ -10,10 +10,11 @@ import {
 } from "react-feather";
 
 // Images
-import LogoHD from "../assets/logo-EcoRide-white-vert.svg";
+import LogoHD from "../assets/logo-EcoRide-white-vert.png";
 
 // Component
 import SearchBlock from "./Search";
+import BurgerMenu from "./BurgerMenu";
 
 // Je récupère les props
 const Header = ({ token }) => {
@@ -51,7 +52,7 @@ const Header = ({ token }) => {
   return (
     <>
       <header>
-        <div className="top-menu">
+        <div className="top-menu desktop">
           <div className="container flex-row align-center">
             <div className="menu-left flex-row align-center">
               <Link className="logo" to="/">
@@ -142,30 +143,47 @@ const Header = ({ token }) => {
             </nav>
           </div>
         </div>
-        <img
-          src="src/assets/iStock-481629528-extend2.png"
-          alt=""
-          className="cover"
-        />
+        <div className="top-menu mobile">
+          <div className="container flex-row align-center">
+            <BurgerMenu />
+            <Link className="logo" to="/">
+              <img
+                className="logo-img"
+                loading="lazy"
+                src={LogoHD}
+                alt="logo Ecoride"
+              />
+            </Link>
+            <div className="nav-item" ref={profilRef}>
+              <Link className="dropdown-btn" to={`/`} onClick={toggleDropdown}>
+                <User size={24} />
+              </Link>
+              {isProfilOpen && (
+                <>
+                  <Link className="dropdown-item flex-row align-center space-between">
+                    <span className="flex-row align-center">
+                      <User /> Se connecter
+                    </span>
+                    <ChevronRight size={16} />
+                  </Link>
+                  <Link className="dropdown-item flex-row align-center space-between">
+                    <span className="flex-row align-center">
+                      <UserPlus /> Créer un compte
+                    </span>
+
+                    <ChevronRight size={16} />
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="cover">
+          <img src="src/assets/iStock-481629528-extend2.png" alt="" />
+        </div>
+
         <SearchBlock />
       </header>
-      {/* burger menu */}
-      {/* <div className="burger-menu">
-        <input
-          className="hamburger"
-          type="checkbox"
-          id="icon-menu-burger"
-          tabIndex="0"
-        />
-        <label aria-label="Ouvrir menu" htmlFor="icon-menu-burger">
-          <span></span>
-        </label>
-        <nav className="flex-parent menu-mobile">
-          <Link  to={`/`}>
-            Accueil
-          </Link>
-        </nav>
-      </div> */}
     </>
   );
 };
