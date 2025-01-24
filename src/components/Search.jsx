@@ -24,6 +24,8 @@ const SearchBlock = () => {
 
   // REF
   const passengersRef = useRef(null); // Référence au menu déroulant
+  const minusButtonRef = useRef(null);
+  const plusButtonRef = useRef(null);
 
   const closeDropdown = () => {
     setIsPassengersOpen(false);
@@ -38,6 +40,23 @@ const SearchBlock = () => {
         closeDropdown();
       }
     };
+    // Accéder aux boutons via le DOM
+    const minusButton = minusButtonRef.current;
+    const plusButton = plusButtonRef.current;
+    if (minusButton) {
+      if (passengers === 1) {
+        minusButton.disabled = true;
+      } else {
+        minusButton.disabled = false;
+      }
+    }
+    if (plusButton) {
+      if (passengers === 8) {
+        plusButton.disabled = true;
+      } else {
+        plusButton.disabled = false;
+      }
+    }
 
     // Ajouter l'event listener
     document.addEventListener("mousedown", handleClickOutside);
@@ -46,7 +65,7 @@ const SearchBlock = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [passengers, isPassengersOpen]);
 
   // Fonction pour basculer le menu
   const toggleDropdown = () => {
@@ -61,7 +80,7 @@ const SearchBlock = () => {
     setSelectedDate(date);
   };
 
-  // Handle counter passenger
+  // Handle counter passengers
   const incrementCounter = () => {
     if (passengers >= 1 && passengers < 8) {
       setPassengers(passengers + 1);
@@ -82,7 +101,7 @@ const SearchBlock = () => {
               <label htmlFor="start-ride" className="label-hidden">
                 Départ
               </label>
-              <Flag />
+              <Flag size={30} />
               <input
                 type="text"
                 name="start-ride"
@@ -96,7 +115,7 @@ const SearchBlock = () => {
               <label htmlFor="end-ride" className="label-hidden">
                 Destination
               </label>
-              <Flag />
+              <Flag size={30} />
               <input
                 type="text"
                 name="end-ride"
@@ -114,7 +133,7 @@ const SearchBlock = () => {
                 Date du départ
               </label>
 
-              <Calendar size={28} />
+              <Calendar size={30} />
               <DatePicker
                 className="drop-btn"
                 locale="fr"
@@ -122,6 +141,7 @@ const SearchBlock = () => {
                 onChange={handleDateChange}
                 dateFormat="dd/MM/yyyy"
                 placeholderText="Aujourd'hui"
+                minDate={new Date()} // Desable dates before today
               />
             </div>
 
@@ -137,12 +157,20 @@ const SearchBlock = () => {
                 <div className="dropdown-menu counter-block flex-row align-center">
                   <p>Nombre de passagers</p>
                   <div className="counter">
-                    <button type="button" onClick={decrementCounter}>
+                    <button
+                      type="button"
+                      onClick={decrementCounter}
+                      ref={minusButtonRef}
+                    >
                       <Minus />
                     </button>
                     <p>{passengers}</p>
 
-                    <button type="button" onClick={incrementCounter}>
+                    <button
+                      type="button"
+                      onClick={incrementCounter}
+                      ref={plusButtonRef}
+                    >
                       <Plus />
                     </button>
                   </div>

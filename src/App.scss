@@ -195,6 +195,16 @@ em {
   width: 1px;
 }
 
+// BUTTON
+
+button:disabled {
+  cursor: default !important;
+  background-color: variables.$color-disabled !important;
+  svg {
+    stroke: variables.$color-dark-grey !important;
+  }
+}
+
 // ACCESSIBILITY
 *:focus-visible {
   outline-color: variables.$color-accessibility;
