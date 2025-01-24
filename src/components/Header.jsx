@@ -15,6 +15,7 @@ import LogoHD from "../assets/logo-EcoRide-white-vert.png";
 // Component
 import SearchBlock from "./Search";
 import BurgerMenu from "./BurgerMenu";
+import ProfilMenu from "./ProfilMenu";
 
 // Je récupère les props
 const Header = ({ token }) => {
@@ -154,28 +155,7 @@ const Header = ({ token }) => {
                 alt="logo Ecoride"
               />
             </Link>
-            <div className="nav-item" ref={profilRef}>
-              <Link className="dropdown-btn" to={`/`} onClick={toggleDropdown}>
-                <User size={24} />
-              </Link>
-              {isProfilOpen && (
-                <>
-                  <Link className="dropdown-item flex-row align-center space-between">
-                    <span className="flex-row align-center">
-                      <User /> Se connecter
-                    </span>
-                    <ChevronRight size={16} />
-                  </Link>
-                  <Link className="dropdown-item flex-row align-center space-between">
-                    <span className="flex-row align-center">
-                      <UserPlus /> Créer un compte
-                    </span>
-
-                    <ChevronRight size={16} />
-                  </Link>
-                </>
-              )}
-            </div>
+            <ProfilMenu />
           </div>
         </div>
         <div className="cover">

@@ -1,6 +1,7 @@
 @use "./sass/partials/variables";
 @use "./sass/partials/header";
 @use "./sass/partials/burgerMenu";
+@use "./sass/partials/profilMenu";
 @use "./sass/partials/home";
 @use "./sass/partials/footer";
 @use "./sass/partials/search";
@@ -70,6 +71,11 @@ body {
 .flex-row {
   display: flex;
   flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
 }
 
 .align-center {
