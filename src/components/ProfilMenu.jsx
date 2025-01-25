@@ -20,7 +20,7 @@ const ProfilMenu = () => {
   return (
     <div className="profil-menu-container">
       <div
-        className={`profil-icon ${isOpen ? "open" : ""}`}
+        className={`profil-icon ${isOpen ? "open" : ""} visible`}
         onClick={toggleMenu}
       >
         <User size={24} />
@@ -32,7 +32,10 @@ const ProfilMenu = () => {
           isOpen ? "visible" : ""
         }`}
       >
-        <ChevronLeft size={28} className="icon-back" />
+        <button className="back-btn" onClick={toggleMenu}>
+          <ChevronLeft size={28} />
+        </button>
+
         <nav className="flex-column align-center ">
           <ul>
             <li>

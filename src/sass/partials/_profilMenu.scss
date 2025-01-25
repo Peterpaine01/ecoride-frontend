@@ -6,6 +6,7 @@
   .profil-icon {
     position: relative;
     display: flex;
+    opacity: 0;
     justify-content: center;
     align-items: center;
     background-color: #fff;
@@ -13,7 +14,7 @@
     width: 30px;
     height: 30px;
     border: 3px solid variables.$color-secondary;
-    z-index: 14;
+    z-index: 20;
     cursor: pointer;
     &:hover {
       color: #fff;
@@ -28,11 +29,10 @@
       width: 20px;
       stroke: variables.$color-dark;
     }
-
-    // Quand le menu est ouvert, animation des barres
-    // &.open {
-
-    // }
+    &.visible {
+      opacity: 1;
+      transition: opacity 1s;
+    }
   }
 
   // Styles pour l'overlay du menu
@@ -51,17 +51,34 @@
     transition: transform 0.4s ease;
     z-index: 15;
 
+    .back-btn {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      background: none;
+      border: none;
+      opacity: 0;
+      transition: opacity 1s;
+      cursor: pointer;
+      svg {
+        color: #fff;
+      }
+    }
+
     &.visible {
       transform: translateY(0);
+      .back-btn {
+        opacity: 1;
+        transition: opacity 1s;
+      }
     }
     nav {
-      height: calc(80% - 100px);
+      height: 100vh;
       justify-content: center;
       width: 100%;
     }
 
     ul {
-      margin-top: 92px;
       width: 100%;
       list-style: none;
       padding: 0;
@@ -85,40 +102,6 @@
           &:hover {
             background-color: variables.$color-accessibility;
           }
-        }
-      }
-    }
-    .social-icons {
-      height: 20%;
-      gap: 10px;
-      svg {
-        stroke-width: 1.5px;
-        &:hover {
-          color: variables.$color-accessibility;
-        }
-      }
-    }
-    .menu-footer {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      height: 100px;
-      width: 100%;
-      background-color: #ffffff30;
-      a {
-        position: relative;
-        display: block;
-        z-index: 1;
-        &:before {
-          position: absolute;
-          content: "";
-          width: 100%;
-          height: 3px;
-          background-color: variables.$color-accessibility;
-          z-index: -1;
-          bottom: -3px;
-          transition: width 0.3s ease;
         }
       }
     }

@@ -7,6 +7,14 @@ const BurgerMenu = () => {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+    const profils = document.getElementsByClassName("profil-icon");
+    for (let i = 0; i < profils.length; i++) {
+      if (!isOpen) {
+        profils[i].classList.remove("visible");
+      } else {
+        profils[i].classList.add("visible");
+      }
+    }
   };
 
   return (

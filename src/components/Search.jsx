@@ -132,8 +132,8 @@ const SearchBlock = () => {
               <label htmlFor="end-ride" className="label-hidden">
                 Date du départ
               </label>
+              <span class="material-symbols-outlined">calendar_month</span>
 
-              <Calendar size={30} />
               <DatePicker
                 className="drop-btn"
                 locale="fr"
