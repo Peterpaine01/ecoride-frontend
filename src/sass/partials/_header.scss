@@ -105,8 +105,8 @@ header {
   align-items: center;
   background-color: #fff;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border: 3px solid variables.$color-secondary;
   &:hover {
     color: #fff;
@@ -118,7 +118,7 @@ header {
     }
   }
   svg {
-    width: 20px;
+    width: 22px;
     stroke: variables.$color-dark;
   }
 }

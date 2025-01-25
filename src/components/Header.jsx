@@ -88,7 +88,7 @@ const Header = ({ token }) => {
                     to={`/`}
                     onClick={toggleDropdown}
                   >
-                    <User size={24} color="red" />
+                    <User />
                   </Link>
                   {isProfilOpen && (
                     <>

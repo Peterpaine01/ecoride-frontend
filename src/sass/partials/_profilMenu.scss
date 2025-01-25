@@ -11,8 +11,8 @@
     align-items: center;
     background-color: #fff;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border: 3px solid variables.$color-secondary;
     z-index: 20;
     cursor: pointer;
@@ -26,16 +26,26 @@
       }
     }
     svg {
-      width: 20px;
+      width: 22px;
       stroke: variables.$color-dark;
     }
     &.visible {
       opacity: 1;
       transition: opacity 1s;
     }
+    // Link profil -> user logged
+    &.user-logged {
+      overflow: hidden;
+      img {
+        height: 100%;
+      }
+      &:hover {
+        border-color: #fff;
+      }
+    }
   }
 
-  // Styles pour l'overlay du menu
+  // Overlay menu -> user not logged
   .menu-overlay {
     position: fixed;
     top: 0;

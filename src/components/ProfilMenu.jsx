@@ -13,40 +13,52 @@ import {
 const ProfilMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // For testing
+  const [isToken, setIsToken] = useState(true);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
   return (
     <div className="profil-menu-container">
-      <div
-        className={`profil-icon ${isOpen ? "open" : ""} visible`}
-        onClick={toggleMenu}
-      >
-        <User size={24} />
-      </div>
+      {isToken ? (
+        <>
+          <Link className="profil-icon user-logged visible">
+            <img src="../../public/images/user1-photo-profil.jpg" alt="" />
+          </Link>
+        </>
+      ) : (
+        <>
+          <div
+            className={`profil-icon ${isOpen ? "open" : ""} visible`}
+            onClick={toggleMenu}
+          >
+            <User size={24} />
+          </div>
+          {/* Menu overlay */}
+          <div
+            className={`menu-overlay flex-column space-between ${
+              isOpen ? "visible" : ""
+            }`}
+          >
+            <button className="back-btn" onClick={toggleMenu}>
+              <ChevronLeft size={28} />
+            </button>
 
-      {/* Menu overlay */}
-      <div
-        className={`menu-overlay flex-column space-between ${
-          isOpen ? "visible" : ""
-        }`}
-      >
-        <button className="back-btn" onClick={toggleMenu}>
-          <ChevronLeft size={28} />
-        </button>
-
-        <nav className="flex-column align-center ">
-          <ul>
-            <li>
-              <Link to="/">Se connecter</Link>
-            </li>
-            <li>
-              <Link to="/">Créer un compte</Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
+            <nav className="flex-column align-center ">
+              <ul>
+                <li>
+                  <Link to="/">Se connecter</Link>
+                </li>
+                <li>
+                  <Link to="/">Créer un compte</Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </>
+      )}
     </div>
   );
 };
