@@ -226,6 +226,65 @@ button:disabled {
   outline-width: 0.2rem;
 }
 
+// MODALS
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: variables.$color-secondary;
+  color: variables.$color-dark;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.4s ease;
+  z-index: 150;
+  &.open {
+    display: flex;
+  }
+  .close-icon {
+    width: 24px;
+    height: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    position: absolute;
+    top: 40px;
+    left: 20px;
+    z-index: 155;
+  }
+
+  .line {
+    height: 3px;
+    background-color: variables.$color-dark;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    width: 100%;
+    position: absolute;
+    left: 0;
+  }
+  .line-1 {
+    transform: rotate(45deg);
+    top: 50%; /* Aligner avec la ligne du milieu */
+    transform-origin: center; /* Pivot au centre */
+    transition: all 0.2s;
+  }
+  .line-2 {
+    opacity: 0; /* Masquer la ligne du milieu */
+    transition: all 0.2s;
+  }
+  .line-3 {
+    transform: rotate(-45deg);
+    top: 50%; /* Aligner avec la ligne du milieu */
+    transform-origin: center; /* Pivot au centre */
+    transition: all 0.2s;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   *:focus-visible {
     animation: outline-bounce 0.5s;

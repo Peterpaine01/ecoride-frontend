@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState, useRef } from "react";
 
 // Handle Date
@@ -14,18 +14,41 @@ import { Flag, Calendar, Users, Search, Plus, Minus } from "react-feather";
 // Je récupère les props
 const SearchBlock = () => {
   // Handle form values
-  const [startLocation, setStartLocation] = useState();
-  const [arrivalLocation, setArrivalLocation] = useState();
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [passengers, setPassengers] = useState(1);
+  const [formData, setFormData] = useState({
+    startLocation: "",
+    arrivalLocation: "",
+    selectedDate: new Date(),
+    passengers: 1,
+  });
 
-  // Handle dropdown status
+  const navigate = useNavigate();
+
+  // HANDLE FORM DATA
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Empêche le rechargement de la page
+    //console.log("Form data:", formData);
+
+    // Après soumission, naviguer vers une autre page
+    navigate("/", { searchQuery: formData });
+  };
+
+  // HANDLE STATUS
   const [isPassengersOpen, setIsPassengersOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState("");
 
   // REF
   const passengersRef = useRef(null); // Référence au menu déroulant
   const minusButtonRef = useRef(null);
   const plusButtonRef = useRef(null);
+
+  // HANDLE DROPDOWN MENU
 
   const closeDropdown = () => {
     setIsPassengersOpen(false);
@@ -44,14 +67,14 @@ const SearchBlock = () => {
     const minusButton = minusButtonRef.current;
     const plusButton = plusButtonRef.current;
     if (minusButton) {
-      if (passengers === 1) {
+      if (formData.passengers === 1) {
         minusButton.disabled = true;
       } else {
         minusButton.disabled = false;
       }
     }
     if (plusButton) {
-      if (passengers === 8) {
+      if (formData.passengers === 8) {
         plusButton.disabled = true;
       } else {
         plusButton.disabled = false;
@@ -65,64 +88,83 @@ const SearchBlock = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [passengers, isPassengersOpen]);
+  }, [formData.passengers, isPassengersOpen]);
 
   // Fonction pour basculer le menu
   const toggleDropdown = () => {
     setIsPassengersOpen((prevState) => !prevState);
   };
 
-  // Fonction pour fermer le menu si l'utilisateur clique ailleurs
-
+  // HANDLE DATE CHANGE
   registerLocale("fr", fr);
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
+    setFormData({ ...formData, selectedDate: date });
   };
 
-  // Handle counter passengers
+  // HANDLE COUNTER PASSENGERS
   const incrementCounter = () => {
-    if (passengers >= 1 && passengers < 8) {
-      setPassengers(passengers + 1);
+    if (formData.passengers >= 1 && formData.passengers < 8) {
+      //setPassengers(formData.passengers + 1);
+      setFormData({ ...formData, passengers: formData.passengers + 1 });
     }
   };
   const decrementCounter = () => {
-    if (passengers > 1 && passengers <= 8) {
-      setPassengers(passengers - 1);
+    if (formData.passengers > 1 && formData.passengers <= 8) {
+      //setPassengers(formData.passengers - 1);
+      setFormData({ ...formData, passengers: formData.passengers - 1 });
     }
   };
+
+  // HANDLE MODALS
+
+  // Ouvrir la modale
+  const toggleModal = (e) => {
+    if (window.innerWidth < 890) {
+      const { name } = e.target;
+      setIsModalOpen(!isModalOpen);
+      setModalContent(name);
+      console.log(name);
+    }
+  };
+
+  //console.log("formData", formData);
 
   return (
     <>
       <div className="search-block">
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="search-left">
             <div className="input-group">
-              <label htmlFor="start-ride" className="label-hidden">
+              <label htmlFor="startLocation" className="label-hidden">
                 Départ
               </label>
               <Flag size={30} />
               <input
                 type="text"
-                name="start-ride"
-                id="start-ride"
+                name="startLocation"
+                id="startLocation"
                 autoComplete="on"
                 placeholder="Départ"
-                value={startLocation}
+                value={formData.startLocation}
+                onChange={handleChange}
+                onFocus={toggleModal}
               />
             </div>
             <div className="input-group">
-              <label htmlFor="end-ride" className="label-hidden">
+              <label htmlFor="arrivalLocation" className="label-hidden">
                 Destination
               </label>
               <Flag size={30} />
               <input
                 type="text"
-                name="end-ride"
-                id="end-ride"
+                name="arrivalLocation"
+                id="arrivalLocation"
                 autoComplete="on"
                 placeholder="Destination"
-                value={arrivalLocation}
+                value={formData.arrivalLocation}
+                onChange={handleChange}
+                onFocus={toggleModal}
               />
             </div>
           </div>
@@ -132,16 +174,17 @@ const SearchBlock = () => {
               <label htmlFor="end-ride" className="label-hidden">
                 Date du départ
               </label>
-              <span class="material-symbols-outlined">calendar_month</span>
+              <span className="material-symbols-outlined">calendar_month</span>
 
               <DatePicker
                 className="drop-btn"
                 locale="fr"
-                selected={selectedDate}
+                selected={formData.selectedDate}
                 onChange={handleDateChange}
                 dateFormat="dd/MM/yyyy"
                 placeholderText="Aujourd'hui"
                 minDate={new Date()} // Desable dates before today
+                //inline
               />
             </div>
 
@@ -151,7 +194,8 @@ const SearchBlock = () => {
                 type="button"
                 onClick={toggleDropdown}
               >
-                <Users /> {passengers} passager{passengers > 1 && "s"}
+                <Users /> {formData.passengers} passager
+                {formData.passengers > 1 && "s"}
               </button>
               {isPassengersOpen && (
                 <div className="dropdown-menu counter-block flex-row align-center">
@@ -164,7 +208,7 @@ const SearchBlock = () => {
                     >
                       <Minus />
                     </button>
-                    <p>{passengers}</p>
+                    <p>{formData.passengers}</p>
 
                     <button
                       type="button"
@@ -179,9 +223,48 @@ const SearchBlock = () => {
             </div>
           </div>
           <button type="submit" aria-disabled="false">
-            <Search />
+            <Search /> <span>Rechercher un trajet</span>
           </button>
         </form>
+      </div>
+      <div
+        className={`modal-container ${isModalOpen ? "open" : ""} flex-column`}
+      >
+        <div className={"close-icon"} onClick={toggleModal}>
+          <span className="line line-1"></span>
+          <span className="line line-2"></span>
+          <span className="line line-3"></span>
+        </div>
+        {(modalContent === "startLocation" ||
+          modalContent === "arrivalLocation") && (
+          <>
+            {modalContent === "startLocation" ? (
+              <h3>D'où partez-vous ?</h3>
+            ) : (
+              <h3>Où voulez-vous aller ?</h3>
+            )}
+
+            <form onSubmit={handleSubmit}>
+              <div className="input-group">
+                <label htmlFor={modalContent} className="label-hidden">
+                  Départ
+                </label>
+                <Flag size={30} />
+                <input
+                  type="text"
+                  name={modalContent}
+                  id={modalContent}
+                  autoComplete="on"
+                  placeholder={
+                    modalContent === "startLocation" ? "Départ" : "Destination"
+                  }
+                  value={formData.modalContent}
+                  onChange={handleChange}
+                />
+              </div>
+            </form>
+          </>
+        )}
       </div>
     </>
   );

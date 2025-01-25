@@ -283,6 +283,10 @@ nav.menu-mobile .btn-outlined {
 }
 
 @media screen and (max-width: 890px) {
+  header {
+    margin-bottom: 270px;
+    height: 270px;
+  }
   .desktop {
     display: none;
   }
