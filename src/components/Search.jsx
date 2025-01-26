@@ -351,7 +351,7 @@ const SearchBlock = () => {
             </div>
             <h3>À quelle date partez-vous ?</h3>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className={modalContent}>
               <div className="input-group date-picker">
                 <label htmlFor="end-ride" className="label-hidden">
                   Date du départ

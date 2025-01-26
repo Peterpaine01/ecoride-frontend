@@ -353,4 +353,11 @@
   .react-datepicker {
     border-top-right-radius: 15px !important;
   }
+
+  form:not(.selectedDate) {
+    width: 100%;
+    input[type="text"] {
+      width: 100%;
+    }
+  }
 }

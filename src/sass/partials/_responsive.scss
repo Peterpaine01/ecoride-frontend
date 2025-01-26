@@ -39,6 +39,9 @@
 }
 
 @media screen and (max-width: 890px) {
+  body {
+    padding-bottom: 50px;
+  }
   h1 {
     font-size: 28px;
   }
@@ -171,13 +174,14 @@
   // FOOTER
   footer {
     position: fixed;
+    margin: 0;
     display: flex;
     bottom: 0;
     width: 100%;
     background-color: variables.$color-primary;
-    height: 50px;
+    height: 60px;
     justify-content: space-between;
-    border-top: 1px solid variables.$color-secondary;
+
     .container {
       width: 100%;
       padding: 0;
@@ -186,6 +190,7 @@
       }
       &.mobile {
         display: flex;
+        border-top: 1px solid variables.$color-secondary;
       }
     }
     .btn-footer {
