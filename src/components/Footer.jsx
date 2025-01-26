@@ -1,15 +1,59 @@
 import { Link } from "react-router-dom";
+import React, { useState } from "react";
 
 // Images
 import LogoHD from "../assets/logo-EcoRide-secondary.svg";
-import { Facebook, Instagram, Linkedin } from "react-feather";
+import {
+  Search,
+  PlusCircle,
+  Compass,
+  Instagram,
+  Facebook,
+  Linkedin,
+} from "react-feather";
 
 // Je récupère les props
 const Footer = () => {
+  // For testing
+  const [isToken, setIsToken] = useState(true);
+
   return (
     <>
-      <footer className="desktop">
-        <div className="container">
+      <footer>
+        {/* MOBILE */}
+        <div className="container mobile">
+          <Link
+            to="/"
+            className={`btn-footer flex-column align-center ${
+              isToken && "user-logged"
+            }`}
+            type="button"
+          >
+            <Search size={20} />
+            <span>Rechercher</span>
+          </Link>
+          <Link
+            to="/publier-trajet"
+            className={`btn-footer flex-column align-center ${
+              isToken && "user-logged"
+            }`}
+            type="button"
+          >
+            <PlusCircle size={20} />
+            <span>Publier un trajet</span>
+          </Link>
+          {isToken && (
+            <Link
+              to="/vos-trajets"
+              className="btn-footer flex-column align-center user-logged"
+            >
+              <Compass size={20} />
+              <span>Vos Trajets</span>
+            </Link>
+          )}
+        </div>
+        {/* DESKTOP */}
+        <div className="container desktop">
           <div className="block-menu">
             <div className="footer-logo">
               <img
@@ -50,7 +94,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="container-fluid">
+        <div className="container-fluid desktop">
           <p className="copyright">© Développement par Flocon dev</p>
         </div>
       </footer>

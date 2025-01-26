@@ -8,7 +8,11 @@ footer {
     flex-direction: row;
     justify-content: space-between;
     position: relative;
+    &.mobile {
+      display: none;
+    }
   }
+
   .block-menu {
     height: 180px;
     display: flex;
