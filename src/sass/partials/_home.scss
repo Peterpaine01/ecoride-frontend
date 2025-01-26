@@ -38,6 +38,14 @@
   justify-content: center;
 }
 
+.title-image {
+  text-align: center;
+  align-items: center;
+  img {
+    width: 50%;
+  }
+}
+
 .note {
   padding: 3px 10px 3px 7px;
   border: 1px solid #fff;

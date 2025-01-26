@@ -108,6 +108,10 @@ header {
   width: 40px;
   height: 40px;
   border: 3px solid variables.$color-secondary;
+  overflow: hidden;
+  &.user-logged {
+    border-color: variables.$color-accessibility;
+  }
   &:hover {
     color: #fff;
     background-color: variables.$color-primary;
@@ -120,6 +124,10 @@ header {
   svg {
     width: 22px;
     stroke: variables.$color-dark;
+  }
+  img {
+    height: 100%;
+    width: unset;
   }
 }
 
@@ -197,43 +205,4 @@ header {
 }
 .mobile {
   display: none;
-}
-
-// RESPONSIVE
-@media screen and (max-width: 1250px) {
-  header {
-    .cover {
-      img {
-        width: auto;
-        height: 100%;
-      }
-    }
-    .menu-left {
-      justify-content: space-between;
-      width: 45%;
-    }
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  header {
-    .menu-left {
-      justify-content: space-between;
-      width: 60%;
-    }
-  }
-}
-
-@media screen and (max-width: 890px) {
-  header {
-    margin-bottom: 270px;
-    height: 270px;
-  }
-  .desktop {
-    display: none;
-  }
-
-  .mobile {
-    display: flex;
-  }
 }

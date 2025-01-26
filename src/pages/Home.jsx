@@ -15,7 +15,7 @@ const Home = () => {
           <div className="section">
             <h1>Bienvenue sur EcoRide !</h1>
           </div>
-          <div className="section flex-row two-column">
+          <div className="section flex-row two-column reverse-mobile">
             <div className="block-left align-center">
               <div className="block-img">
                 <img
@@ -67,7 +67,7 @@ const Home = () => {
           </div>
           <div className="section flex-row two-column framed">
             <div className="block-left">
-              <div className="">
+              <div className="title-image reverse-mobile flex-column">
                 <h2>Comment fonctionne EcoRide ?</h2>
                 <img
                   src="/images/icon-EcoRide-primary.svg"

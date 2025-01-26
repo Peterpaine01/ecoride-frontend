@@ -16,6 +16,9 @@
     border: 3px solid variables.$color-secondary;
     z-index: 20;
     cursor: pointer;
+    &.user-logged {
+      border-color: variables.$color-accessibility;
+    }
     &:hover {
       color: #fff;
       background-color: variables.$color-primary;

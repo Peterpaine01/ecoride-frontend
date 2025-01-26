@@ -165,7 +165,7 @@ const SearchBlock = () => {
                 type="text"
                 name="startLocation"
                 id="startLocation"
-                autoComplete="on"
+                autoComplete="off"
                 placeholder="Départ"
                 value={formData.startLocation}
                 onChange={handleChange}
@@ -181,7 +181,7 @@ const SearchBlock = () => {
                 type="text"
                 name="arrivalLocation"
                 id="arrivalLocation"
-                autoComplete="on"
+                autoComplete="off"
                 placeholder="Destination"
                 value={formData.arrivalLocation}
                 onChange={handleChange}
@@ -288,7 +288,7 @@ const SearchBlock = () => {
                   type="text"
                   name={modalContent}
                   id={modalContent}
-                  autoComplete="on"
+                  autoComplete="off"
                   placeholder={
                     modalContent === "startLocation" ? "Départ" : "Destination"
                   }

@@ -21,6 +21,9 @@ import ProfilMenu from "./ProfilMenu";
 const Header = ({ token }) => {
   const [isProfilOpen, setIsProfilOpen] = useState(false);
 
+  // For testing
+  const [isToken, setIsToken] = useState(true);
+
   // REF
   const profilRef = useRef(null); // Référence au menu déroulant
 
@@ -84,11 +87,18 @@ const Header = ({ token }) => {
                 </li>
                 <li className="nav-item" ref={profilRef}>
                   <Link
-                    className="dropdown-btn"
+                    className={`dropdown-btn ${isToken && "user-logged"}`}
                     to={`/`}
                     onClick={toggleDropdown}
                   >
-                    <User />
+                    {isToken ? (
+                      <img
+                        src="../../public/images/user1-photo-profil.jpg"
+                        alt=""
+                      />
+                    ) : (
+                      <User />
+                    )}
                   </Link>
                   {isProfilOpen && (
                     <>
@@ -159,7 +169,16 @@ const Header = ({ token }) => {
           </div>
         </div>
         <div className="cover">
-          <img src="src/assets/iStock-481629528-extend2.png" alt="" />
+          <img
+            className="desktop"
+            src="src/assets/iStock-481629528-extend2.png"
+            alt=""
+          />
+          <img
+            className="mobile"
+            src="src/assets/iStock-481629528-extend-mobile.png"
+            alt=""
+          />
         </div>
 
         <SearchBlock />

@@ -8,7 +8,7 @@ import { Facebook, Instagram, Linkedin } from "react-feather";
 const Footer = () => {
   return (
     <>
-      <footer>
+      <footer className="desktop">
         <div className="container">
           <div className="block-menu">
             <div className="footer-logo">
