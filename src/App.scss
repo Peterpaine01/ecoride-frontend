@@ -208,6 +208,18 @@ em {
   width: 1px;
 }
 
+input[type="text"] {
+  padding: 10px 10px;
+  font-size: 16px;
+  border: 1px solid variables.$color-primary;
+  border-radius: 15px;
+  color: variables.$color-dark;
+  &::placeholder {
+    color: variables.$color-dark-grey;
+    font-style: italic;
+  }
+}
+
 // BUTTON
 
 button:disabled {
@@ -215,6 +227,19 @@ button:disabled {
   background-color: variables.$color-disabled !important;
   svg {
     stroke: variables.$color-dark-grey !important;
+  }
+}
+
+.btn-solid {
+  border: 0;
+  color: #fff;
+  background-color: variables.$color-primary;
+  padding: 10px 20px;
+  border-radius: 60px;
+  font-size: 22px;
+  cursor: pointer;
+  &:hover {
+    background-color: adjust-color(variables.$color-primary, $lightness: -10%);
   }
 }
 
@@ -300,5 +325,16 @@ button:disabled {
   }
   100% {
     outline-offset: 0.25rem;
+  }
+}
+
+// RESPONSIVE
+@media screen and (max-width: 890px) {
+  .desktop {
+    display: none;
+  }
+
+  .mobile {
+    display: flex;
   }
 }

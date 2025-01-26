@@ -46,7 +46,9 @@ const SearchBlock = () => {
   // REF
   const passengersRef = useRef(null); // Référence au menu déroulant
   const minusButtonRef = useRef(null);
+  const minusButtonModalRef = useRef(null);
   const plusButtonRef = useRef(null);
+  const plusButtonModalRef = useRef(null);
 
   // HANDLE DROPDOWN MENU
 
@@ -63,9 +65,14 @@ const SearchBlock = () => {
         closeDropdown();
       }
     };
+
     // Accéder aux boutons via le DOM
     const minusButton = minusButtonRef.current;
     const plusButton = plusButtonRef.current;
+    const minusButtonModal = minusButtonModalRef.current;
+    const plusButtonModal = plusButtonModalRef.current;
+
+    // dropdown counter desktop
     if (minusButton) {
       if (formData.passengers === 1) {
         minusButton.disabled = true;
@@ -80,6 +87,22 @@ const SearchBlock = () => {
         plusButton.disabled = false;
       }
     }
+    // modal counter mobile
+    if (minusButtonModal) {
+      if (formData.passengers === 1) {
+        minusButtonModal.disabled = true;
+      } else {
+        minusButtonModal.disabled = false;
+      }
+    }
+
+    if (plusButtonModal) {
+      if (formData.passengers === 8) {
+        plusButtonModal.disabled = true;
+      } else {
+        plusButtonModal.disabled = false;
+      }
+    }
 
     // Ajouter l'event listener
     document.addEventListener("mousedown", handleClickOutside);
@@ -88,7 +111,7 @@ const SearchBlock = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [formData.passengers, isPassengersOpen]);
+  }, [formData.passengers, isPassengersOpen, isModalOpen]);
 
   // Fonction pour basculer le menu
   const toggleDropdown = () => {
@@ -105,13 +128,11 @@ const SearchBlock = () => {
   // HANDLE COUNTER PASSENGERS
   const incrementCounter = () => {
     if (formData.passengers >= 1 && formData.passengers < 8) {
-      //setPassengers(formData.passengers + 1);
       setFormData({ ...formData, passengers: formData.passengers + 1 });
     }
   };
   const decrementCounter = () => {
     if (formData.passengers > 1 && formData.passengers <= 8) {
-      //setPassengers(formData.passengers - 1);
       setFormData({ ...formData, passengers: formData.passengers - 1 });
     }
   };
@@ -184,7 +205,8 @@ const SearchBlock = () => {
                 dateFormat="dd/MM/yyyy"
                 placeholderText="Aujourd'hui"
                 minDate={new Date()} // Desable dates before today
-                //inline
+                name="selectedDate"
+                onFocus={toggleModal}
               />
             </div>
 
@@ -192,13 +214,20 @@ const SearchBlock = () => {
               <button
                 className="drop-btn"
                 type="button"
-                onClick={toggleDropdown}
+                name="passengers"
+                onClick={(e) => {
+                  if (window.innerWidth < 890) {
+                    toggleModal(e);
+                  } else {
+                    toggleDropdown(e);
+                  }
+                }}
               >
                 <Users /> {formData.passengers} passager
                 {formData.passengers > 1 && "s"}
               </button>
               {isPassengersOpen && (
-                <div className="dropdown-menu counter-block flex-row align-center">
+                <div className="dropdown-menu counter-block flex-row align-center desktop">
                   <p>Nombre de passagers</p>
                   <div className="counter">
                     <button
@@ -227,6 +256,7 @@ const SearchBlock = () => {
           </button>
         </form>
       </div>
+      {/* MODAL block search > mobile */}
       <div
         className={`modal-container ${isModalOpen ? "open" : ""} flex-column`}
       >
@@ -235,9 +265,13 @@ const SearchBlock = () => {
           <span className="line line-2"></span>
           <span className="line line-3"></span>
         </div>
+        {/* Modal start or arrival location */}
         {(modalContent === "startLocation" ||
           modalContent === "arrivalLocation") && (
           <>
+            <div className="icon-container">
+              <Flag size={34} />
+            </div>
             {modalContent === "startLocation" ? (
               <h3>D'où partez-vous ?</h3>
             ) : (
@@ -249,7 +283,7 @@ const SearchBlock = () => {
                 <label htmlFor={modalContent} className="label-hidden">
                   Départ
                 </label>
-                <Flag size={30} />
+
                 <input
                   type="text"
                   name={modalContent}
@@ -263,6 +297,73 @@ const SearchBlock = () => {
                 />
               </div>
             </form>
+            <button type="button" className="btn-solid" onClick={toggleModal}>
+              Valider
+            </button>
+          </>
+        )}
+        {/* Modal select date departure */}
+        {modalContent === "selectedDate" && (
+          <>
+            <div className="icon-container">
+              <span className="material-symbols-outlined">calendar_month</span>
+            </div>
+            <h3>À quelle date partez-vous ?</h3>
+
+            <form onSubmit={handleSubmit}>
+              <div className="input-group date-picker">
+                <label htmlFor="end-ride" className="label-hidden">
+                  Date du départ
+                </label>
+
+                <DatePicker
+                  className="drop-btn"
+                  locale="fr"
+                  selected={formData.selectedDate}
+                  onChange={handleDateChange}
+                  dateFormat="dd/MM/yyyy"
+                  placeholderText="Aujourd'hui"
+                  minDate={new Date()} // Desable dates before today
+                  inline
+                />
+              </div>
+            </form>
+            <button type="button" className="btn-solid" onClick={toggleModal}>
+              Valider
+            </button>
+          </>
+        )}
+        {/* Modal counter passengers */}
+        {modalContent === "passengers" && (
+          <>
+            <div className="icon-container">
+              <Users size={34} />
+            </div>
+
+            <h3>Nombre de passagers ?</h3>
+            <div className=" counter-block flex-row align-center">
+              <div className="counter">
+                <button
+                  type="button"
+                  onClick={decrementCounter}
+                  ref={minusButtonRef}
+                >
+                  <Minus />
+                </button>
+                <p>{formData.passengers}</p>
+
+                <button
+                  type="button"
+                  onClick={incrementCounter}
+                  ref={plusButtonRef}
+                >
+                  <Plus />
+                </button>
+              </div>
+            </div>
+            <button type="button" className="btn-solid" onClick={toggleModal}>
+              Valider
+            </button>
           </>
         )}
       </div>
