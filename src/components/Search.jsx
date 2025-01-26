@@ -118,12 +118,25 @@ const SearchBlock = () => {
     setIsPassengersOpen((prevState) => !prevState);
   };
 
-  // HANDLE DATE CHANGE
+  // HANDLE DATE
   registerLocale("fr", fr);
 
   const handleDateChange = (date) => {
     setFormData({ ...formData, selectedDate: date });
   };
+
+  const today = new Date();
+
+  const options = {
+    weekday: "short", // Jour de la semaine abrégé
+    day: "2-digit", // Jour du mois sur 2 chiffres
+    month: "short", // Mois abrégé
+    year: "numeric", // Année sur 4 chiffres
+  };
+
+  const displayDateMobile = new Intl.DateTimeFormat("fr-FR", options).format(
+    today
+  );
 
   // HANDLE COUNTER PASSENGERS
   const incrementCounter = () => {
@@ -148,8 +161,6 @@ const SearchBlock = () => {
       console.log(name);
     }
   };
-
-  //console.log("formData", formData);
 
   return (
     <>
@@ -188,17 +199,48 @@ const SearchBlock = () => {
                 onFocus={toggleModal}
               />
             </div>
-          </div>
-
-          <div className="search-right">
-            <div className="input-group date-picker">
+            <div className="input-group date-picker mobile">
               <label htmlFor="end-ride" className="label-hidden">
                 Date du départ
               </label>
               <span className="material-symbols-outlined">calendar_month</span>
 
+              <input
+                type="text"
+                name="selectedDate"
+                id="selectedDate"
+                autoComplete="off"
+                placeholder={displayDateMobile}
+                onChange={handleDateChange}
+                value={new Intl.DateTimeFormat("fr-FR", options).format(
+                  formData.selectedDate
+                )}
+                onFocus={toggleModal}
+              />
+            </div>
+          </div>
+
+          <div className="search-right">
+            <div className="input-group date-picker desktop">
+              <label htmlFor="end-ride" className="label-hidden">
+                Date du départ
+              </label>
+              <span className="material-symbols-outlined">calendar_month</span>
+
+              <input
+                type="text"
+                name="selectedDate"
+                id="selectedDate"
+                autoComplete="off"
+                placeholder={new Date()}
+                onChange={handleDateChange}
+                value={formData.selectedDate}
+                onFocus={toggleModal}
+                className="mobile"
+              />
+
               <DatePicker
-                className="drop-btn"
+                className="drop-btn desktop"
                 locale="fr"
                 selected={formData.selectedDate}
                 onChange={handleDateChange}
@@ -206,7 +248,6 @@ const SearchBlock = () => {
                 placeholderText="Aujourd'hui"
                 minDate={new Date()} // Desable dates before today
                 name="selectedDate"
-                onFocus={toggleModal}
               />
             </div>
 

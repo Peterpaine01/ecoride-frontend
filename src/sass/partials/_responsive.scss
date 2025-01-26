@@ -46,11 +46,11 @@
     font-size: 20px;
   }
   .desktop {
-    display: none;
+    display: none !important;
   }
 
   .mobile {
-    display: flex;
+    display: flex !important;
   }
 
   .flex-row.two-column {
@@ -125,6 +125,7 @@
       input[type="text"] {
         margin-right: 0;
         padding-left: 0px;
+        width: 100%;
         &.drop-btn {
           width: calc(100% - 10px) !important;
         }

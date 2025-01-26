@@ -60,6 +60,7 @@
       border-bottom: 0 solid variables.$color-accessibility;
       font-weight: 300;
       color: variables.$color-dark;
+      border-radius: 0;
       &::placeholder {
         color: variables.$color-dark-grey;
         font-style: italic;
@@ -334,7 +335,7 @@
     color: #fff;
   }
   .material-symbols-outlined {
-    width: 34px;
+    width: auto;
   }
   h3 {
     text-transform: none;
