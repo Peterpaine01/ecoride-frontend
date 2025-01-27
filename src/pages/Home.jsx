@@ -4,12 +4,14 @@ import axios from "axios";
 
 // Components
 import Header from "../components/Header";
+import Hero from "../components/Hero";
 import Footer from "../components/Footer";
 
 const Home = () => {
   return (
     <>
       <Header />
+      <Hero />
       <main>
         <div className="container">
           <div className="section">

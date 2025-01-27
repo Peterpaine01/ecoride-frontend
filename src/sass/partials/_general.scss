@@ -1,13 +1,5 @@
 @use "variables";
 
-.desktop {
-  display: flex !important;
-}
-
-.mobile {
-  display: none !important;
-}
-
 // FONTS
 @import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
 
@@ -28,13 +20,24 @@
   font-style: normal;
 }
 
-#root {
-  font-family: variables.$main-font;
-}
-
 body {
   background: variables.$color-dark;
   min-height: 100vh;
+}
+
+#root {
+  font-family: variables.$main-font;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 250px;
+}
+
+.desktop {
+  display: flex !important;
+}
+
+.mobile {
+  display: none !important;
 }
 
 .container {
@@ -45,7 +48,7 @@ body {
 }
 .container-fluid {
   width: 100%;
-  padding: 0 20px;
+  padding: 0;
 }
 
 .container-narrow {
@@ -97,7 +100,7 @@ body {
 
 h1 {
   font-size: 40px;
-  font-weight: 700;
+  font-weight: 600;
   color: variables.$color-primary;
   text-align: center;
   position: relative;

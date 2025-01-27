@@ -1,0 +1,36 @@
+@use "variables";
+
+.hero {
+  height: 282px;
+  width: 100%;
+  position: relative;
+  border-bottom: 4px variables.$color-bg-dark solid;
+  display: flex;
+
+  .cover {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+}
+
+.cover-container {
+  height: 270px;
+  width: 100%;
+  position: relative;
+  border-bottom: 4px variables.$color-bg-dark solid;
+  display: flex;
+  .cover {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+  }
+}

@@ -29,7 +29,7 @@ const Footer = () => {
             }`}
             type="button"
           >
-            <Search size={20} />
+            <Search size={22} />
             <span>Rechercher</span>
           </Link>
           <Link
@@ -39,7 +39,7 @@ const Footer = () => {
             }`}
             type="button"
           >
-            <PlusCircle size={20} />
+            <PlusCircle size={22} />
             <span>Publier un trajet</span>
           </Link>
           {isToken && (
@@ -47,7 +47,7 @@ const Footer = () => {
               to="/vos-trajets"
               className="btn-footer flex-column align-center user-logged"
             >
-              <Compass size={20} />
+              <Compass size={22} />
               <span>Vos Trajets</span>
             </Link>
           )}

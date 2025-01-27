@@ -187,20 +187,6 @@ const Header = ({ token }) => {
             <ProfilMenu />
           </div>
         </div>
-        <div className="cover">
-          <img
-            className="desktop"
-            src="src/assets/iStock-481629528-extend2.png"
-            alt=""
-          />
-          <img
-            className="mobile"
-            src="src/assets/iStock-481629528-extend-mobile.png"
-            alt=""
-          />
-        </div>
-
-        <SearchBlock />
       </header>
     </>
   );
