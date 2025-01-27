@@ -73,7 +73,7 @@ const Header = ({ token }) => {
                     <Link to={`/`}>Rechercher un trajet</Link>
                   </li>
                   <li className="nav-item">
-                    <Link to={`/`}>Contact</Link>
+                    <Link to={`/contact`}>Contact</Link>
                   </li>
                 </ul>
               </nav>
@@ -103,49 +103,68 @@ const Header = ({ token }) => {
                   {isProfilOpen && (
                     <>
                       <div className="dropdown-menu">
-                        <div className="top-dropdown">
-                          <p className="text-small">
-                            <span className="text-emphase">Fanny</span>, il te
-                            reste
-                          </p>
-                          <hr />
-                          <p className="text-big">200</p>
-                          <p className="text-tiny">crédits</p>
-                        </div>
-                        <Link className="dropdown-item flex-row align-center space-between">
-                          <span className="flex-row align-center">
-                            <User /> Se connecter
-                          </span>
-                          <ChevronRight size={16} color="red" />
-                        </Link>
-                        <Link className="dropdown-item flex-row align-center space-between">
-                          <span className="flex-row align-center">
-                            <UserPlus /> Créer un compte
-                          </span>
+                        {isToken ? (
+                          <>
+                            <div className="top-dropdown">
+                              <p className="text-small">
+                                <span className="text-emphase">Fanny</span>, il
+                                te reste
+                              </p>
+                              <hr />
+                              <p className="text-big">200</p>
+                              <p className="text-tiny">crédits</p>
+                            </div>
 
-                          <ChevronRight size={16} color="red" />
-                        </Link>
+                            <Link
+                              className="dropdown-item flex-row align-center space-between"
+                              to={"/profil"}
+                            >
+                              <span className="flex-row align-center">
+                                <User /> Profil
+                              </span>
+                              <ChevronRight size={16} color="red" />
+                            </Link>
+                            <Link
+                              className="dropdown-item flex-row align-center space-between"
+                              to={"/vos-trajets"}
+                            >
+                              <span className="flex-row align-center">
+                                <Compass /> Vos trajets
+                              </span>
 
-                        <Link className="dropdown-item flex-row align-center space-between">
-                          <span className="flex-row align-center">
-                            <User /> Profil
-                          </span>
-                          <ChevronRight size={16} color="red" />
-                        </Link>
-                        <Link className="dropdown-item flex-row align-center space-between">
-                          <span className="flex-row align-center">
-                            <Compass /> Vos trajets
-                          </span>
+                              <ChevronRight size={16} color="red" />
+                            </Link>
+                            <Link className="dropdown-item flex-row align-center space-between">
+                              <span className="flex-row align-center">
+                                <XCircle /> Se déconnecter
+                              </span>
 
-                          <ChevronRight size={16} color="red" />
-                        </Link>
-                        <Link className="dropdown-item flex-row align-center space-between">
-                          <span className="flex-row align-center">
-                            <XCircle /> Se déconnecter
-                          </span>
+                              <ChevronRight size={16} color="red" />
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              className="dropdown-item flex-row align-center space-between"
+                              to={"/se-connecter"}
+                            >
+                              <span className="flex-row align-center">
+                                <User /> Se connecter
+                              </span>
+                              <ChevronRight size={16} color="red" />
+                            </Link>
+                            <Link
+                              className="dropdown-item flex-row align-center space-between"
+                              to={"/creer-compte"}
+                            >
+                              <span className="flex-row align-center">
+                                <UserPlus /> Créer un compte
+                              </span>
 
-                          <ChevronRight size={16} color="red" />
-                        </Link>
+                              <ChevronRight size={16} color="red" />
+                            </Link>
+                          </>
+                        )}
                       </div>
                     </>
                   )}

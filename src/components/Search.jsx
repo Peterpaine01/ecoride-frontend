@@ -35,7 +35,7 @@ const SearchBlock = () => {
     //console.log("Form data:", formData);
 
     // Après soumission, naviguer vers une autre page
-    navigate("/", { searchQuery: formData });
+    navigate("/recherche-trajets", { searchQuery: formData });
   };
 
   // HANDLE STATUS

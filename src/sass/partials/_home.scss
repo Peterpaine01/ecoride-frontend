@@ -17,7 +17,7 @@
       height: 85px;
       border-top: 4px solid variables.$color-primary;
       border-left: 4px solid variables.$color-primary;
-      border-radius: 5px;
+      border-top-left-radius: 5px;
     }
     &:after {
       content: "";
@@ -28,7 +28,7 @@
       border-right: 4px solid variables.$color-primary;
       bottom: 0;
       right: -4px;
-      border-radius: 5px;
+      border-bottom-right-radius: 5px;
     }
   }
 }

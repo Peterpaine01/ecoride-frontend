@@ -24,7 +24,7 @@ const ProfilMenu = () => {
     <div className="profil-menu-container">
       {isToken ? (
         <>
-          <Link className="profil-icon user-logged visible">
+          <Link className="profil-icon user-logged visible" to={"/profil"}>
             <img src="../../public/images/user1-photo-profil.jpg" alt="" />
           </Link>
         </>
@@ -49,10 +49,10 @@ const ProfilMenu = () => {
             <nav className="flex-column align-center ">
               <ul>
                 <li>
-                  <Link to="/">Se connecter</Link>
+                  <Link to="/se-connecter">Se connecter</Link>
                 </li>
                 <li>
-                  <Link to="/">Créer un compte</Link>
+                  <Link to="/creer-compte">Créer un compte</Link>
                 </li>
               </ul>
             </nav>

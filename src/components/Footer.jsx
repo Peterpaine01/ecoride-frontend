@@ -66,13 +66,15 @@ const Footer = () => {
             <nav>
               <ul className="nav-list">
                 <li className="nav-item">
-                  <Link to="/">Comment ça marche ?</Link>
+                  <Link to="/comment-fonctionne-ecoride">
+                    Comment ça marche ?
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/">Qui sommes-nous ?</Link>
+                  <Link to="/qui-sommes-nous">Qui sommes-nous ?</Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/">Mentions légales</Link>
+                  <Link to="/mentions-legales">Mentions légales</Link>
                 </li>
               </ul>
             </nav>

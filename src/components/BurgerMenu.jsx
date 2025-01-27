@@ -41,13 +41,13 @@ const BurgerMenu = () => {
               <Link to="/">Rechercher un trajet</Link>
             </li>
             <li>
-              <Link to="/">Comment ça marche ?</Link>
+              <Link to="/comment-fonctionne-ecoride">Comment ça marche ?</Link>
             </li>
             <li>
-              <Link to="/">Qui sommes-nous ?</Link>
+              <Link to="/qui-sommes-nous">Qui sommes-nous ?</Link>
             </li>
             <li>
-              <Link to="/">Contact</Link>
+              <Link to="/contact">Contact</Link>
             </li>
           </ul>
         </nav>
@@ -64,7 +64,7 @@ const BurgerMenu = () => {
           </Link>
         </div>
         <div className="menu-footer">
-          <Link to="/">Mentions légales</Link>
+          <Link to="/mentions-legales">Mentions légales</Link>
         </div>
       </div>
     </div>
