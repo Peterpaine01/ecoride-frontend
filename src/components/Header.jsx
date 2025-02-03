@@ -92,10 +92,7 @@ const Header = ({ token }) => {
                     onClick={toggleDropdown}
                   >
                     {isToken ? (
-                      <img
-                        src="../../public/images/user1-photo-profil.jpg"
-                        alt=""
-                      />
+                      <img src="../../images/user1-photo-profil.jpg" alt="" />
                     ) : (
                       <User />
                     )}

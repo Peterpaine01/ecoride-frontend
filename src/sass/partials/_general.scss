@@ -88,6 +88,10 @@ body {
   align-items: center;
 }
 
+.gap-5 {
+  gap: 5px;
+}
+
 .space-between {
   justify-content: space-between;
 }
@@ -106,6 +110,7 @@ h1 {
   position: relative;
   line-height: 40px;
   padding: 30px 0;
+  margin-bottom: 60px;
   &:after {
     position: absolute;
     content: "";
@@ -160,6 +165,10 @@ p {
   font-size: 12px;
 }
 
+span {
+  color: #fff;
+}
+
 // Images
 
 img {
@@ -211,7 +220,7 @@ em {
   width: 1px;
 }
 
-input[type="text"] {
+input {
   padding: 10px 10px;
   font-size: 16px;
   border: 1px solid variables.$color-primary;
@@ -223,7 +232,18 @@ input[type="text"] {
   }
 }
 
+form.framed {
+  border: 2px dotted variables.$color-primary;
+  padding: 40px 20px;
+  width: 400px;
+}
+
 // BUTTON
+
+button {
+  font-family: variables.$main-font;
+  font-size: 16px;
+}
 
 button:disabled {
   cursor: default !important;

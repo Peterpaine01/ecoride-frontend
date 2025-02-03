@@ -25,7 +25,7 @@ const ProfilMenu = () => {
       {isToken ? (
         <>
           <Link className="profil-icon user-logged visible" to={"/profil"}>
-            <img src="../../public/images/user1-photo-profil.jpg" alt="" />
+            <img src="../../images/user1-photo-profil.jpg" alt="" />
           </Link>
         </>
       ) : (

@@ -1,0 +1,142 @@
+@use "variables";
+
+form.user-connect {
+  align-items: flex-start;
+  .input-group {
+    width: 100%;
+  }
+  fieldset {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #fff;
+    padding: 20px;
+    border-radius: 5px;
+    p {
+      padding-top: 0;
+      padding-bottom: 20px;
+    }
+    .input-checkbox-container {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.inline-input {
+  justify-content: flex-start;
+}
+
+.check-pw {
+  margin-bottom: 20px;
+  p {
+    padding-top: 0;
+  }
+}
+
+.password-container {
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
+}
+
+// form connection
+
+.icon-input-container {
+  position: relative;
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    margin-bottom: 15px;
+    padding-left: 35px;
+  }
+  input[type="password"] {
+    padding-right: 40px;
+    height: 40px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    padding-top: 4px;
+    padding-bottom: 0;
+
+    &::placeholder {
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+  }
+}
+.icone-verif {
+  width: 30px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  display: none;
+}
+.error-msg {
+  margin-top: 7px;
+  color: #f75252;
+  font-weight: 400;
+  display: none;
+}
+.pswd-info {
+  margin-top: 8px;
+  color: #a9a9a9;
+  font-weight: 400;
+  display: block;
+}
+
+.input-icon-left {
+  position: absolute;
+  left: 10px;
+  top: calc(50% - 18px);
+  font-size: 18px;
+  color: variables.$color-dark-grey;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: calc(50% - 17px);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: variables.$color-dark-grey;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    color: variables.$color-accessibility;
+  }
+}
+
+select {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 1px solid variables.$color-primary;
+  border-radius: 10px;
+  color: variables.$color-dark;
+}
+[type="checkbox"] {
+  appearance: none;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  font-size: 1em;
+  width: 1em;
+  border-radius: 3px;
+  padding: 0;
+  border-color: #fff;
+  padding-right: 5px;
+}
+
+.input-checkbox-container {
+  margin-bottom: 20px;
+  [type="checkbox"] {
+    height: 15px;
+    width: 15px;
+  }
+  label {
+    color: #fff;
+  }
+  a {
+    color: variables.$color-accessibility;
+  }
+}
