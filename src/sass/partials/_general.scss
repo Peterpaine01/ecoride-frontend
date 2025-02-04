@@ -151,6 +151,7 @@ p {
 .text-emphase {
   font-size: 20px;
   font-weight: 600;
+  color: variables.$color-dark;
 }
 
 .text-labor {
@@ -163,10 +164,6 @@ p {
 
 .text-tiny {
   font-size: 12px;
-}
-
-span {
-  color: #fff;
 }
 
 // Images

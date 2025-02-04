@@ -2,7 +2,16 @@ import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { Circle, Eye, EyeOff, Lock, Unlock, User, Mail } from "react-feather";
+import {
+  Circle,
+  Eye,
+  EyeOff,
+  Lock,
+  Unlock,
+  User,
+  Mail,
+  CheckCircle,
+} from "react-feather";
 
 // Components
 import Header from "../components/Header";
@@ -17,17 +26,58 @@ const SignUp = () => {
     password: "",
     gender: "",
     isDriver: false,
-    rgpg: false,
+    rgpd: false,
   });
   const [validationPassword, setValidationPassword] = useState({
-    pwLength: false,
+    criteria: 0,
+    length: false,
     uppercase: false,
     lowercase: false,
     number: false,
     symbol: false,
   });
+  const [validationEmail, setValidationEmail] = useState(false);
 
-  const showValidationPassword = () => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => {
+      const updatedFormData = { ...prev, [name]: value };
+      checkPassword(updatedFormData.password);
+      checkEmail(updatedFormData.email);
+      return updatedFormData;
+    });
+  };
+
+  const checkPassword = (password = "") => {
+    console.log("password.length -> ", password.length);
+    const newValidation = {
+      length: password.length >= 9,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      symbol: /[^a-zA-Z0-9\s]/.test(password),
+    };
+
+    // Eval total number of criteria met
+    newValidation.criteria =
+      Object.values(newValidation).filter(Boolean).length;
+
+    setValidationPassword(newValidation);
+    console.log("validationPassword -> ", validationPassword);
+  };
+
+  const checkEmail = (email = "") => {
+    const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (regexEmail.test(email)) {
+      setValidationEmail(true);
+    } else {
+      setValidationEmail(false);
+    }
+  };
+
+  useEffect(() => {
+    checkPassword(formData.password);
+  }, [formData.password]);
 
   return (
     <>
@@ -40,7 +90,7 @@ const SignUp = () => {
             <h1>Créer un compte</h1>
             <form className="user-connect framed flex-column">
               <div className="input-group">
-                <label for="user" className="label-hidden">
+                <label for="username" className="label-hidden">
                   Nom d'utilisateur
                 </label>
                 <div className="icon-input-container">
@@ -48,9 +98,11 @@ const SignUp = () => {
                   <input
                     type="text"
                     autocomplete="off"
-                    id="user"
+                    id="username"
                     placeholder="3 caractères minimum"
                     maxlength="24"
+                    value={formData.username}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -65,7 +117,10 @@ const SignUp = () => {
                     type="text"
                     autocomplete="off"
                     id="email"
+                    name="email"
                     placeholder="Adresse email"
+                    value={formData.email}
+                    onChange={handleChange}
                   />
                 </div>
                 <span className="error-msg">Rentrez un email valide.</span>
@@ -84,10 +139,13 @@ const SignUp = () => {
                     type={showPassword ? "text" : "password"}
                     autocomplete="off"
                     id="password"
+                    name="password"
                     placeholder="Mot de passe"
                     className="password-input"
-                    onChange={() => {
-                      showValidationPassword();
+                    value={formData.password}
+                    onChange={(e) => {
+                      handleChange(e);
+                      checkPassword();
                     }}
                   />
                   <button
@@ -100,20 +158,65 @@ const SignUp = () => {
                 </div>
 
                 <div className="check-pw">
-                  <p className="flex-row align-center gap-5">
-                    <Circle size={20} /> 9 caractères minimum
+                  <p
+                    className={`flex-row align-center gap-5 ${
+                      validationPassword.length && "criteria-checked"
+                    }`}
+                  >
+                    {validationPassword.length ? (
+                      <CheckCircle size={20} />
+                    ) : (
+                      <Circle size={20} />
+                    )}
+                    9 caractères minimum
                   </p>
-                  <p className="flex-row align-center gap-5">
-                    <Circle size={20} /> 1 lettre majuscule minimum
+                  <p
+                    className={`flex-row align-center gap-5 ${
+                      validationPassword.uppercase && "criteria-checked"
+                    }`}
+                  >
+                    {validationPassword.uppercase ? (
+                      <CheckCircle size={20} />
+                    ) : (
+                      <Circle size={20} />
+                    )}{" "}
+                    1 lettre majuscule minimum
                   </p>
-                  <p className="flex-row align-center gap-5">
-                    <Circle size={20} /> 1 lettre minuscule minimum
+                  <p
+                    className={`flex-row align-center gap-5 ${
+                      validationPassword.lowercase && "criteria-checked"
+                    }`}
+                  >
+                    {validationPassword.lowercase ? (
+                      <CheckCircle size={20} />
+                    ) : (
+                      <Circle size={20} />
+                    )}{" "}
+                    1 lettre minuscule minimum
                   </p>
-                  <p className="flex-row align-center gap-5">
-                    <Circle size={20} /> 1 chiffre minimum
+                  <p
+                    className={`flex-row align-center gap-5 ${
+                      validationPassword.number && "criteria-checked"
+                    }`}
+                  >
+                    {validationPassword.number ? (
+                      <CheckCircle size={20} />
+                    ) : (
+                      <Circle size={20} />
+                    )}{" "}
+                    1 chiffre minimum
                   </p>
-                  <p className="flex-row align-center gap-5">
-                    <Circle size={20} /> 1 caractère spéciale minimum
+                  <p
+                    className={`flex-row align-center gap-5 ${
+                      validationPassword.symbol && "criteria-checked"
+                    }`}
+                  >
+                    {validationPassword.symbol ? (
+                      <CheckCircle size={20} />
+                    ) : (
+                      <Circle size={20} />
+                    )}{" "}
+                    1 caractère spéciale minimum
                   </p>
                 </div>
               </div>
@@ -126,9 +229,9 @@ const SignUp = () => {
                     Je m’identifie comme <sup>*</sup>{" "}
                   </p>
                   <select name="gender" id="gender">
-                    <option value="">homme</option>
-                    <option value="dog">femme</option>
-                    <option value="cat">autre</option>
+                    <option value="male">homme</option>
+                    <option value="female">femme</option>
+                    <option value="other">autre</option>
                   </select>
                 </div>
               </div>
@@ -137,13 +240,18 @@ const SignUp = () => {
                   Avec EcoRide, je veux : <sup>*</sup>
                 </p>
                 <div className="input-checkbox-container flex-row gap-5">
-                  <input type="checkbox" id="passenger" name="scales" checked />
+                  <input
+                    type="checkbox"
+                    id="passenger"
+                    name="passenger"
+                    checked
+                  />
                   <label for="passenger">
                     participer à des trajets en tant que passager
                   </label>
                 </div>
                 <div className="input-checkbox-container flex-row gap-5">
-                  <input type="checkbox" id="driver" name="scales" />
+                  <input type="checkbox" id="driver" name="driver" />
                   <label for="driver">
                     proposer mon véhicule et mes talents de conducteur
                   </label>
@@ -151,9 +259,9 @@ const SignUp = () => {
               </fieldset>
               <div className="input-group ">
                 <div className="input-checkbox-container flex-row gap-5">
-                  <input type="checkbox" id="passenger" name="scales" checked />
-                  <label for="passenger">
-                    J’accepte la
+                  <input type="checkbox" id="rgpd" name="rgpd" defaultChecked />
+                  <label for="rgpd">
+                    J’accepte la{" "}
                     <Link to="/mentions-legales">
                       <strong>politique de confidentialité des données</strong>
                     </Link>

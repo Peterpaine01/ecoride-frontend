@@ -5,6 +5,10 @@ form.user-connect {
   .input-group {
     width: 100%;
   }
+  button[type="submit"] {
+    align-self: center;
+    margin-top: 20px;
+  }
   fieldset {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -29,6 +33,9 @@ form.user-connect {
   margin-bottom: 20px;
   p {
     padding-top: 0;
+  }
+  svg {
+    stroke: variables.$color-secondary;
   }
 }
 
