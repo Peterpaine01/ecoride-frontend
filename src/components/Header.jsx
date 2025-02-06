@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import AuthContext from "./context/AuthContext";
+
 import { Link } from "react-router-dom";
 import {
   User,
@@ -19,6 +21,7 @@ import ProfilMenu from "./ProfilMenu";
 
 // Je récupère les props
 const Header = ({ token }) => {
+  const { user, login, logout } = useContext(AuthContext);
   const [isProfilOpen, setIsProfilOpen] = useState(false);
 
   // For testing
