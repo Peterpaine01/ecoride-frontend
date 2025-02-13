@@ -12,16 +12,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = Cookies.get("token");
 
-    const fetchUser = async (userId) => {
-      try {
-        const response = await axios.get(`/user/${userId}`);
-        setUser(response.data.user);
-      } catch (error) {
-        console.error("Error fetching user", error);
-        logout();
-      }
-    };
-
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
@@ -35,6 +25,17 @@ export const AuthProvider = ({ children }) => {
       }
     }
   }, [isAuthenticated]);
+
+  const fetchUser = async (userId) => {
+    try {
+      const response = await axios.get(`/user/${userId}`);
+      setUser(response.data.user);
+      console.log(response.data.user);
+    } catch (error) {
+      console.error("Error fetching user", error);
+      logout();
+    }
+  };
 
   const login = async (email, password) => {
     try {
