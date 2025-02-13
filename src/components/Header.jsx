@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import AuthContext from "./context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 import { Link } from "react-router-dom";
 import {
@@ -20,8 +20,8 @@ import BurgerMenu from "./BurgerMenu";
 import ProfilMenu from "./ProfilMenu";
 
 // Je récupère les props
-const Header = ({ token }) => {
-  const { user, login, logout } = useContext(AuthContext);
+const Header = () => {
+  const { user, login, logout, isAuthenticated } = useContext(AuthContext);
   const [isProfilOpen, setIsProfilOpen] = useState(false);
 
   // For testing
@@ -83,18 +83,23 @@ const Header = ({ token }) => {
             </div>
             <nav className="flex-row">
               <ul className="nav-list">
-                <li className="nav-item">
-                  <Link className="add-btn" to={`/publier-trajet`}>
-                    <PlusCircle size={31} /> Publier un trajet
-                  </Link>
-                </li>
+                {isAuthenticated && (
+                  <li className="nav-item">
+                    <Link className="add-btn" to={`/publier-trajet`}>
+                      <PlusCircle size={31} /> Publier un trajet
+                    </Link>
+                  </li>
+                )}
+
                 <li className="nav-item" ref={profilRef}>
                   <Link
-                    className={`dropdown-btn ${isToken && "user-logged"}`}
+                    className={`dropdown-btn ${
+                      isAuthenticated && "user-logged"
+                    }`}
                     to={`/`}
                     onClick={toggleDropdown}
                   >
-                    {isToken ? (
+                    {isAuthenticated ? (
                       <img src="../../images/user1-photo-profil.jpg" alt="" />
                     ) : (
                       <User />
@@ -103,7 +108,7 @@ const Header = ({ token }) => {
                   {isProfilOpen && (
                     <>
                       <div className="dropdown-menu">
-                        {isToken ? (
+                        {isAuthenticated ? (
                           <>
                             <div className="top-dropdown">
                               <p className="text-small">
@@ -134,7 +139,10 @@ const Header = ({ token }) => {
 
                               <ChevronRight size={16} color="red" />
                             </Link>
-                            <Link className="dropdown-item flex-row align-center space-between">
+                            <Link
+                              className="dropdown-item flex-row align-center space-between"
+                              onClick={logout}
+                            >
                               <span className="flex-row align-center">
                                 <XCircle /> Se déconnecter
                               </span>

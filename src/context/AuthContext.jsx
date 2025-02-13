@@ -1,45 +1,58 @@
 import axios from "../config/axiosConfig";
 import Cookies from "js-cookie";
 import { createContext, useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [userId, setUserId] = useState(null);
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const token = Cookies.get("token");
 
-    const fetchUser = async () => {
+    const fetchUser = async (userId) => {
       try {
         const response = await axios.get(`/user/${userId}`);
         setUser(response.data.user);
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.error("Error fetching user", error);
+        logout();
       }
     };
 
     if (token) {
-      setIsAuthenticated(true);
-      fetchUser();
+      try {
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.id;
+
+        setIsAuthenticated(true);
+        fetchUser(userId);
+      } catch (error) {
+        console.error("Token invalid", error);
+        logout();
+      }
     }
-  }, [isAuthenticated]);
+  }, []);
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/login`,
-        {
-          email,
-          password,
-        }
+      const response = await axios.post(`/login`, {
+        email,
+        password,
+      });
+      const { token } = response.data;
+
+      Cookies.set("token", token);
+      const decodedToken = jwtDecode(token);
+      setIsAuthenticated(true);
+      fetchUser(decodedToken.id);
+    } catch (error) {
+      console.error(
+        "Error connecting",
+        error.response?.data?.error || error.message
       );
-      Cookies.set("token", response.data.token);
-      setUserId(response.data.userId);
-    } catch (err) {
-      console.error(err.response.data.error);
     }
   };
 
@@ -50,10 +63,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export default AuthContext;
