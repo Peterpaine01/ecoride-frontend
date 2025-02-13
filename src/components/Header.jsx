@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import Cookies from "js-cookie";
 
 import { Link } from "react-router-dom";
 import {
@@ -56,6 +57,15 @@ const Header = () => {
     setIsProfilOpen(false);
   };
 
+  if (user && user.accountStatus === "pending") {
+    // alert("Pensez à aciver votre compte. Rendez-vous sur votre boite mail.");
+    console.log(
+      "Compte inactif. Pensez à aciver votre compte. Rendez-vous sur votre boite mail."
+    );
+  }
+  console.log("cookie token", Cookies.get("token"));
+  console.log("user", user);
+
   return (
     <>
       <header>
@@ -83,7 +93,7 @@ const Header = () => {
             </div>
             <nav className="flex-row">
               <ul className="nav-list">
-                {isAuthenticated && (
+                {user && user.accountStatus === "active" && user.is_driver && (
                   <li className="nav-item">
                     <Link className="add-btn" to={`/publier-trajet`}>
                       <PlusCircle size={31} /> Publier un trajet
@@ -94,53 +104,69 @@ const Header = () => {
                 <li className="nav-item" ref={profilRef}>
                   <Link
                     className={`dropdown-btn ${
-                      isAuthenticated && "user-logged"
+                      user && user.accountStatus === "active" && "user-logged"
                     }`}
                     onClick={toggleDropdown}
                   >
-                    {isAuthenticated ? (
-                      <img src="../../images/user1-photo-profil.jpg" alt="" />
+                    {user ? (
+                      user.photo ? (
+                        user.photo
+                      ) : (
+                        <img
+                          src={`../../images/user-${user.gender}.jpg`}
+                          alt="photo profil par défaut"
+                        />
+                      )
                     ) : (
                       <User />
                     )}
                   </Link>
+
                   {isProfilOpen && (
                     <>
                       <div className="dropdown-menu">
-                        {isAuthenticated ? (
+                        {user ? (
                           <>
-                            <div className="top-dropdown">
-                              <p className="text-small">
-                                <span className="text-emphase">Fanny</span>, il
-                                te reste
-                              </p>
-                              <hr />
-                              <p className="text-big">200</p>
-                              <p className="text-tiny">crédits</p>
-                            </div>
+                            {user.accountStatus === "active" && (
+                              <>
+                                <div className="top-dropdown">
+                                  <p className="text-small">
+                                    <span className="text-emphase">
+                                      {user.username}
+                                    </span>
+                                    , il te reste
+                                  </p>
+                                  <hr />
+                                  <p className="text-big">{user.credits}</p>
+                                  <p className="text-tiny">crédits</p>
+                                </div>
 
-                            <Link
-                              className="dropdown-item flex-row align-center space-between"
-                              to={"/profil"}
-                            >
-                              <span className="flex-row align-center">
-                                <User /> Profil
-                              </span>
-                              <ChevronRight size={16} color="red" />
-                            </Link>
-                            <Link
-                              className="dropdown-item flex-row align-center space-between"
-                              to={"/vos-trajets"}
-                            >
-                              <span className="flex-row align-center">
-                                <Compass /> Vos trajets
-                              </span>
+                                <Link
+                                  className="dropdown-item flex-row align-center space-between"
+                                  to={"/profil"}
+                                >
+                                  <span className="flex-row align-center">
+                                    <User /> Profil
+                                  </span>
+                                  <ChevronRight size={16} color="red" />
+                                </Link>
+                                <Link
+                                  className="dropdown-item flex-row align-center space-between"
+                                  to={"/vos-trajets"}
+                                >
+                                  <span className="flex-row align-center">
+                                    <Compass /> Vos trajets
+                                  </span>
 
-                              <ChevronRight size={16} color="red" />
-                            </Link>
+                                  <ChevronRight size={16} color="red" />
+                                </Link>
+                              </>
+                            )}
+
                             <Link
                               className="dropdown-item flex-row align-center space-between"
                               onClick={logout}
+                              to={"/se-connecter"}
                             >
                               <span className="flex-row align-center">
                                 <XCircle /> Se déconnecter

@@ -8,10 +8,9 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(Cookies.get("token") || null);
 
   useEffect(() => {
-    const token = Cookies.get("token");
-
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
@@ -24,13 +23,14 @@ export const AuthProvider = ({ children }) => {
         logout();
       }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, token]);
 
   const fetchUser = async (userId) => {
+    console.log(userId);
     try {
       const response = await axios.get(`/user/${userId}`);
-      setUser(response.data.user);
-      console.log(response.data.user);
+      setUser(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching user", error);
       logout();
@@ -61,6 +61,7 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     Cookies.remove("token");
     setUser(null);
+    setToken(null);
   };
 
   return (
