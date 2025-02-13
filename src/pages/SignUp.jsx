@@ -21,15 +21,16 @@ import Footer from "../components/Footer";
 
 const SignUp = () => {
   const { user, login, logout, isAuthenticated } = useContext(AuthContext);
+  console.log(user);
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    gender: "",
-    is_driver: false,
-    consent_data_retention: false,
+    gender: "male",
+    is_driver: 0,
+    consent_data_retention: 0,
   });
   const [validationPassword, setValidationPassword] = useState({
     criteria: 0,
@@ -50,7 +51,7 @@ const SignUp = () => {
     setFormData((prev) => {
       const updatedFormData = {
         ...prev,
-        [name]: type === "checkbox" ? checked : value, // ✅ Plus de destructuration inutile
+        [name]: type === "checkbox" ? (checked ? 1 : 0) : value,
       };
 
       if (name === "password") checkPassword(updatedFormData.password);
@@ -97,21 +98,20 @@ const SignUp = () => {
       return;
     }
 
-    if (
-      !formData.username ||
-      !formData.email ||
-      !formData.password ||
-      !formData.consent_data_retention
-    ) {
+    if (!formData.username || !formData.email || !formData.password) {
       setErrorMessage("Tous les champs sont requis.");
       return;
     }
 
-    try {
-      const response = await axios.post(
-        "https://ecoride--ecoride-backend--hbtbyqs8v9w2.code.run/create-user",
-        formData
+    if (!formData.consent_data_retention) {
+      setErrorMessage(
+        "Veuillez accepter notre politique de gestion des données."
       );
+      return;
+    }
+
+    try {
+      const response = await axios.post("/create-user", formData);
 
       const { token, userId } = response.data;
 

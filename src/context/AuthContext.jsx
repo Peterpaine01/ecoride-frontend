@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
         logout();
       }
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const login = async (email, password) => {
     try {

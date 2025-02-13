@@ -96,7 +96,6 @@ const Header = () => {
                     className={`dropdown-btn ${
                       isAuthenticated && "user-logged"
                     }`}
-                    to={`/`}
                     onClick={toggleDropdown}
                   >
                     {isAuthenticated ? (
