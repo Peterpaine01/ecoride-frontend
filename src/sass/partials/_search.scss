@@ -361,3 +361,96 @@
     }
   }
 }
+
+// SEARCH RIDES LIST
+
+.one-third-column {
+  width: calc(100% / 3);
+}
+
+.results-search {
+  flex: 1;
+  h1 {
+    text-align: left;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+
+.ride-card {
+  background-color: #fff;
+  border-radius: 10px;
+  text-decoration: none;
+
+  p {
+    color: variables.$color-bg-dark;
+    padding: 0;
+    text-decoration: none;
+  }
+  .top-ride-card {
+    padding: 15px 20px;
+    height: 70px;
+    position: relative;
+  }
+
+  .bottom-ride-card {
+    padding: 15px 20px;
+    min-height: 55px;
+    border-top: 2px solid #d7ead6;
+    background-color: #ecf5eb;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    .profil-icon {
+      width: 40px;
+      height: 40px;
+      img {
+        width: 100%;
+      }
+    }
+  }
+  .info-ride {
+    display: flex;
+    flex-direction: row;
+    width: calc(100% - 70px);
+    justify-content: space-between;
+    gap: 15px;
+  }
+  .timing {
+    width: 100%;
+
+    p {
+      text-align: center;
+      padding: 3px 5px;
+      border-radius: 5px;
+      background-color: variables.$color-secondary;
+      width: fit-content;
+      margin: 5px auto 0;
+    }
+  }
+  .timeline {
+    height: 3px;
+    margin-top: 7px;
+    background-color: variables.$color-bg-dark;
+  }
+  .credits {
+    position: absolute;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: variables.$color-accessibility;
+    right: 15px;
+    top: -5px;
+    padding: 10px 7px 15px;
+    clip-path: polygon(100% 0, 100% 100%, 50% 81%, 0 100%, 0 0);
+
+    p {
+      font-size: 14px;
+      &:first-child {
+        font-size: 20px;
+        font-weight: 800;
+      }
+    }
+  }
+}

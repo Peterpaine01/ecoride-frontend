@@ -92,6 +92,10 @@ body {
   gap: 5px;
 }
 
+.gap-15 {
+  gap: 15px;
+}
+
 .space-between {
   justify-content: space-between;
 }
@@ -111,15 +115,15 @@ h1 {
   line-height: 40px;
   padding: 30px 0;
   margin-bottom: 60px;
-  &:after {
-    position: absolute;
-    content: "";
-    width: 36px;
-    height: 7px;
-    background-color: variables.$color-primary;
-    bottom: 0;
-    left: calc(50% - 18px);
-  }
+  // &:after {
+  //   position: absolute;
+  //   content: "";
+  //   width: 36px;
+  //   height: 7px;
+  //   background-color: variables.$color-primary;
+  //   bottom: 0;
+  //   left: calc(50% - 18px);
+  // }
 }
 h2 {
   font-size: 32px;

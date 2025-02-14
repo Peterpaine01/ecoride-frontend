@@ -63,8 +63,8 @@ const Header = () => {
       "Compte inactif. Pensez à aciver votre compte. Rendez-vous sur votre boite mail."
     );
   }
-  console.log("cookie token", Cookies.get("token"));
-  console.log("user", user);
+  // console.log("cookie token", Cookies.get("token"));
+  // console.log("user", user);
 
   return (
     <>
@@ -109,14 +109,7 @@ const Header = () => {
                     onClick={toggleDropdown}
                   >
                     {user ? (
-                      user.photo ? (
-                        user.photo
-                      ) : (
-                        <img
-                          src={`../../images/user-${user.gender}.jpg`}
-                          alt="photo profil par défaut"
-                        />
-                      )
+                      <img src={user.photo} alt="photo profil par défaut" />
                     ) : (
                       <User />
                     )}

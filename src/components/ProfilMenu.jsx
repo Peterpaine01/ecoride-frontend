@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import {
   User,
@@ -11,6 +12,7 @@ import {
 } from "react-feather";
 
 const ProfilMenu = () => {
+  const { user, login, logout, isAuthenticated } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
 
   // For testing
@@ -22,10 +24,12 @@ const ProfilMenu = () => {
 
   return (
     <div className="profil-menu-container">
-      {isToken ? (
+      {user ? (
         <>
           <Link className="profil-icon user-logged visible" to={"/profil"}>
-            <img src="../../images/user1-photo-profil.jpg" alt="" />
+            {user.photo && (
+              <img src={user.photo} alt="photo profil par défaut" />
+            )}
           </Link>
         </>
       ) : (

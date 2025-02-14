@@ -8,17 +8,16 @@ import { registerLocale } from "react-datepicker";
 import fr from "date-fns/locale/fr";
 
 // Images
-import LogoHD from "../assets/logo-EcoRide-secondary.svg";
 import { Flag, Calendar, Users, Search, Plus, Minus } from "react-feather";
 
 // Je récupère les props
 const SearchBlock = () => {
   // Handle form values
   const [formData, setFormData] = useState({
-    startLocation: "",
-    arrivalLocation: "",
-    selectedDate: new Date(),
-    passengers: 1,
+    departureCity: "",
+    destinationCity: "",
+    departureDate: new Date(),
+    availableSeats: 1,
   });
 
   const navigate = useNavigate();
@@ -31,11 +30,17 @@ const SearchBlock = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Empêche le rechargement de la page
-    //console.log("Form data:", formData);
+    e.preventDefault();
 
-    // Après soumission, naviguer vers une autre page
-    navigate("/recherche-trajets", { searchQuery: formData });
+    const queryParams = new URLSearchParams({
+      departureCity: formData.departureCity,
+      destinationCity: formData.destinationCity,
+      departureDate: formData.departureDate.toISOString(), // Convertir la date en string ISO
+      availableSeats: formData.availableSeats,
+    }).toString();
+
+    // Aftfer submit, go to another page with queryparams
+    navigate(`/recherche-trajets?${queryParams}`);
   };
 
   // HANDLE STATUS
@@ -74,14 +79,14 @@ const SearchBlock = () => {
 
     // dropdown counter desktop
     if (minusButton) {
-      if (formData.passengers === 1) {
+      if (formData.availableSeats === 1) {
         minusButton.disabled = true;
       } else {
         minusButton.disabled = false;
       }
     }
     if (plusButton) {
-      if (formData.passengers === 8) {
+      if (formData.availableSeats === 8) {
         plusButton.disabled = true;
       } else {
         plusButton.disabled = false;
@@ -89,7 +94,7 @@ const SearchBlock = () => {
     }
     // modal counter mobile
     if (minusButtonModal) {
-      if (formData.passengers === 1) {
+      if (formData.availableSeats === 1) {
         minusButtonModal.disabled = true;
       } else {
         minusButtonModal.disabled = false;
@@ -97,7 +102,7 @@ const SearchBlock = () => {
     }
 
     if (plusButtonModal) {
-      if (formData.passengers === 8) {
+      if (formData.availableSeats === 8) {
         plusButtonModal.disabled = true;
       } else {
         plusButtonModal.disabled = false;
@@ -111,7 +116,7 @@ const SearchBlock = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [formData.passengers, isPassengersOpen, isModalOpen]);
+  }, [formData.availableSeats, isPassengersOpen, isModalOpen]);
 
   // Fonction pour basculer le menu
   const toggleDropdown = () => {
@@ -122,7 +127,7 @@ const SearchBlock = () => {
   registerLocale("fr", fr);
 
   const handleDateChange = (date) => {
-    setFormData({ ...formData, selectedDate: date });
+    setFormData({ ...formData, departureDate: date });
   };
 
   const today = new Date();
@@ -140,13 +145,13 @@ const SearchBlock = () => {
 
   // HANDLE COUNTER PASSENGERS
   const incrementCounter = () => {
-    if (formData.passengers >= 1 && formData.passengers < 8) {
-      setFormData({ ...formData, passengers: formData.passengers + 1 });
+    if (formData.availableSeats >= 1 && formData.availableSeats < 8) {
+      setFormData({ ...formData, passengers: formData.availableSeats + 1 });
     }
   };
   const decrementCounter = () => {
-    if (formData.passengers > 1 && formData.passengers <= 8) {
-      setFormData({ ...formData, passengers: formData.passengers - 1 });
+    if (formData.availableSeats > 1 && formData.availableSeats <= 8) {
+      setFormData({ ...formData, passengers: formData.availableSeats - 1 });
     }
   };
 
@@ -168,33 +173,33 @@ const SearchBlock = () => {
         <form onSubmit={handleSubmit}>
           <div className="search-left">
             <div className="input-group">
-              <label htmlFor="startLocation" className="label-hidden">
+              <label htmlFor="departureCity" className="label-hidden">
                 Départ
               </label>
               <Flag size={30} />
               <input
                 type="text"
-                name="startLocation"
-                id="startLocation"
+                name="departureCity"
+                id="departureCity"
                 autoComplete="off"
                 placeholder="Départ"
-                value={formData.startLocation}
+                value={formData.departureCity}
                 onChange={handleChange}
                 onFocus={toggleModal}
               />
             </div>
             <div className="input-group">
-              <label htmlFor="arrivalLocation" className="label-hidden">
+              <label htmlFor="destinationCity" className="label-hidden">
                 Destination
               </label>
               <Flag size={30} />
               <input
                 type="text"
-                name="arrivalLocation"
-                id="arrivalLocation"
+                name="destinationCity"
+                id="destinationCity"
                 autoComplete="off"
                 placeholder="Destination"
-                value={formData.arrivalLocation}
+                value={formData.destinationCity}
                 onChange={handleChange}
                 onFocus={toggleModal}
               />
@@ -207,13 +212,13 @@ const SearchBlock = () => {
 
               <input
                 type="text"
-                name="selectedDate"
-                id="selectedDate"
+                name="departureDate"
+                id="departureDate"
                 autoComplete="off"
                 placeholder={displayDateMobile}
                 onChange={handleDateChange}
                 value={new Intl.DateTimeFormat("fr-FR", options).format(
-                  formData.selectedDate
+                  formData.departureDate
                 )}
                 onFocus={toggleModal}
               />
@@ -229,12 +234,12 @@ const SearchBlock = () => {
 
               <input
                 type="text"
-                name="selectedDate"
-                id="selectedDate"
+                name="departureDate"
+                id="departureDate"
                 autoComplete="off"
                 placeholder={new Date()}
                 onChange={handleDateChange}
-                value={formData.selectedDate}
+                value={formData.departureDate}
                 onFocus={toggleModal}
                 className="mobile"
               />
@@ -242,12 +247,12 @@ const SearchBlock = () => {
               <DatePicker
                 className="drop-btn desktop"
                 locale="fr"
-                selected={formData.selectedDate}
+                selected={formData.departureDate}
                 onChange={handleDateChange}
                 dateFormat="dd/MM/yyyy"
                 placeholderText="Aujourd'hui"
                 minDate={new Date()} // Desable dates before today
-                name="selectedDate"
+                name="departureDate"
               />
             </div>
 
@@ -264,8 +269,8 @@ const SearchBlock = () => {
                   }
                 }}
               >
-                <Users /> {formData.passengers} passager
-                {formData.passengers > 1 && "s"}
+                <Users /> {formData.availableSeats} passager
+                {formData.availableSeats > 1 && "s"}
               </button>
               {isPassengersOpen && (
                 <div className="dropdown-menu counter-block flex-row align-center desktop">
@@ -278,7 +283,7 @@ const SearchBlock = () => {
                     >
                       <Minus />
                     </button>
-                    <p>{formData.passengers}</p>
+                    <p>{formData.availableSeats}</p>
 
                     <button
                       type="button"
@@ -307,13 +312,13 @@ const SearchBlock = () => {
           <span className="line line-3"></span>
         </div>
         {/* Modal start or arrival location */}
-        {(modalContent === "startLocation" ||
-          modalContent === "arrivalLocation") && (
+        {(modalContent === "departureCity" ||
+          modalContent === "destinationCity") && (
           <>
             <div className="icon-container">
               <Flag size={34} />
             </div>
-            {modalContent === "startLocation" ? (
+            {modalContent === "departureCity" ? (
               <h3>D'où partez-vous ?</h3>
             ) : (
               <h3>Où voulez-vous aller ?</h3>
@@ -331,7 +336,7 @@ const SearchBlock = () => {
                   id={modalContent}
                   autoComplete="off"
                   placeholder={
-                    modalContent === "startLocation" ? "Départ" : "Destination"
+                    modalContent === "departureCity" ? "Départ" : "Destination"
                   }
                   value={formData.modalContent}
                   onChange={handleChange}
@@ -344,7 +349,7 @@ const SearchBlock = () => {
           </>
         )}
         {/* Modal select date departure */}
-        {modalContent === "selectedDate" && (
+        {modalContent === "departureDate" && (
           <>
             <div className="icon-container">
               <span className="material-symbols-outlined">calendar_month</span>
@@ -360,7 +365,7 @@ const SearchBlock = () => {
                 <DatePicker
                   className="drop-btn"
                   locale="fr"
-                  selected={formData.selectedDate}
+                  selected={formData.departureDate}
                   onChange={handleDateChange}
                   dateFormat="dd/MM/yyyy"
                   placeholderText="Aujourd'hui"
@@ -391,7 +396,7 @@ const SearchBlock = () => {
                 >
                   <Minus />
                 </button>
-                <p>{formData.passengers}</p>
+                <p>{formData.availableSeats}</p>
 
                 <button
                   type="button"
