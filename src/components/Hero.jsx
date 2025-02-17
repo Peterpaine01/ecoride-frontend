@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   User,
   ChevronRight,
@@ -18,7 +18,7 @@ import BurgerMenu from "./BurgerMenu";
 import ProfilMenu from "./ProfilMenu";
 
 // Je récupère les props
-const Hero = ({ token }) => {
+const Hero = () => {
   const [isProfilOpen, setIsProfilOpen] = useState(false);
 
   // REF
@@ -56,7 +56,7 @@ const Hero = ({ token }) => {
         <div className="cover">
           <img
             className="desktop"
-            src="src/assets/iStock-481629528-extend2.png"
+            src="src/assets/iStock-481629528-extend-cover.png"
             alt=""
           />
           <img

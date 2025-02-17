@@ -85,7 +85,7 @@ const RideCard = ({ ride }) => {
         <div className="bottom-ride-card flex-row">
           <div className="driver-infos flex-column">
             <div className="profil-icon">
-              {user.photo && (
+              {driver.photo && (
                 <img src={driver.photo} alt="photo profil par défaut" />
               )}
             </div>

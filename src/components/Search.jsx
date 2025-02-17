@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import React, { useEffect, useState, useRef } from "react";
 
 // Handle Date
@@ -12,12 +12,22 @@ import { Flag, Calendar, Users, Search, Plus, Minus } from "react-feather";
 
 // Je récupère les props
 const SearchBlock = () => {
-  // Handle form values
+  const [searchParams] = useSearchParams();
+
+  // console.log("searchParams", searchParams);
+
+  const searchQuery = {
+    departureCity: searchParams.get("departureCity"),
+    destinationCity: searchParams.get("destinationCity"),
+    departureDate: searchParams.get("departureDate"),
+    availableSeats: parseInt(searchParams.get("availableSeats"), 10) || 1,
+  };
+
   const [formData, setFormData] = useState({
-    departureCity: "",
-    destinationCity: "",
-    departureDate: new Date(),
-    availableSeats: 1,
+    departureCity: "" || searchQuery.departureCity,
+    destinationCity: "" || searchQuery.destinationCity,
+    departureDate: new Date() || searchQuery.departureDate,
+    availableSeats: 1 || searchQuery.availableSeats,
   });
 
   const navigate = useNavigate();

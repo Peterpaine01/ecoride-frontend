@@ -123,17 +123,17 @@ select {
   border-radius: 10px;
   color: variables.$color-dark;
 }
-[type="checkbox"] {
-  appearance: none;
-  aspect-ratio: 1;
-  box-sizing: border-box;
-  font-size: 1em;
-  width: 1em;
-  border-radius: 3px;
-  padding: 0;
-  border-color: #fff;
-  padding-right: 5px;
-}
+// [type="checkbox"] {
+//   appearance: none;
+//   aspect-ratio: 1;
+//   box-sizing: border-box;
+//   font-size: 1em;
+//   width: 1em;
+//   border-radius: 3px;
+//   padding: 0;
+//   border-color: #fff;
+//   padding-right: 5px;
+// }
 
 .input-checkbox-container {
   margin-bottom: 20px;
