@@ -25,7 +25,7 @@ Ecoride est une plateforme de covoiturage éco-responsable permettant aux utilis
 1. Clonez le dépôt :
 
    ```bash
-   git clone https://github.com/votre-repo/ecoride-frontend.git
+   git clone https://github.com/Peterpaine01/ecoride-frontend.git
    cd ecoride-frontend
    ```
 
