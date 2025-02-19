@@ -59,7 +59,7 @@ const SearchBlock = () => {
   const [modalContent, setModalContent] = useState("");
 
   // REF
-  const passengersRef = useRef(null); // Référence au menu déroulant
+  const passengersRef = useRef(null);
   const minusButtonRef = useRef(null);
   const minusButtonModalRef = useRef(null);
   const plusButtonRef = useRef(null);
@@ -156,12 +156,12 @@ const SearchBlock = () => {
   // HANDLE COUNTER PASSENGERS
   const incrementCounter = () => {
     if (formData.availableSeats >= 1 && formData.availableSeats < 8) {
-      setFormData({ ...formData, passengers: formData.availableSeats + 1 });
+      setFormData({ ...formData, availableSeats: formData.availableSeats + 1 });
     }
   };
   const decrementCounter = () => {
     if (formData.availableSeats > 1 && formData.availableSeats <= 8) {
-      setFormData({ ...formData, passengers: formData.availableSeats - 1 });
+      setFormData({ ...formData, availableSeats: formData.availableSeats - 1 });
     }
   };
 
@@ -270,7 +270,7 @@ const SearchBlock = () => {
               <button
                 className="drop-btn"
                 type="button"
-                name="passengers"
+                name="availableSeats"
                 onClick={(e) => {
                   if (window.innerWidth < 890) {
                     toggleModal(e);
@@ -390,7 +390,7 @@ const SearchBlock = () => {
           </>
         )}
         {/* Modal counter passengers */}
-        {modalContent === "passengers" && (
+        {modalContent === "availableSeats" && (
           <>
             <div className="icon-container">
               <Users size={34} />

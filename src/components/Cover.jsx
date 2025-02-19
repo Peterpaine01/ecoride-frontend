@@ -7,12 +7,12 @@ const Cover = () => {
         <div className="cover">
           <img
             className="desktop"
-            src="src/assets/iStock-481629528-extend-cover.png"
+            src="https://res.cloudinary.com/djxejhaxr/image/upload/cover_qysjoz.jpg"
             alt=""
           />
           <img
             className="mobile"
-            src="src/assets/iStock-481629528-extend-cover.png"
+            src="https://res.cloudinary.com/djxejhaxr/image/upload/cover_qysjoz.jpg"
             alt=""
           />
         </div>

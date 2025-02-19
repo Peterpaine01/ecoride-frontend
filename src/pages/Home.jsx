@@ -21,7 +21,7 @@ const Home = () => {
             <div className="block-left align-center">
               <div className="block-img">
                 <img
-                  src="/images/side-view-blurry-woman-waiting-near-car.png"
+                  src="https://res.cloudinary.com/djxejhaxr/image/upload/side-view-blurry-woman-waiting-near-car_kaisoe.png"
                   alt="borne de rechargement pour voiture electrique"
                 />
               </div>

@@ -279,6 +279,7 @@
   width: 400px;
   justify-content: space-between;
   padding: 15px 20px;
+  flex-direction: row;
   > p {
     color: variables.$color-dark;
     font-size: 20px;

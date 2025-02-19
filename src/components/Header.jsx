@@ -29,7 +29,7 @@ const Header = () => {
   const [isToken, setIsToken] = useState(true);
 
   // REF
-  const profilRef = useRef(null); // Référence au menu déroulant
+  const profilRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

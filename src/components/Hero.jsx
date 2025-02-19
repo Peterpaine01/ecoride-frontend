@@ -22,7 +22,7 @@ const Hero = () => {
   const [isProfilOpen, setIsProfilOpen] = useState(false);
 
   // REF
-  const profilRef = useRef(null); // Référence au menu déroulant
+  const profilRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -56,12 +56,12 @@ const Hero = () => {
         <div className="cover">
           <img
             className="desktop"
-            src="src/assets/iStock-481629528-extend-cover.png"
+            src="https://res.cloudinary.com/djxejhaxr/image/upload/cover_qysjoz.jpg"
             alt=""
           />
           <img
             className="mobile"
-            src="src/assets/iStock-481629528-extend-mobile.png"
+            src="https://res.cloudinary.com/djxejhaxr/image/upload/hero-MOBILE_yt2oco.jpg"
             alt=""
           />
         </div>
