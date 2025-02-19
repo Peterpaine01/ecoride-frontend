@@ -192,7 +192,7 @@ const Profil = () => {
                     <h3>AVIS</h3>
                     <div className="last-reviews">
                       {reviewsDataTest
-                        .filter((review) => review.isPublished) // Filtrer uniquement les avis publiés
+                        .filter((review) => review.isPublished)
                         .slice(0, 2)
                         .map((review, index) => (
                           <article
