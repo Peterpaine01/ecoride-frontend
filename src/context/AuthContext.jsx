@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
       });
       const { token } = response.data;
 
-      Cookies.set("token", token);
+      Cookies.set("token", token, { expires: 365 });
       const decodedToken = jwtDecode(token);
       setIsAuthenticated(true);
       fetchUser(decodedToken.id);

@@ -1,0 +1,101 @@
+@use "variables";
+
+.profile-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #fff;
+}
+
+.profile {
+  h1 {
+    margin: 0;
+    padding: 0;
+  }
+  h3 {
+    color: #fff;
+    margin-bottom: 15px;
+  }
+
+  nav {
+    margin-bottom: 40px;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid #fff;
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+
+    .profile-info,
+    .preferences,
+    .vehicles {
+      width: 50%;
+    }
+    .ecoride {
+      border: 1px solid #fff;
+      padding: 20px;
+      border-radius: 15px;
+      width: 50%;
+    }
+  }
+
+  .reviews {
+    width: 100%;
+  }
+
+  .last-reviews {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    article {
+      width: 50%;
+      border: none !important;
+    }
+  }
+}
+
+.vehicle {
+  padding: 15px 20px;
+  background-color: #fff;
+  border-radius: 15px;
+  text-decoration: none;
+  color: variables.$color-bg-dark;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  &:hover {
+    background-color: variables.$color-accessibility;
+  }
+}
+
+.user-infos {
+  flex: 1;
+}
+
+.profil-icon {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  border: 3px solid variables.$color-secondary;
+  overflow: hidden;
+  &.user-logged {
+    border-color: variables.$color-accessibility;
+  }
+  img {
+    width: 100%;
+  }
+}

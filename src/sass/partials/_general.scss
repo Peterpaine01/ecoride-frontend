@@ -267,6 +267,8 @@ button:disabled {
   border-radius: 60px;
   font-size: 22px;
   cursor: pointer;
+  text-decoration: none;
+  height: fit-content;
   &:hover {
     background-color: adjust-color(variables.$color-primary, $lightness: -10%);
   }
