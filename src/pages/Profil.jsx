@@ -1,18 +1,18 @@
-import { Link } from "react-router-dom";
-import Cookies from "js-cookie";
-import React, { useEffect, useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import axios from "../config/axiosConfig";
+import { Link } from "react-router-dom"
+import Cookies from "js-cookie"
+import React, { useEffect, useState, useContext } from "react"
+import { AuthContext } from "../context/AuthContext"
+import axios from "../config/axiosConfig"
 
 // Components
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Cover from "../components/Cover";
+import Header from "../components/Header"
+import Footer from "../components/Footer"
+import Cover from "../components/Cover"
 
 const Profil = () => {
-  const { user, login, logout, isAuthenticated } = useContext(AuthContext);
-  console.log(user);
-  const [userReviewsList, setUserReviewsList] = useState(false);
+  const { user, login, logout, isAuthenticated } = useContext(AuthContext)
+  console.log(user)
+  const [userReviewsList, setUserReviewsList] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,30 +20,30 @@ const Profil = () => {
         try {
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/reviews-driver/${user.account_id}`
-          );
+          )
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+            throw new Error("Network response was not ok")
           }
-          const data = await response.json();
-          console.log("Reviews data:", data.reviews);
+          const data = await response.json()
+          console.log("Reviews data:", data.reviews)
 
-          setUserReviewsList(data.reviews || []);
+          setUserReviewsList(data.reviews || [])
         } catch (error) {
-          console.error("Error fetching reviews:", error);
+          console.error("Error fetching reviews:", error)
         }
       }
-    };
+    }
 
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   const renderStars = (note) => {
-    const fullStar = "⭐"; // Icône étoile pleine
-    const emptyStar = "☆"; // Icône étoile vide
-    return fullStar.repeat(note) + emptyStar.repeat(5 - note);
-  };
+    const fullStar = "⭐" // Icône étoile pleine
+    const emptyStar = "☆" // Icône étoile vide
+    return fullStar.repeat(note) + emptyStar.repeat(5 - note)
+  }
 
-  console.log("userReviewsList", userReviewsList);
+  console.log("userReviewsList", userReviewsList)
   const reviewsDataTest = [
     {
       title: "Bien !",
@@ -73,7 +73,7 @@ const Profil = () => {
       wasRideOk: true,
       isPublished: false,
     },
-  ];
+  ]
 
   // if (!user) {
   //   return <p>Loading</p>;
@@ -88,7 +88,7 @@ const Profil = () => {
       {user ? (
         <main>
           <div className="container profile">
-            <div className="section profile-header">
+            <section className="profile-header">
               <div className="flex-row gap-15">
                 <div className="profil-icon user-logged">
                   <img src={user.photo} alt={`Photo de ${user.username}`} />
@@ -100,8 +100,8 @@ const Profil = () => {
               </div>
 
               <Link className="edit-profile btn-solid">Modifier le profil</Link>
-            </div>
-            <div className="section filters-layout flex-row">
+            </section>
+            <section className="filters-layout flex-row">
               <aside className="sidebar one-third-column">
                 <h2>Compte</h2>
                 <nav className="menu">
@@ -181,7 +181,7 @@ const Profil = () => {
                           <Link key={car.id} className="vehicle">
                             🚗 {car.model} - {car.color}
                           </Link>
-                        );
+                        )
                       })}
 
                     <button>Ajouter un véhicule</button>
@@ -213,7 +213,7 @@ const Profil = () => {
                 </div>
                 <Link>Tous les avis </Link>
               </div>
-            </div>
+            </section>
           </div>
         </main>
       ) : (
@@ -222,7 +222,7 @@ const Profil = () => {
 
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default Profil;
+export default Profil

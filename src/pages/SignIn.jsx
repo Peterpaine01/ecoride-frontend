@@ -58,7 +58,7 @@ const SignIn = () => {
 
       <main>
         <div className="container">
-          <div className="section flex-column align-center">
+          <section className="flex-column align-center">
             <h1>Se connecter</h1>
             <form
               className="user-connect framed flex-column"
@@ -134,7 +134,7 @@ const SignIn = () => {
                 Mot de passe oublié ?
               </Link>
             </form>
-          </div>
+          </section>
         </div>
       </main>
 

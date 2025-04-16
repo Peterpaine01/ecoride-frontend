@@ -27,7 +27,7 @@ const MapMarker = ({ position, label }) => {
   const icon = label === "Départ" ? greenIcon : redIcon
 
   useEffect(() => {
-    if (position) map.setView(position, 13)
+    if (position) map.setView(position, map.getZoom())
   }, [position, map])
 
   return (
@@ -36,5 +36,4 @@ const MapMarker = ({ position, label }) => {
     </Marker>
   )
 }
-
 export default MapMarker

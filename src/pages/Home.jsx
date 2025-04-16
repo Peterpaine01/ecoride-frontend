@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom"
+import React, { useEffect, useState } from "react"
+import axios from "axios"
 
 // Components
-import Header from "../components/Header";
-import Hero from "../components/Hero";
-import Footer from "../components/Footer";
+import Header from "../components/Header"
+import Hero from "../components/Hero"
+import Footer from "../components/Footer"
 
 const Home = () => {
   return (
@@ -14,10 +14,10 @@ const Home = () => {
       <Hero />
       <main>
         <div className="container">
-          <div className="section">
+          <section>
             <h1>Bienvenue sur EcoRide !</h1>
-          </div>
-          <div className="section flex-row two-column reverse-mobile">
+          </section>
+          <section className="flex-row two-column reverse-mobile">
             <div className="block-left align-center">
               <div className="block-img">
                 <img
@@ -56,8 +56,8 @@ const Home = () => {
                 créant des liens entre les passagers.
               </p>
             </div>
-          </div>
-          <div className="section">
+          </section>
+          <section>
             <div className="slogan">
               <p>
                 <em>
@@ -66,8 +66,8 @@ const Home = () => {
                 </em>
               </p>
             </div>
-          </div>
-          <div className="section flex-row two-column framed">
+          </section>
+          <section className="flex-row two-column framed">
             <div className="block-left">
               <div className="title-image reverse-mobile flex-column">
                 <h2>Comment fonctionne EcoRide ?</h2>
@@ -93,12 +93,12 @@ const Home = () => {
                 cœur de chaque trajet partagé.
               </p>
             </div>
-          </div>
+          </section>
         </div>
       </main>
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

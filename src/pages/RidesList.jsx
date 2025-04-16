@@ -3,24 +3,24 @@ import {
   useLocation,
   useSearchParams,
   useNavigate,
-} from "react-router-dom";
-import React, { useEffect, useState, useMemo, useRef } from "react";
-import axios from "../config/axiosConfig";
+} from "react-router-dom"
+import React, { useEffect, useState, useMemo, useRef } from "react"
+import axios from "../config/axiosConfig"
 
 // Components
-import Header from "../components/Header";
-import Cover from "../components/Cover";
-import Hero from "../components/Hero";
-import Search from "../components/Search";
-import Footer from "../components/Footer";
-import RideCard from "../components/RideCard";
-import { Key } from "react-feather";
+import Header from "../components/Header"
+import Cover from "../components/Cover"
+import Hero from "../components/Hero"
+import Search from "../components/Search"
+import Footer from "../components/Footer"
+import RideCard from "../components/RideCard"
+import { Key } from "react-feather"
 
 const RidesList = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [ridesList, setRidesList] = useState();
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [ridesList, setRidesList] = useState()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   // useMemo = update searchQuery only if searchParams change
   const searchQuery = useMemo(
@@ -31,9 +31,9 @@ const RidesList = () => {
       availableSeats: parseInt(searchParams.get("availableSeats"), 10) || 1,
     }),
     [searchParams]
-  );
+  )
 
-  console.log("searchParams", searchParams);
+  console.log("searchParams", searchParams)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,117 +41,117 @@ const RidesList = () => {
         try {
           const response = await axios.get("/search-rides", {
             params: searchQuery,
-          });
-          console.log("Rides data:", response.data);
+          })
+          console.log("Rides data:", response.data)
 
-          setRidesList(response.data.rides || []);
+          setRidesList(response.data.rides || [])
         } catch (error) {
-          console.error("Error fetching rides:", error);
+          console.error("Error fetching rides:", error)
         }
       }
-    };
+    }
 
-    fetchData();
-  }, [searchQuery]);
-  console.log("ridesList", ridesList);
+    fetchData()
+  }, [searchQuery])
+  console.log("ridesList", ridesList)
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    const formData = new FormData(event.target);
-    const newParams = {};
+    const formData = new FormData(event.target)
+    const newParams = {}
 
     formData.forEach((value, key) => {
       if (value && value !== "--:--" && value !== "Indifférent") {
-        newParams[key] = value;
+        newParams[key] = value
       }
-    });
+    })
 
-    newParams.isElectric = formData.get("isElectric") === "on";
-    newParams.acceptSmoking = formData.get("acceptSmoking") === "on";
-    newParams.acceptAnimals = formData.get("acceptAnimals") === "on";
+    newParams.isElectric = formData.get("isElectric") === "on"
+    newParams.acceptSmoking = formData.get("acceptSmoking") === "on"
+    newParams.acceptAnimals = formData.get("acceptAnimals") === "on"
 
-    const updatedParams = new URLSearchParams(searchParams);
+    const updatedParams = new URLSearchParams(searchParams)
 
     Object.entries(newParams).forEach(([key, value]) => {
-      updatedParams.set(key, value);
-    });
+      updatedParams.set(key, value)
+    })
 
-    navigate(`?${updatedParams.toString()}`);
-  };
+    navigate(`?${updatedParams.toString()}`)
+  }
 
   const getDate = (date) => {
-    const formattedDate = new Date(Date.parse(date));
+    const formattedDate = new Date(Date.parse(date))
 
     const options = {
       weekday: "short",
       day: "numeric",
       month: "long",
       year: "numeric",
-    };
+    }
 
     return formattedDate
       .toLocaleDateString("fr-FR", options)
-      .replace(/^./, (c) => c.toUpperCase());
-  };
-  console.log(searchQuery);
+      .replace(/^./, (c) => c.toUpperCase())
+  }
+  console.log(searchQuery)
 
   // COUNTER
 
   // REF
-  const minusButtonRef = useRef(null);
-  const minusButtonModalRef = useRef(null);
-  const plusButtonRef = useRef(null);
-  const plusButtonModalRef = useRef(null);
+  const minusButtonRef = useRef(null)
+  const minusButtonModalRef = useRef(null)
+  const plusButtonRef = useRef(null)
+  const plusButtonModalRef = useRef(null)
 
   // Accéder aux boutons via le DOM
-  const minusButton = minusButtonRef.current;
-  const plusButton = plusButtonRef.current;
-  const minusButtonModal = minusButtonModalRef.current;
-  const plusButtonModal = plusButtonModalRef.current;
+  const minusButton = minusButtonRef.current
+  const plusButton = plusButtonRef.current
+  const minusButtonModal = minusButtonModalRef.current
+  const plusButtonModal = plusButtonModalRef.current
 
   // dropdown counter desktop
   if (minusButton) {
     if (formData.availableSeats === 1) {
-      minusButton.disabled = true;
+      minusButton.disabled = true
     } else {
-      minusButton.disabled = false;
+      minusButton.disabled = false
     }
   }
   if (plusButton) {
     if (formData.availableSeats === 8) {
-      plusButton.disabled = true;
+      plusButton.disabled = true
     } else {
-      plusButton.disabled = false;
+      plusButton.disabled = false
     }
   }
   // modal counter mobile
   if (minusButtonModal) {
     if (formData.availableSeats === 1) {
-      minusButtonModal.disabled = true;
+      minusButtonModal.disabled = true
     } else {
-      minusButtonModal.disabled = false;
+      minusButtonModal.disabled = false
     }
   }
 
   if (plusButtonModal) {
     if (formData.availableSeats === 8) {
-      plusButtonModal.disabled = true;
+      plusButtonModal.disabled = true
     } else {
-      plusButtonModal.disabled = false;
+      plusButtonModal.disabled = false
     }
   }
 
   const incrementCounter = () => {
     if (formData.availableSeats >= 1 && formData.availableSeats < 8) {
-      setFormData({ ...formData, passengers: formData.availableSeats + 1 });
+      setFormData({ ...formData, passengers: formData.availableSeats + 1 })
     }
-  };
+  }
   const decrementCounter = () => {
     if (formData.availableSeats > 1 && formData.availableSeats <= 8) {
-      setFormData({ ...formData, passengers: formData.availableSeats - 1 });
+      setFormData({ ...formData, passengers: formData.availableSeats - 1 })
     }
-  };
+  }
 
   return (
     <>
@@ -159,7 +159,7 @@ const RidesList = () => {
       <Hero searchParams={searchQuery} />
       <main>
         <div className="container">
-          <div className="section filters-layout flex-row">
+          <section className="filters-layout flex-row">
             <aside className="filters one-third-column">
               <div className="filter-header flex-row">
                 <h2>Filtrer</h2>
@@ -259,20 +259,20 @@ const RidesList = () => {
               <div className="results-list flex-column gap-15">
                 {ridesList ? (
                   ridesList.map((ride) => {
-                    console.log("ride", ride);
-                    return <RideCard key={ride._id} ride={ride} />;
+                    console.log("ride", ride)
+                    return <RideCard key={ride._id} ride={ride} />
                   })
                 ) : (
                   <p>Pas de trajet trouvé avec ces critères.</p>
                 )}
               </div>
             </div>
-          </div>
+          </section>
         </div>
       </main>
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default RidesList;
+export default RidesList

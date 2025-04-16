@@ -1,7 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
-import React, { useEffect, useState, useContext } from "react";
-import axios from "../config/axiosConfig";
-import { AuthContext } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom"
+import React, { useEffect, useState, useContext } from "react"
+import axios from "../config/axiosConfig"
+import { AuthContext } from "../context/AuthContext"
 
 import {
   Circle,
@@ -12,18 +12,18 @@ import {
   User,
   Mail,
   CheckCircle,
-} from "react-feather";
+} from "react-feather"
 
 // Components
-import Header from "../components/Header";
-import Cover from "../components/Cover";
-import Footer from "../components/Footer";
+import Header from "../components/Header"
+import Cover from "../components/Cover"
+import Footer from "../components/Footer"
 
 const SignUp = () => {
-  const { user, login, logout, isAuthenticated } = useContext(AuthContext);
+  const { user, login, logout, isAuthenticated } = useContext(AuthContext)
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -31,7 +31,7 @@ const SignUp = () => {
     gender: "male",
     is_driver: 0,
     consent_data_retention: 0,
-  });
+  })
   const [validationPassword, setValidationPassword] = useState({
     criteria: 0,
     length: false,
@@ -39,27 +39,27 @@ const SignUp = () => {
     lowercase: false,
     number: false,
     symbol: false,
-  });
-  const [validationEmail, setValidationEmail] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  })
+  const [validationEmail, setValidationEmail] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
-    const { name, type, checked, value } = e.target;
+    const { name, type, checked, value } = e.target
 
     setFormData((prev) => {
       const updatedFormData = {
         ...prev,
         [name]: type === "checkbox" ? (checked ? 1 : 0) : value,
-      };
+      }
 
-      if (name === "password") checkPassword(updatedFormData.password);
-      if (name === "email") checkEmail(updatedFormData.email);
+      if (name === "password") checkPassword(updatedFormData.password)
+      if (name === "email") checkEmail(updatedFormData.email)
 
-      return updatedFormData;
-    });
-  };
+      return updatedFormData
+    })
+  }
 
   const checkPassword = (password = "") => {
     //console.log("password.length -> ", password.length);
@@ -69,77 +69,76 @@ const SignUp = () => {
       lowercase: /[a-z]/.test(password),
       number: /[0-9]/.test(password),
       symbol: /[^a-zA-Z0-9\s]/.test(password),
-    };
+    }
 
     // Eval total number of criteria met
-    newValidation.criteria =
-      Object.values(newValidation).filter(Boolean).length;
+    newValidation.criteria = Object.values(newValidation).filter(Boolean).length
 
-    setValidationPassword(newValidation);
+    setValidationPassword(newValidation)
     //console.log("validationPassword -> ", validationPassword);
-  };
+  }
 
   const checkEmail = (email = "") => {
-    const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    setValidationEmail(regexEmail.test(email));
-  };
+    const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    setValidationEmail(regexEmail.test(email))
+  }
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    setErrorMessage("");
+    event.preventDefault()
+    setErrorMessage("")
 
     if (!validationEmail) {
-      setErrorMessage("Veuillez entrer une adresse e-mail valide.");
-      return;
+      setErrorMessage("Veuillez entrer une adresse e-mail valide.")
+      return
     }
 
     if (validationPassword.criteria < 4) {
-      setErrorMessage("Le mot de passe ne respecte pas tous les critères.");
-      return;
+      setErrorMessage("Le mot de passe ne respecte pas tous les critères.")
+      return
     }
 
     if (!formData.username || !formData.email || !formData.password) {
-      setErrorMessage("Tous les champs sont requis.");
-      return;
+      setErrorMessage("Tous les champs sont requis.")
+      return
     }
 
     if (!formData.consent_data_retention) {
       setErrorMessage(
         "Veuillez accepter notre politique de gestion des données."
-      );
-      return;
+      )
+      return
     }
 
     try {
-      const response = await axios.post("/create-user", formData);
+      const response = await axios.post("/create-user", formData)
 
-      console.log(response.data);
+      console.log(response.data)
 
-      login(formData.email, formData.password);
+      login(formData.email, formData.password)
 
-      setIsSubmitted(true);
+      setIsSubmitted(true)
 
-      console.log(response.data);
+      console.log(response.data)
     } catch (error) {
-      console.log(error.response.status);
-      console.log(error.message);
+      console.log(error.response.status)
+      console.log(error.message)
       if (error.response && error.response.data) {
         if (error.response.status === 409) {
-          setErrorMessage("Cette adresse mail est déjà utilisée.");
+          setErrorMessage("Cette adresse mail est déjà utilisée.")
         } else {
-          setErrorMessage("Une erreur est survenue, veuillez réessayer.");
+          setErrorMessage("Une erreur est survenue, veuillez réessayer.")
         }
       } else {
-        setErrorMessage("Impossible de se connecter au serveur.");
+        setErrorMessage("Impossible de se connecter au serveur.")
       }
     }
-  };
+  }
 
   useEffect(() => {
-    checkPassword(formData.password);
-  }, [formData.password]);
+    checkPassword(formData.password)
+  }, [formData.password])
 
-  console.log("formData -> ", formData);
+  console.log("formData -> ", formData)
 
   return (
     <>
@@ -149,7 +148,7 @@ const SignUp = () => {
       <main>
         <div className="container">
           {isSubmitted ? (
-            <div className="section flex-column align-center">
+            <section className="flex-column align-center">
               <h1>Compte créé !</h1>
               <p>Merci pour votre inscription sur Ecoride.</p>
               <p>
@@ -157,9 +156,9 @@ const SignUp = () => {
                 mail afin d'activer votre compte et commencer à utiliser les
                 services Ecoride.
               </p>
-            </div>
+            </section>
           ) : (
-            <div className="section flex-column align-center">
+            <section className="flex-column align-center">
               <h1>Créer un compte</h1>
               <form
                 className="user-connect framed flex-column"
@@ -366,13 +365,13 @@ const SignUp = () => {
                   S'inscrire
                 </button>
               </form>
-            </div>
+            </section>
           )}
         </div>
       </main>
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default SignUp;
+export default SignUp

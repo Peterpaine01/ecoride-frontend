@@ -1,33 +1,33 @@
-import { Link } from "react-router-dom";
-import React, { useEffect, useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import axios from "../config/axiosConfig";
+import { Link } from "react-router-dom"
+import React, { useEffect, useState, useContext } from "react"
+import { AuthContext } from "../context/AuthContext"
+import axios from "../config/axiosConfig"
 
 // Components
-import Header from "../components/Header";
-import Cover from "../components/Cover";
-import Footer from "../components/Footer";
+import Header from "../components/Header"
+import Cover from "../components/Cover"
+import Footer from "../components/Footer"
 
 const RidesSchedule = () => {
-  const [rides, setRides] = useState();
+  const [rides, setRides] = useState()
 
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext)
 
   useEffect(() => {
     const fetchRides = async () => {
       try {
-        const response = await axios.get(`/driver-rides`);
+        const response = await axios.get(`/driver-rides`)
 
-        setRides(response.data.rides);
+        setRides(response.data.rides)
       } catch (error) {
-        console.error("Error fetching rides :", error);
+        console.error("Error fetching rides :", error)
       }
-    };
+    }
 
-    fetchRides();
-  }, []);
+    fetchRides()
+  }, [])
 
-  console.log(rides);
+  console.log(rides)
 
   return (
     <>
@@ -35,15 +35,15 @@ const RidesSchedule = () => {
       <Cover />
       <main>
         <div className="container">
-          <div className="section">
+          <section>
             <h1>Vos trajets</h1>
-          </div>
-          <div className="section">
+          </section>
+          <section>
             {rides &&
               rides
                 .filter((ride) => ride.rideStatus === "forthcoming")
                 .map((ride) => {
-                  console.log("ride", ride);
+                  console.log("ride", ride)
 
                   return (
                     <div key={ride._id} className="card-ride">
@@ -53,14 +53,14 @@ const RidesSchedule = () => {
                   </p> */}
                       <p>{ride.departureDate}</p>
                     </div>
-                  );
+                  )
                 })}
-          </div>
+          </section>
         </div>
       </main>
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default RidesSchedule;
+export default RidesSchedule

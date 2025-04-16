@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useContext, useRef } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { useNavigate } from "react-router-dom"
 
@@ -18,9 +18,12 @@ import axios from "../config/axiosConfig"
 import Header from "../components/Header"
 import Cover from "../components/Cover"
 import Footer from "../components/Footer"
+import FitBoundsOnRoute from "../components/FitBoundsOnRoute"
 
 const PublishRide = () => {
   const navigate = useNavigate()
+
+  const mapRef = useRef(null)
 
   const [step, setStep] = useState(1)
   const [vehicles, setVehicles] = useState([])
@@ -35,36 +38,14 @@ const PublishRide = () => {
     vehicleId: "",
   })
   const [routeCoords, setRouteCoords] = useState([])
+  const [geolocFailed, setGeolocFailed] = useState(false)
+  const [errors, setErrors] = useState("")
+  const [isMapReady, setIsMapReady] = useState(false)
 
   const { user } = useContext(AuthContext)
 
   const nextStep = () => setStep(step + 1)
   const prevStep = () => setStep(step - 1)
-
-  const handleAddressSelect = async (query, type) => {
-    const response = await geocodingClient
-      .forwardGeocode({ query, limit: 1 })
-      .send()
-
-    if (response.body.features.length > 0) {
-      const place = response.body.features[0]
-      const newCoords = place.center
-
-      setFormData((prev) => ({
-        ...prev,
-        [type]: {
-          street: place.text,
-          city: place.context?.find((c) => c.id.includes("place"))?.text || "",
-          zip:
-            place.context?.find((c) => c.id.includes("postcode"))?.text || "",
-          coords: newCoords,
-        },
-      }))
-
-      setMarker(newCoords)
-      setMapView({ longitude: newCoords[0], latitude: newCoords[1], zoom: 14 })
-    }
-  }
 
   useEffect(() => {
     if (
@@ -209,15 +190,46 @@ const PublishRide = () => {
     }
   }, [step, user])
 
+  useEffect(() => {
+    if (isMapReady && step === 3 && routeCoords.length > 0 && mapRef.current) {
+      const bounds = L.latLngBounds(
+        routeCoords.map(([lat, lng]) => L.latLng(lat, lng))
+      )
+
+      console.log("✅ Zoom sur l’itinéraire :", bounds)
+
+      mapRef.current.fitBounds(bounds, {
+        padding: [50, 50],
+        animate: true,
+      })
+    }
+  }, [isMapReady, step, routeCoords])
+
+  useEffect(() => {
+    console.log("Zoom Check →", {
+      step,
+      routeCoordsLength: routeCoords.length,
+      isMapReady,
+      hasMap: !!mapRef.current,
+    })
+  }, [step, routeCoords, isMapReady])
+
   return (
     <>
       <Header />
       <Cover />
       <main>
-        <div className="section">
+        <section>
           <h1>Nouveau trajet</h1>
-        </div>
-        <div className="section framed">
+          {geolocFailed && (
+            <p className="text-red-600 mt-10">
+              Impossible d’accéder à votre position. Saisissez l’adresse de
+              départ manuellement.
+            </p>
+          )}
+        </section>
+
+        <section className="flex-row two-column framed">
           {(step === 1 || step === 2 || step === 3) && (
             <>
               <div className="block-left">
@@ -225,8 +237,9 @@ const PublishRide = () => {
                 {step === 1 && (
                   <>
                     <AddressForm
-                      label="Où souhaitez-vous récupérer vos passager ?"
+                      label="Où souhaitez-vous récupérer vos passagers ?"
                       address={formData.departureAddress}
+                      errors={errors}
                       onChange={(updatedAddress) =>
                         setFormData((prev) => ({
                           ...prev,
@@ -248,21 +261,17 @@ const PublishRide = () => {
                               coords,
                             },
                           }))
+                          setErrors("")
                         } catch {
                           console.log(
+                            "Impossible de localiser l’adresse de départ."
+                          )
+                          setErrors(
                             "Impossible de localiser l’adresse de départ."
                           )
                         }
                       }}
                     />
-
-                    <button
-                      className="btn-solid"
-                      onClick={() => setStep(2)}
-                      disabled={!formData.departureAddress.coords}
-                    >
-                      Continuer
-                    </button>
                   </>
                 )}
                 {/* Étape 2 : Adresse de destination */}
@@ -271,6 +280,7 @@ const PublishRide = () => {
                     <AddressForm
                       label="Où allez-vous ?"
                       address={formData.destinationAddress}
+                      errors={errors}
                       onChange={(updatedAddress) =>
                         setFormData((prev) => ({
                           ...prev,
@@ -292,32 +302,39 @@ const PublishRide = () => {
                               coords,
                             },
                           }))
+                          setErrors("")
                         } catch {
                           console.log(
+                            "Impossible de localiser l’adresse de destination."
+                          )
+                          setErrors(
                             "Impossible de localiser l’adresse de destination."
                           )
                         }
                       }}
                     />
-
-                    <button
-                      className="btn-solid"
-                      onClick={() => setStep(3)}
-                      disabled={!formData.destinationAddress.coords}
-                    >
-                      Continuer
-                    </button>
                   </>
                 )}
                 {/* Étape 3 : Calcul itinéraire */}
                 {step === 3 && (
-                  <div>
-                    <h3 className="text-lg font-semibold">
+                  <div className="flex-column align-center">
+                    <h2 className="text-lg font-semibold">
                       Temps de trajet estimé
-                    </h3>
+                    </h2>
                     {formData.duration ? (
-                      <p className="text-green-600 text-xl font-bold">
-                        {formData.duration} minutes
+                      <p className="emphase mt-20">
+                        {(() => {
+                          const duration = Math.round(formData.duration)
+                          if (duration >= 60) {
+                            const hours = Math.floor(duration / 60)
+                            const minutes = duration % 60
+                            return `${hours}h${
+                              minutes > 0 ? ` ${minutes}m` : ""
+                            }`
+                          } else {
+                            return `${duration}m`
+                          }
+                        })()}
                       </p>
                     ) : (
                       <p className="text-red-600">
@@ -331,12 +348,14 @@ const PublishRide = () => {
                 <MapContainer
                   center={formData.departureAddress.coords || [48.8566, 2.3522]}
                   zoom={13}
-                  style={{ height: "300px" }}
+                  style={{ minHeight: "300px", aspectRatio: 1 }}
+                  ref={mapRef}
                 >
                   <TileLayer
                     attribution="&copy; OpenStreetMap"
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   />
+
                   {formData.departureAddress.coords && (
                     <MapMarker
                       position={formData.departureAddress.coords}
@@ -356,17 +375,7 @@ const PublishRide = () => {
               </div>
             </>
           )}
-          {step === 4 && (
-            <div>
-              <label>Date de départ :</label>
-              <input
-                type="date"
-                name="departureDate"
-                value={formData.departureDate.split("T")[0]}
-                onChange={handleChange}
-              />
-            </div>
-          )}
+
           {/* Étape 4 : Date de départ */}
           {step === 4 && (
             <div>
@@ -435,7 +444,6 @@ const PublishRide = () => {
                 value={formData.creditsPerPassenger}
                 onChange={handleChange}
               />
-              <button onClick={prevStep}>Précédent</button>
             </div>
           )}
 
@@ -448,35 +456,37 @@ const PublishRide = () => {
                 value={formData.description}
                 onChange={handleChange}
               ></textarea>
-              <button onClick={prevStep}>Précédent</button>
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="btn-solid"
-              >
-                Publier
-              </button>
             </div>
           )}
-        </div>
-        <section>
+        </section>
+        <section className="flex-row gap-15 justify-center">
           {/* Navigation entre les étapes */}
-          <div>
-            {step > 1 && <button onClick={prevStep}>Précédent</button>}
-            {step < 9 ? (
-              <button onClick={nextStep} className="btn-solid">
-                Continuer
-              </button>
-            ) : (
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="btn-solid"
-              >
-                Publier
-              </button>
-            )}
-          </div>
+          {step > 1 && (
+            <button className="btn-light" onClick={prevStep}>
+              Précédent
+            </button>
+          )}
+          {step < 9 ? (
+            <button
+              onClick={nextStep}
+              className="btn-solid"
+              disabled={
+                step === 1
+                  ? !formData.departureAddress.street ||
+                    !formData.departureAddress.zip ||
+                    !formData.departureAddress.city
+                  : step === 2
+                  ? !formData.destinationAddress.coords
+                  : ""
+              }
+            >
+              Continuer
+            </button>
+          ) : (
+            <button type="submit" onClick={handleSubmit} className="btn-solid">
+              Publier
+            </button>
+          )}
         </section>
       </main>
       <Footer />

@@ -164,10 +164,10 @@ const PublishRide = () => {
       <Header />
       <Cover />
       <main>
-        <div className="section">
+        <section>
           <h1>Nouveau trajet</h1>
-        </div>
-        <div className="section">
+        </section>
+        <section>
           <div className="content-form">
             {step === 1 && (
               <div>
@@ -339,7 +339,7 @@ const PublishRide = () => {
               </button>
             )}
           </div>
-        </div>
+        </section>
       </main>
 
       <Footer />
