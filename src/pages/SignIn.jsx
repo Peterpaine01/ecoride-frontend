@@ -1,79 +1,55 @@
-import { Link, useNavigate } from "react-router-dom";
-import React, { useEffect, useState, useContext } from "react";
-import axios from "../config/axiosConfig";
-import { AuthContext } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom"
+import React, { useState, useContext } from "react"
+import { AuthContext } from "../context/AuthContext"
 
 // Components
-import Header from "../components/Header";
-import Cover from "../components/Cover";
-import Footer from "../components/Footer";
+import Header from "../components/Header"
+import Cover from "../components/Cover"
+import Footer from "../components/Footer"
 
-import {
-  Circle,
-  Eye,
-  EyeOff,
-  Lock,
-  Unlock,
-  Mail,
-  CheckCircle,
-} from "react-feather";
+import { Eye, EyeOff, Lock, Unlock, Mail } from "react-feather"
 
 const SignIn = () => {
-  const { user, login, logout, isAuthenticated } = useContext(AuthContext);
+  const { login } = useContext(AuthContext)
+  const [showPassword, setShowPassword] = useState(false)
+  const [formData, setFormData] = useState({ email: "", password: "" })
+  const [validationEmail, setValidationEmail] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const [validationEmail, setValidationEmail] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
 
-    setFormData((prev) => {
-      const updatedFormData = {
-        ...prev,
-        [name]: value,
-      };
-      if (name === "email") checkEmail(updatedFormData.email);
-
-      return updatedFormData;
-    });
-  };
+    if (name === "email") checkEmail(value)
+  }
 
   const checkEmail = (email = "") => {
-    const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    setValidationEmail(regexEmail.test(email));
-  };
+    const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    setValidationEmail(regexEmail.test(email))
+  }
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    setErrorMessage("");
+    event.preventDefault()
+    setErrorMessage("")
 
     if (!validationEmail) {
-      setErrorMessage("Veuillez entrer une adresse e-mail valide.");
-      return;
+      setErrorMessage("Veuillez entrer une adresse e-mail valide.")
+      return
     }
 
-    try {
-      await login(formData.email, formData.password);
-      navigate("/");
-    } catch (error) {
-      console.log(error.response.status);
-      console.log(error.message);
-      if (error.response && error.response.data) {
-        setErrorMessage("Une erreur est survenue, veuillez réessayer.");
-      } else {
-        setErrorMessage("Impossible de se connecter au serveur.");
-      }
-    }
-  };
+    const result = await login(formData.email, formData.password)
 
-  console.log("formData -> ", formData);
+    if (result.success) {
+      navigate("/")
+    } else {
+      setErrorMessage(result.message || "Identifiants incorrects.")
+    }
+  }
+
+  console.log(errorMessage)
 
   return (
     <>
@@ -87,29 +63,32 @@ const SignIn = () => {
             <form
               className="user-connect framed flex-column"
               onSubmit={handleSubmit}
+              noValidate
             >
               <div className="input-group">
-                <label for="email" className="label-hidden">
+                <label htmlFor="email" className="label-hidden">
                   Entrez votre email
                 </label>
                 <div className="icon-input-container">
                   <Mail size={20} className="input-icon-left" />
                   <input
                     type="email"
-                    autocomplete="off"
+                    autoComplete="off"
                     id="email"
                     name="email"
                     placeholder="Adresse email"
                     value={formData.email}
                     onChange={handleChange}
+                    aria-invalid={!validationEmail}
                   />
                 </div>
+                {!validationEmail && formData.email.length > 0 && (
+                  <span className="error-msg">Email invalide.</span>
+                )}
               </div>
-              {!validationEmail && (
-                <span className="error-msg">Email invalide.</span>
-              )}
+
               <div className="input-group password-container">
-                <label for="password" className="label-hidden">
+                <label htmlFor="password" className="label-hidden">
                   Mot de passe
                 </label>
                 <div className="icon-input-container password-container">
@@ -120,11 +99,10 @@ const SignIn = () => {
                   )}
                   <input
                     type={showPassword ? "text" : "password"}
-                    autocomplete="off"
+                    autoComplete="off"
                     id="password"
                     name="password"
                     placeholder="Mot de passe"
-                    className="password-input"
                     value={formData.password}
                     onChange={handleChange}
                   />
@@ -132,24 +110,37 @@ const SignIn = () => {
                     type="button"
                     className="password-toggle"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label="Afficher ou masquer le mot de passe"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
-                {/* Message d'erreur */}
-                {errorMessage && <p className="error-msg">{errorMessage}</p>}
               </div>
+              {errorMessage && (
+                <p className="error-msg" role="alert">
+                  {errorMessage}
+                </p>
+              )}
 
-              <button type="submit" className="btn-solid">
-                Accéder
+              <button
+                type="submit"
+                className="btn-solid"
+                disabled={!validationEmail || loading}
+              >
+                {loading ? "Connexion..." : "Accéder"}
               </button>
+
+              <Link to="/forgot-password" className="forgot-link mt-2">
+                Mot de passe oublié ?
+              </Link>
             </form>
           </div>
         </div>
       </main>
+
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default SignIn;
+export default SignIn
