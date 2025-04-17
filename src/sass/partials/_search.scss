@@ -128,6 +128,7 @@
     height: 50px;
     margin-left: 5px;
     cursor: pointer;
+    padding: 0;
     &:hover {
       background-color: adjust-color(
         variables.$color-primary,
@@ -299,35 +300,39 @@
     font-size: 20px;
     font-weight: 400;
   }
-  .counter {
+}
+
+.counter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 2px solid variables.$color-primary;
+  overflow: hidden;
+  border-radius: 5px;
+  background: white;
+  p {
+    width: 40px;
+    text-align: center;
+    color: variables.$color-dark;
+    font-size: 24px;
+    font-weight: 400;
+  }
+  button {
+    border: none;
+    height: 40px;
+    width: 40px;
     display: flex;
-    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    border: 2px solid variables.$color-primary;
-    overflow: hidden;
-    border-radius: 5px;
-    p {
-      width: 30px;
-      text-align: center;
-      color: variables.$color-dark;
-      font-size: 24px;
-      font-weight: 400;
-    }
-    button {
-      border: none;
-      height: 33px;
-      width: 33px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: 400;
-      color: variables.$color-bg-dark;
-      cursor: pointer;
-      background: variables.$color-secondary;
-      svg {
-        width: 18px;
-        stroke: 2px;
-      }
+    font-weight: 400;
+    color: variables.$color-bg-dark;
+    cursor: pointer;
+    background: variables.$color-secondary;
+    border-radius: 0;
+    padding: 0;
+    svg {
+      width: 18px;
+      stroke: variables.$color-bg-dark !important;
     }
   }
 }

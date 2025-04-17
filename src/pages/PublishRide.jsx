@@ -2,6 +2,8 @@ import { useState, useEffect, useContext, useRef } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { useNavigate } from "react-router-dom"
 
+import { Plus, Minus } from "react-feather"
+
 // Handle Date
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
@@ -24,14 +26,14 @@ import axios from "../config/axiosConfig"
 import Header from "../components/Header"
 import Cover from "../components/Cover"
 import Footer from "../components/Footer"
-import FitBoundsOnRoute from "../components/FitBoundsOnRoute"
+import Counter from "../components/Counter"
 
 const PublishRide = () => {
   const navigate = useNavigate()
 
   const mapRef = useRef(null)
 
-  const [step, setStep] = useState(5)
+  const [step, setStep] = useState(7)
   const [vehicles, setVehicles] = useState([])
   const [formData, setFormData] = useState({
     departureDate: "",
@@ -454,14 +456,14 @@ const PublishRide = () => {
               <div className="flex-column align-center w-100">
                 <h2>Avec quel véhicule ?</h2>
 
-                <div className="custom-select">
+                <div className="custom-select mt-20">
                   <div className="select" tabIndex="1">
                     {vehicles.map((vehicle, index) => {
                       const inputId = `vehicle-${vehicle.id}`
                       console.log(formData.vehicleId)
 
                       return (
-                        <div key={vehicle.id}>
+                        <div className="wrapper-select" key={vehicle.id}>
                           <input
                             className="selectopt"
                             name="vehicleId"
@@ -489,15 +491,18 @@ const PublishRide = () => {
 
           {/* Étape 7 : Nombre de passagers */}
           {step === 7 && (
-            <div>
-              <label>Nombre de places disponibles :</label>
-              <input
-                type="number"
-                name="availableSeats"
-                value={formData.availableSeats}
-                onChange={handleChange}
-              />
-            </div>
+            <>
+              <div className="flex-column align-center w-100">
+                <h2>Combien de passagers ?</h2>
+                <Counter
+                  name={"availableSeats"}
+                  value={formData.availableSeats || 1}
+                  onChange={handleChange}
+                  minValue={1}
+                  maxValue={8}
+                />
+              </div>
+            </>
           )}
 
           {/* Étape 8 : Nombre de crédits par passager */}
