@@ -25,13 +25,14 @@ import Header from "../components/Header"
 import Cover from "../components/Cover"
 import Footer from "../components/Footer"
 import Counter from "../components/Counter"
+import RideSummary from "../components/RideSummary"
 
 const PublishRide = () => {
   const navigate = useNavigate()
 
   const mapRef = useRef(null)
 
-  const [step, setStep] = useState(4)
+  const [step, setStep] = useState(1)
   const [vehicles, setVehicles] = useState([])
   const [formData, setFormData] = useState({
     departureDate: "",
@@ -46,11 +47,13 @@ const PublishRide = () => {
   const [routeCoords, setRouteCoords] = useState([])
   const [geolocFailed, setGeolocFailed] = useState(false)
   const [errors, setErrors] = useState("")
-  const [isMapReady, setIsMapReady] = useState(false)
 
   const { user } = useContext(AuthContext)
 
-  const nextStep = () => setStep(step + 1)
+  const nextStep = () => {
+    hydrateFormStepData()
+    setStep(step + 1)
+  }
   const prevStep = () => setStep(step - 1)
 
   useEffect(() => {
@@ -141,22 +144,19 @@ const PublishRide = () => {
         let currentDate = prev.departureDate
 
         if (!currentDate) {
-          // Si departureDate est vide, on utilise la date d'aujourd'hui au format ISO
           const today = new Date().toISOString().split("T")[0]
-          currentDate = `${today}T00:00` // Valeur par défaut pour currentDate
+          currentDate = `${today}T00:00`
         }
 
-        // Si currentDate n'est pas déjà une chaîne, on le transforme en chaîne ISO
         if (!(typeof currentDate === "string")) {
           currentDate = new Date(currentDate).toISOString()
         }
 
-        const datePart = currentDate.split("T")[0] // On extrait la partie date
-        const updatedDate = `${datePart}T${hour}:${minute}` // On combine la date avec l'heure modifiée
-
+        const datePart = currentDate.split("T")[0]
+        const updatedDate = `${datePart}T${hour}:${minute}`
         return {
           ...prev,
-          departureDate: updatedDate, // Mise à jour de departureDate avec la nouvelle heure
+          departureDate: updatedDate,
         }
       }
 
@@ -170,7 +170,6 @@ const PublishRide = () => {
   const formatTimeToFrench = (isoDate) => {
     const date = new Date(isoDate)
 
-    // Utiliser l'heure locale sans manipulation de fuseau horaire
     const options = { hour: "2-digit", minute: "2-digit" }
     return date.toLocaleTimeString("fr-FR", options)
   }
@@ -213,30 +212,6 @@ const PublishRide = () => {
     }
   }, [step, user])
 
-  useEffect(() => {
-    if (isMapReady && step === 3 && routeCoords.length > 0 && mapRef.current) {
-      const bounds = L.latLngBounds(
-        routeCoords.map(([lat, lng]) => L.latLng(lat, lng))
-      )
-
-      console.log("✅ Zoom sur l’itinéraire :", bounds)
-
-      mapRef.current.fitBounds(bounds, {
-        padding: [50, 50],
-        animate: true,
-      })
-    }
-  }, [isMapReady, step, routeCoords])
-
-  useEffect(() => {
-    console.log("Zoom Check →", {
-      step,
-      routeCoordsLength: routeCoords.length,
-      isMapReady,
-      hasMap: !!mapRef.current,
-    })
-  }, [step, routeCoords, isMapReady])
-
   // HANDLE DATE
   registerLocale("fr", fr)
 
@@ -245,8 +220,6 @@ const PublishRide = () => {
   }
 
   const calculateDistanceAndPrice = (startCoords, endCoords) => {
-    console.log(startCoords, endCoords)
-
     const formatCoords = (coords) => {
       if (!coords) return null
 
@@ -273,12 +246,58 @@ const PublishRide = () => {
     const distanceMeters = startLatLng.distanceTo(endLatLng)
     const distanceKm = distanceMeters / 1000
 
-    // Formule : (km / 4) + 2
-    const price = Math.round((distanceKm / 4 + 2) * 100) / 100 // arrondi à 2 décimales
-
-    // console.log("distanceKm :", distanceKm.toFixed(2), "price :", price)
+    // Formule : (km / 20) + 2
+    const price = Math.ceil(distanceKm / 20 + 2)
 
     return price
+  }
+
+  const hydrateFormStepData = () => {
+    if (step === 4) {
+      if (!formData.departureDate) {
+        const now = new Date()
+        setFormData((prev) => ({
+          ...prev,
+          departureDate: now.toISOString(),
+        }))
+      }
+    }
+
+    if (step === 5) {
+      if (!formData.availableSeats) {
+        setFormData((prev) => ({
+          ...prev,
+          availableSeats: 1,
+        }))
+      }
+    }
+
+    if (step === 6) {
+      if (!formData.vehicleId && vehicles.length > 0) {
+        setFormData((prev) => ({
+          ...prev,
+          vehicleId: vehicles[0].id,
+        }))
+      }
+    }
+
+    if (step === 7) {
+      if (
+        !formData.creditsPerPassenger &&
+        formData.departureAddress.coords &&
+        formData.destinationAddress.coords
+      ) {
+        const price = calculateDistanceAndPrice(
+          formData.departureAddress.coords,
+          formData.destinationAddress.coords
+        )
+
+        setFormData((prev) => ({
+          ...prev,
+          creditsPerPassenger: price,
+        }))
+      }
+    }
   }
 
   console.log(formData)
@@ -290,12 +309,6 @@ const PublishRide = () => {
       <main>
         <section>
           <h1>Nouveau trajet</h1>
-          {geolocFailed && (
-            <p className="text-red-600 mt-10">
-              Impossible d’accéder à votre position. Saisissez l’adresse de
-              départ manuellement.
-            </p>
-          )}
         </section>
 
         <section className="new-ride flex-row two-column framed">
@@ -341,6 +354,12 @@ const PublishRide = () => {
                         }
                       }}
                     />
+                    {geolocFailed && (
+                      <p>
+                        Impossible d’accéder à votre position. Saisissez
+                        l’adresse de départ manuellement.
+                      </p>
+                    )}
                   </>
                 )}
                 {/* Étape 2 : Adresse de destination */}
@@ -578,13 +597,12 @@ const PublishRide = () => {
 
               <div className="block-right justify-left">
                 <p>
-                  <strong>
-                    Prix idéal :{" "}
-                    {calculateDistanceAndPrice(
-                      formData.departureAddress.coords,
-                      formData.destinationAddress.coords
-                    )}
-                  </strong>
+                  <strong>Prix idéal :</strong>{" "}
+                  {calculateDistanceAndPrice(
+                    formData.departureAddress.coords,
+                    formData.destinationAddress.coords
+                  )}{" "}
+                  crédits
                 </p>
                 <p>
                   Ecoride vous conseille d'adapter votre prix
@@ -617,6 +635,13 @@ const PublishRide = () => {
               ></textarea>
             </div>
           )}
+          {/* Étape 10 : Description */}
+          {step === 10 && (
+            <div>
+              <label>Résumé du trajet</label>
+              <RideSummary formData={formData} />
+            </div>
+          )}
         </section>
         <section className="flex-row gap-15 justify-center">
           {/* Navigation entre les étapes */}
@@ -625,7 +650,7 @@ const PublishRide = () => {
               Précédent
             </button>
           )}
-          {step < 9 ? (
+          {step < 10 ? (
             <button
               onClick={nextStep}
               className="btn-solid"

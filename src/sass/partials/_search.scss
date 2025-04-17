@@ -311,11 +311,12 @@
   border-radius: 5px;
   background: white;
   p {
-    width: 40px;
+    min-width: 40px;
     text-align: center;
     color: variables.$color-dark;
     font-size: 24px;
     font-weight: 400;
+    padding: 0 5px;
   }
   button {
     border: none;
