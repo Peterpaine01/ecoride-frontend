@@ -1,0 +1,17 @@
+@use "variables";
+
+.new-ride {
+  min-height: 500px;
+}
+
+.comission {
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 5px 10px 0;
+  p {
+    text-align: center;
+  }
+  strong {
+    font-size: 30px;
+  }
+}

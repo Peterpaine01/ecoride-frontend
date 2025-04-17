@@ -2,8 +2,6 @@ import { useState, useEffect, useContext, useRef } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { useNavigate } from "react-router-dom"
 
-import { Plus, Minus } from "react-feather"
-
 // Handle Date
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
@@ -33,7 +31,7 @@ const PublishRide = () => {
 
   const mapRef = useRef(null)
 
-  const [step, setStep] = useState(7)
+  const [step, setStep] = useState(4)
   const [vehicles, setVehicles] = useState([])
   const [formData, setFormData] = useState({
     departureDate: "",
@@ -138,26 +136,43 @@ const PublishRide = () => {
     const { name, value } = e.target
 
     setFormData((prev) => {
-      if (name === "departureDate") {
-        const existingTime = prev.departureDate.split("T")[1] || "00:00"
-        return {
-          ...prev,
-          departureDate: `${value}T${existingTime}`,
-        }
-      }
-
       if (name === "departureTime") {
-        const existingDate =
-          prev.departureDate.split("T")[0] ||
-          new Date().toISOString().split("T")[0]
+        const [hour, minute] = value.split(":")
+        let currentDate = prev.departureDate
+
+        if (!currentDate) {
+          // Si departureDate est vide, on utilise la date d'aujourd'hui au format ISO
+          const today = new Date().toISOString().split("T")[0]
+          currentDate = `${today}T00:00` // Valeur par défaut pour currentDate
+        }
+
+        // Si currentDate n'est pas déjà une chaîne, on le transforme en chaîne ISO
+        if (!(typeof currentDate === "string")) {
+          currentDate = new Date(currentDate).toISOString()
+        }
+
+        const datePart = currentDate.split("T")[0] // On extrait la partie date
+        const updatedDate = `${datePart}T${hour}:${minute}` // On combine la date avec l'heure modifiée
+
         return {
           ...prev,
-          departureDate: `${existingDate}T${value}`,
+          departureDate: updatedDate, // Mise à jour de departureDate avec la nouvelle heure
         }
       }
 
-      return { ...prev, [name]: value }
+      return {
+        ...prev,
+        [name]: value,
+      }
     })
+  }
+
+  const formatTimeToFrench = (isoDate) => {
+    const date = new Date(isoDate)
+
+    // Utiliser l'heure locale sans manipulation de fuseau horaire
+    const options = { hour: "2-digit", minute: "2-digit" }
+    return date.toLocaleTimeString("fr-FR", options)
   }
 
   const handleSubmit = async (e) => {
@@ -229,6 +244,43 @@ const PublishRide = () => {
     setFormData({ ...formData, departureDate: date })
   }
 
+  const calculateDistanceAndPrice = (startCoords, endCoords) => {
+    console.log(startCoords, endCoords)
+
+    const formatCoords = (coords) => {
+      if (!coords) return null
+
+      if (Array.isArray(coords) && coords.length === 2) {
+        const [lat, lng] = coords
+        return { lat, lng }
+      }
+
+      if (typeof coords === "object" && "lat" in coords && "lng" in coords) {
+        return coords
+      }
+
+      return null
+    }
+
+    const start = formatCoords(startCoords)
+    const end = formatCoords(endCoords)
+
+    if (!start || !end) return 2
+
+    const startLatLng = L.latLng(start.lat, start.lng)
+    const endLatLng = L.latLng(end.lat, end.lng)
+
+    const distanceMeters = startLatLng.distanceTo(endLatLng)
+    const distanceKm = distanceMeters / 1000
+
+    // Formule : (km / 4) + 2
+    const price = Math.round((distanceKm / 4 + 2) * 100) / 100 // arrondi à 2 décimales
+
+    // console.log("distanceKm :", distanceKm.toFixed(2), "price :", price)
+
+    return price
+  }
+
   console.log(formData)
 
   return (
@@ -246,7 +298,7 @@ const PublishRide = () => {
           )}
         </section>
 
-        <section className="flex-row two-column framed">
+        <section className="new-ride flex-row two-column framed">
           {(step === 1 || step === 2 || step === 3) && (
             <>
               <div className="block-left">
@@ -443,7 +495,11 @@ const PublishRide = () => {
                 <input
                   type="time"
                   name="departureTime"
-                  value={formData.departureDate.split("T")[1] || ""}
+                  value={
+                    formData.departureDate
+                      ? formatTimeToFrench(formData.departureDate).slice(0, 5)
+                      : ""
+                  }
                   onChange={handleChange}
                 />
               </div>
@@ -507,15 +563,47 @@ const PublishRide = () => {
 
           {/* Étape 8 : Nombre de crédits par passager */}
           {step === 8 && (
-            <div>
-              <label>Crédits par passager :</label>
-              <input
-                type="number"
-                name="creditsPerPassenger"
-                value={formData.creditsPerPassenger}
-                onChange={handleChange}
-              />
-            </div>
+            <>
+              <div className="block-left flex-column align-center">
+                <h2>Quand partez-vous ?</h2>
+
+                <Counter
+                  name={"creditsPerPassenger"}
+                  value={formData.creditsPerPassenger || 2}
+                  onChange={handleChange}
+                  minValue={2}
+                  maxValue={1000}
+                />
+              </div>
+
+              <div className="block-right justify-left">
+                <p>
+                  <strong>
+                    Prix idéal :{" "}
+                    {calculateDistanceAndPrice(
+                      formData.departureAddress.coords,
+                      formData.destinationAddress.coords
+                    )}
+                  </strong>
+                </p>
+                <p>
+                  Ecoride vous conseille d'adapter votre prix
+                  proportionnellement au nombre de kilomètres parcourus.
+                </p>
+
+                <div className="flex-row align-center gap-15 mt-20">
+                  <div className="comission flex-colunm align-center">
+                    <p>
+                      <strong>2</strong> crédits
+                    </p>
+                  </div>
+                  <p>
+                    La plateforme EcoRide prélève 2 crédits de commission par
+                    trajet.
+                  </p>
+                </div>
+              </div>
+            </>
           )}
 
           {/* Étape 9 : Description */}
