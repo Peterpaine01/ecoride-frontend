@@ -1,18 +1,18 @@
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import React, { useEffect, useState, useRef } from "react";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom"
+import React, { useEffect, useState, useRef } from "react"
 
 // Handle Date
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale } from "react-datepicker";
-import fr from "date-fns/locale/fr";
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import { registerLocale } from "react-datepicker"
+import fr from "date-fns/locale/fr"
 
 // Images
-import { Flag, Calendar, Users, Search, Plus, Minus } from "react-feather";
+import { Flag, Calendar, Users, Search, Plus, Minus } from "react-feather"
 
 // Je récupère les props
 const SearchBlock = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams()
 
   // console.log("searchParams", searchParams);
 
@@ -21,55 +21,55 @@ const SearchBlock = () => {
     destinationCity: searchParams.get("destinationCity"),
     departureDate: searchParams.get("departureDate"),
     availableSeats: parseInt(searchParams.get("availableSeats"), 10) || 1,
-  };
+  }
 
   const [formData, setFormData] = useState({
     departureCity: "" || searchQuery.departureCity,
     destinationCity: "" || searchQuery.destinationCity,
     departureDate: new Date() || searchQuery.departureDate,
     availableSeats: 1 || searchQuery.availableSeats,
-  });
+  })
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   // HANDLE FORM DATA
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const queryParams = new URLSearchParams({
       departureCity: formData.departureCity,
       destinationCity: formData.destinationCity,
       departureDate: formData.departureDate.toISOString(), // Convertir la date en string ISO
       availableSeats: formData.availableSeats,
-    }).toString();
+    }).toString()
 
     // Aftfer submit, go to another page with queryparams
-    navigate(`/recherche-trajets?${queryParams}`);
-  };
+    navigate(`/recherche-trajets?${queryParams}`)
+  }
 
   // HANDLE STATUS
-  const [isPassengersOpen, setIsPassengersOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState("");
+  const [isPassengersOpen, setIsPassengersOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalContent, setModalContent] = useState("")
 
   // REF
-  const passengersRef = useRef(null);
-  const minusButtonRef = useRef(null);
-  const minusButtonModalRef = useRef(null);
-  const plusButtonRef = useRef(null);
-  const plusButtonModalRef = useRef(null);
+  const passengersRef = useRef(null)
+  const minusButtonRef = useRef(null)
+  const minusButtonModalRef = useRef(null)
+  const plusButtonRef = useRef(null)
+  const plusButtonModalRef = useRef(null)
 
   // HANDLE DROPDOWN MENU
 
   const closeDropdown = () => {
-    setIsPassengersOpen(false);
-  };
+    setIsPassengersOpen(false)
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -77,105 +77,102 @@ const SearchBlock = () => {
         passengersRef.current &&
         !passengersRef.current.contains(event.target)
       ) {
-        closeDropdown();
+        closeDropdown()
       }
-    };
+    }
 
     // Accéder aux boutons via le DOM
-    const minusButton = minusButtonRef.current;
-    const plusButton = plusButtonRef.current;
-    const minusButtonModal = minusButtonModalRef.current;
-    const plusButtonModal = plusButtonModalRef.current;
+    const minusButton = minusButtonRef.current
+    const plusButton = plusButtonRef.current
+    const minusButtonModal = minusButtonModalRef.current
+    const plusButtonModal = plusButtonModalRef.current
 
     // dropdown counter desktop
     if (minusButton) {
       if (formData.availableSeats === 1) {
-        minusButton.disabled = true;
+        minusButton.disabled = true
       } else {
-        minusButton.disabled = false;
+        minusButton.disabled = false
       }
     }
     if (plusButton) {
       if (formData.availableSeats === 8) {
-        plusButton.disabled = true;
+        plusButton.disabled = true
       } else {
-        plusButton.disabled = false;
+        plusButton.disabled = false
       }
     }
     // modal counter mobile
     if (minusButtonModal) {
       if (formData.availableSeats === 1) {
-        minusButtonModal.disabled = true;
+        minusButtonModal.disabled = true
       } else {
-        minusButtonModal.disabled = false;
+        minusButtonModal.disabled = false
       }
     }
 
     if (plusButtonModal) {
       if (formData.availableSeats === 8) {
-        plusButtonModal.disabled = true;
+        plusButtonModal.disabled = true
       } else {
-        plusButtonModal.disabled = false;
+        plusButtonModal.disabled = false
       }
     }
 
-    // Ajouter l'event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
 
-    // Nettoyer l'event listener à la fin du cycle de vie
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [formData.availableSeats, isPassengersOpen, isModalOpen]);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [formData.availableSeats, isPassengersOpen, isModalOpen])
 
   // Fonction pour basculer le menu
   const toggleDropdown = () => {
-    setIsPassengersOpen((prevState) => !prevState);
-  };
+    setIsPassengersOpen((prevState) => !prevState)
+  }
 
   // HANDLE DATE
-  registerLocale("fr", fr);
+  registerLocale("fr", fr)
 
   const handleDateChange = (date) => {
-    setFormData({ ...formData, departureDate: date });
-  };
+    setFormData({ ...formData, departureDate: date })
+  }
 
-  const today = new Date();
+  const today = new Date()
 
   const options = {
     weekday: "short", // Jour de la semaine abrégé
     day: "2-digit", // Jour du mois sur 2 chiffres
     month: "short", // Mois abrégé
     year: "numeric", // Année sur 4 chiffres
-  };
+  }
 
   const displayDateMobile = new Intl.DateTimeFormat("fr-FR", options).format(
     today
-  );
+  )
 
   // HANDLE COUNTER PASSENGERS
   const incrementCounter = () => {
     if (formData.availableSeats >= 1 && formData.availableSeats < 8) {
-      setFormData({ ...formData, availableSeats: formData.availableSeats + 1 });
+      setFormData({ ...formData, availableSeats: formData.availableSeats + 1 })
     }
-  };
+  }
   const decrementCounter = () => {
     if (formData.availableSeats > 1 && formData.availableSeats <= 8) {
-      setFormData({ ...formData, availableSeats: formData.availableSeats - 1 });
+      setFormData({ ...formData, availableSeats: formData.availableSeats - 1 })
     }
-  };
+  }
 
   // HANDLE MODALS
 
-  // Ouvrir la modale
   const toggleModal = (e) => {
     if (window.innerWidth < 890) {
-      const { name } = e.target;
-      setIsModalOpen(!isModalOpen);
-      setModalContent(name);
-      console.log(name);
+      const { name } = e.target
+      setIsModalOpen(!isModalOpen)
+      setModalContent(name)
+      console.log(name)
     }
-  };
+  }
 
   return (
     <>
@@ -273,9 +270,9 @@ const SearchBlock = () => {
                 name="availableSeats"
                 onClick={(e) => {
                   if (window.innerWidth < 890) {
-                    toggleModal(e);
+                    toggleModal(e)
                   } else {
-                    toggleDropdown(e);
+                    toggleDropdown(e)
                   }
                 }}
               >
@@ -366,7 +363,10 @@ const SearchBlock = () => {
             </div>
             <h3>À quelle date partez-vous ?</h3>
 
-            <form onSubmit={handleSubmit} className={modalContent}>
+            <form
+              onSubmit={handleSubmit}
+              className={`flex-row justify-center ${modalContent}`}
+            >
               <div className="input-group date-picker">
                 <label htmlFor="end-ride" className="label-hidden">
                   Date du départ
@@ -424,7 +424,7 @@ const SearchBlock = () => {
         )}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default SearchBlock;
+export default SearchBlock

@@ -166,6 +166,20 @@
   left: -35px !important;
 }
 
+.date-picker-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .react-datepicker {
+    border-top-right-radius: 15px !important;
+    margin-top: 0;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 .react-datepicker {
   font-family: variables.$main-font !important;
   font-size: 16px !important;
@@ -353,6 +367,7 @@
 
   .react-datepicker {
     border-top-right-radius: 15px !important;
+    margin-top: 0;
   }
 
   form:not(.selectedDate) {

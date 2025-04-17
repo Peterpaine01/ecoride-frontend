@@ -2,6 +2,12 @@ import { useState, useEffect, useContext, useRef } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { useNavigate } from "react-router-dom"
 
+// Handle Date
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import { registerLocale } from "react-datepicker"
+import fr from "date-fns/locale/fr"
+
 import { MapContainer, TileLayer, Polyline } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
 import MapMarker from "../components/MapMarker"
@@ -25,7 +31,7 @@ const PublishRide = () => {
 
   const mapRef = useRef(null)
 
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(5)
   const [vehicles, setVehicles] = useState([])
   const [formData, setFormData] = useState({
     departureDate: "",
@@ -214,6 +220,15 @@ const PublishRide = () => {
     })
   }, [step, routeCoords, isMapReady])
 
+  // HANDLE DATE
+  registerLocale("fr", fr)
+
+  const handleDateChange = (date) => {
+    setFormData({ ...formData, departureDate: date })
+  }
+
+  console.log(formData)
+
   return (
     <>
       <Header />
@@ -329,10 +344,10 @@ const PublishRide = () => {
                             const hours = Math.floor(duration / 60)
                             const minutes = duration % 60
                             return `${hours}h${
-                              minutes > 0 ? ` ${minutes}m` : ""
+                              minutes > 0 ? ` ${minutes} min` : ""
                             }`
                           } else {
-                            return `${duration}m`
+                            return `${duration} min`
                           }
                         })()}
                       </p>
@@ -378,47 +393,98 @@ const PublishRide = () => {
 
           {/* Étape 4 : Date de départ */}
           {step === 4 && (
-            <div>
-              <label>Date de départ :</label>
-              <input
-                type="date"
-                name="departureDate"
-                value={formData.departureDate.split("T")[0] || ""}
-                onChange={handleChange}
-              />
-            </div>
+            <>
+              <div className="block-left flex-column align-center">
+                <h2>Quand partez-vous ?</h2>
+                <p className="emphase mt-20">
+                  {formData.departureDate
+                    ? new Date(formData.departureDate)
+                        .toLocaleDateString("fr-FR", {
+                          weekday: "short",
+                          day: "2-digit",
+                          month: "long",
+                        })
+                        .replace(".", "")
+                        .replace(/^\w/, (c) => c.toUpperCase())
+                    : new Date()
+                        .toLocaleDateString("fr-FR", {
+                          weekday: "short",
+                          day: "2-digit",
+                          month: "long",
+                        })
+                        .replace(".", "")
+                        .replace(/^\w/, (c) => c.toUpperCase())}
+                </p>
+              </div>
+
+              <div className="block-right date-picker-content">
+                <DatePicker
+                  className="drop-btn"
+                  locale="fr"
+                  selected={formData.departureDate}
+                  onChange={handleDateChange}
+                  dateFormat="dd/MM/yyyy"
+                  placeholderText="Aujourd'hui"
+                  minDate={new Date()}
+                  inline
+                />
+              </div>
+            </>
           )}
 
           {/* Étape 5 : Heure de départ */}
           {step === 5 && (
-            <div>
-              <label>Heure de départ :</label>
-              <input
-                type="time"
-                name="departureTime"
-                value={formData.departureDate.split("T")[1] || ""}
-                onChange={handleChange}
-              />
-            </div>
+            <>
+              <div className="flex-column align-center w-100">
+                <h2>A quelle heure ?</h2>
+
+                <input
+                  type="time"
+                  name="departureTime"
+                  value={formData.departureDate.split("T")[1] || ""}
+                  onChange={handleChange}
+                />
+              </div>
+            </>
           )}
 
           {/* Étape 6 : Véhicule */}
           {step === 6 && (
-            <div>
-              <label>Véhicule :</label>
-              <select
-                name="vehicleId"
-                value={formData.vehicleId || ""}
-                onChange={handleChange}
-              >
-                <option value="">Sélectionnez un véhicule</option>
-                {vehicles.map((vehicle) => (
-                  <option key={vehicle.id} value={vehicle.id}>
-                    {vehicle.model} - {vehicle.registration_number}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <>
+              <div className="flex-column align-center w-100">
+                <h2>Avec quel véhicule ?</h2>
+
+                <div className="custom-select">
+                  <div className="select" tabIndex="1">
+                    {vehicles.map((vehicle, index) => {
+                      const inputId = `vehicle-${vehicle.id}`
+                      console.log(formData.vehicleId)
+
+                      return (
+                        <div key={vehicle.id}>
+                          <input
+                            className="selectopt"
+                            name="vehicleId"
+                            type="radio"
+                            id={inputId}
+                            value={vehicle.id}
+                            checked={
+                              formData.vehicleId
+                                ? formData.vehicleId === String(vehicle.id)
+                                : index === 0 // coche le premier par défaut
+                            }
+                            onChange={handleChange}
+                          />
+                          <label htmlFor={inputId} className="option">
+                            {vehicle.model} - {vehicle.registration_number}
+                          </label>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            </>
           )}
 
           {/* Étape 7 : Nombre de passagers */}

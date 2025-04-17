@@ -47,6 +47,7 @@
   }
   h1 {
     font-size: 28px;
+    margin-bottom: 0;
   }
   h2 {
     font-size: 20px;
@@ -69,7 +70,7 @@
   }
 
   section {
-    margin: 40px 0px;
+    margin: 20px 20px;
   }
 
   // HERO
@@ -203,7 +204,7 @@
     background-color: variables.$color-primary;
     height: 60px;
     justify-content: space-between;
-
+    z-index: 500;
     .container {
       width: 100%;
       padding: 0;
@@ -238,5 +239,9 @@
         }
       }
     }
+  }
+
+  .framed {
+    margin: 0 20px;
   }
 }
