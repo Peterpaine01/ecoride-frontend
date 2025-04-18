@@ -10,13 +10,14 @@ import fr from "date-fns/locale/fr"
 
 import { MapContainer, TileLayer, Polyline } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
-import MapMarker from "../components/MapMarker"
-import AddressForm from "../components/AddressForm"
+
+// Utils
 import {
   getCoordinates,
   reverseGeocode,
   calculateRoute,
 } from "../utils/geolocation"
+import { displayDuration } from "../utils/dateTimeHandler"
 
 import axios from "../config/axiosConfig"
 
@@ -27,6 +28,8 @@ import Footer from "../components/Footer"
 import Counter from "../components/Counter"
 import RideSummary from "../components/RideSummary"
 import StepIndicator from "../components/StepIndicator"
+import MapMarker from "../components/MapMarker"
+import AddressForm from "../components/AddressForm"
 
 const PublishRide = () => {
   const navigate = useNavigate()
@@ -50,6 +53,7 @@ const PublishRide = () => {
   const [errors, setErrors] = useState("")
 
   const { user } = useContext(AuthContext)
+  console.log(vehicles[0])
 
   const nextStep = () => {
     hydrateFormStepData()
@@ -104,6 +108,54 @@ const PublishRide = () => {
       )
     }
   }, [step, formData.departureAddress.coords])
+
+  useEffect(() => {
+    if (
+      step === 1 &&
+      !formData.destinationAddress.coords &&
+      "geolocation" in navigator
+    ) {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const coords = [pos.coords.latitude, pos.coords.longitude]
+          setFormData((prev) => ({
+            ...prev,
+            destinationAddress: { ...prev.destinationAddress, coords },
+          }))
+          const address = await reverseGeocode(coords)
+          setFormData((prev) => ({
+            ...prev,
+            destinationAddress: {
+              ...prev.destinationAddress,
+              street: address.street,
+              city: address.city,
+              zip: address.zip,
+            },
+          }))
+        },
+        (err) => {
+          console.warn("Erreur géolocalisation :", err)
+
+          if (err.code === 2) {
+            console.log(
+              "La géolocalisation est indisponible, veuillez saisir votre adresse manuellement."
+            )
+          } else {
+            console.log(
+              "Impossible d’obtenir votre position. Essayez de réactiver la géolocalisation."
+            )
+          }
+
+          setGeolocFailed(true)
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        }
+      )
+    }
+  }, [step, formData.destinationAddress.coords])
 
   useEffect(() => {
     const fetchRoute = async () => {
@@ -192,7 +244,7 @@ const PublishRide = () => {
   }
 
   useEffect(() => {
-    if (step === 6) {
+    if (step === 6 || step === 10) {
       if (!user || !user.account_id) {
         console.error("Utilisateur non authentifié ou account_id manquant.")
         return
@@ -302,6 +354,7 @@ const PublishRide = () => {
   }
 
   console.log(formData)
+  console.log(vehicles[0])
 
   return (
     <>
@@ -413,18 +466,7 @@ const PublishRide = () => {
                     </h2>
                     {formData.duration ? (
                       <p className="emphase mt-20">
-                        {(() => {
-                          const duration = Math.round(formData.duration)
-                          if (duration >= 60) {
-                            const hours = Math.floor(duration / 60)
-                            const minutes = duration % 60
-                            return `${hours}h${
-                              minutes > 0 ? ` ${minutes} min` : ""
-                            }`
-                          } else {
-                            return `${duration} min`
-                          }
-                        })()}
+                        {displayDuration(formData.duration)}
                       </p>
                     ) : (
                       <p className="text-red-600">
@@ -499,7 +541,6 @@ const PublishRide = () => {
                   selected={formData.departureDate}
                   onChange={handleDateChange}
                   dateFormat="dd/MM/yyyy"
-                  placeholderText="Aujourd'hui"
                   minDate={new Date()}
                   inline
                 />
@@ -628,20 +669,24 @@ const PublishRide = () => {
 
           {/* Étape 9 : Description */}
           {step === 9 && (
-            <div>
-              <label>Description :</label>
+            <div className="flex-column align-center text-align w-100">
+              <h2>Quelque chose à partager sur votre trajet ?</h2>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
+                rows="10"
+                cols="10"
+                className="description-textarea"
+                placeholder="Vous êtes flexible quant au lieu de rencontre ? L’espace dans votre coffre est limité ? Dites le à vos passagers !"
               ></textarea>
             </div>
           )}
-          {/* Étape 10 : Description */}
+          {/* Étape 10 : Résumé */}
           {step === 10 && (
-            <div>
-              <label>Résumé du trajet</label>
-              <RideSummary formData={formData} />
+            <div className="summary  flex-column two-column w-100">
+              <h2>Résumé du trajet</h2>
+              <RideSummary formData={formData} vehicles={vehicles} />
             </div>
           )}
         </section>

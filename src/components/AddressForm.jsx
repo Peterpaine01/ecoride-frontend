@@ -15,7 +15,7 @@ const AddressForm = ({ address, onChange, label, onSubmit, errors }) => {
           {errors}
         </p>
       )}
-      <div className="flex-row align-left">
+      <div className="flex-row align-start">
         <input
           type="text"
           placeholder="Rue"
@@ -24,9 +24,10 @@ const AddressForm = ({ address, onChange, label, onSubmit, errors }) => {
           className="w-100"
         />
       </div>
-      <div className="flex-row align-left gap-15">
+      <div className="flex-row city align-start gap-15">
         <input
           type="text"
+          className="zip"
           placeholder="Code postal"
           value={address?.zip || ""}
           onChange={(e) => handleChange("zip", e.target.value)}

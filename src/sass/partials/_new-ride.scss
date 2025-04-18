@@ -8,6 +8,13 @@
 
 .new-ride {
   min-height: 400px;
+  h2 {
+    text-align: center;
+    line-height: 38px;
+  }
+  input.zip {
+    width: 40%;
+  }
 }
 
 .comission {
@@ -40,5 +47,18 @@
     height: 3px;
     border-radius: 60px;
     z-index: 5;
+  }
+}
+
+.description-textarea {
+  margin-top: 20px;
+  width: 70%;
+  padding: 10px;
+}
+
+.summary {
+  h3 {
+    border-bottom: 1px solid variables.$color-dark-grey;
+    padding-bottom: 10px;
   }
 }

@@ -88,7 +88,7 @@ section {
   align-items: center;
 }
 
-.align-left {
+.align-start {
   align-items: flex-start;
 }
 
@@ -123,6 +123,10 @@ section {
   width: 100%;
 }
 
+.w-40 {
+  width: 40%;
+}
+
 .w-0 {
   width: 0%;
 }
@@ -133,6 +137,10 @@ section {
 
 .mt-20 {
   margin-top: 20px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
 }
 
 .fit-content {
@@ -169,6 +177,14 @@ section {
   background: variables.$color-dark-grey;
 }
 
+.color-secondary {
+  color: variables.$color-secondary;
+}
+
+.color-yellow {
+  color: variables.$color-accessibility;
+}
+
 .transition-all {
   transition: all 300ms ease;
 }
@@ -184,15 +200,6 @@ h1 {
   line-height: 40px;
   padding: 30px 0;
   margin-bottom: 60px;
-  // &:after {
-  //   position: absolute;
-  //   content: "";
-  //   width: 36px;
-  //   height: 7px;
-  //   background-color: variables.$color-primary;
-  //   bottom: 0;
-  //   left: calc(50% - 18px);
-  // }
 }
 h2 {
   font-size: 32px;
@@ -274,6 +281,13 @@ img {
   .block-right {
     text-align: center;
   }
+}
+
+.dotted {
+  border: 2px dotted variables.$color-dark-grey;
+  padding: 20px;
+  width: 100%;
+  border-radius: 10px;
 }
 
 em {
@@ -394,15 +408,6 @@ form.framed {
     pointer-events: none;
     z-index: 3;
   }
-
-  // .select:before {
-  //   position: absolute;
-  //   right: 0;
-  //   height: 40px;
-  //   width: 40px;
-  //   content: "";
-  //   background: white;
-  // }
 }
 
 // BUTTON

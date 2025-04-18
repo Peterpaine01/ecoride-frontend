@@ -252,6 +252,21 @@
 
   .new-ride {
     min-height: 0;
+    h2 {
+      line-height: 24px;
+    }
+  }
+
+  .summary {
+    h2 {
+      margin: 0;
+    }
+    .block-left {
+      margin: 0;
+    }
+    .flex-row.two-column {
+      gap: 0;
+    }
   }
 
   #publishRide {
@@ -271,6 +286,21 @@
     }
     .line {
       display: none;
+    }
+  }
+  .description-textarea {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .new-ride {
+    input.zip {
+      width: 100%;
+    }
+    .city {
+      flex-direction: column;
     }
   }
 }

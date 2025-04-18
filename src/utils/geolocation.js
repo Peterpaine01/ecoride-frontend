@@ -20,7 +20,13 @@ export const reverseGeocode = async ([lat, lon]) => {
   const res = await axios.get("https://nominatim.openstreetmap.org/reverse", {
     params: { lat, lon, format: "json" },
   })
-  return res.data.display_name
+  const address = res.data.address
+
+  return {
+    street: address.road || address.pedestrian || address.path || "",
+    city: address.city || address.town || address.village || "",
+    zip: address.postcode || "",
+  }
 }
 
 export const calculateRoute = async (start, end) => {

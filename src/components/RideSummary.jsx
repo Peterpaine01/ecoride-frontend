@@ -1,17 +1,17 @@
-const formatDateToFrench = (isoDate) => {
-  if (!isoDate) return ""
-  const date = new Date(isoDate)
-  return date.toLocaleString("fr-FR", {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  })
-}
+import {
+  Calendar,
+  MapPin,
+  Target,
+  Clock,
+  Users,
+  CreditCard,
+  Edit,
+  Truck,
+} from "react-feather"
 
-const RideSummary = ({ formData }) => {
+import { displayDuration } from "../utils/dateTimeHandler"
+
+const RideSummary = ({ formData, vehicles }) => {
   const {
     departureDate,
     departureAddress,
@@ -23,50 +23,116 @@ const RideSummary = ({ formData }) => {
     vehicleId,
   } = formData
 
+  const rideVehicle = vehicles.find((vehicle) => vehicle.id === vehicleId)
+
+  const formatDateToFrench = (isoDate) => {
+    if (!isoDate) return ""
+    const date = new Date(isoDate)
+    const formatted = date.toLocaleString("fr-FR", {
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1)
+  }
+
   return (
-    <div className="p-4 border rounded-xl shadow bg-white space-y-3">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">
-        🛣️ Résumé du trajet
-      </h2>
+    <div className="flex-row two-column align-start w-100">
+      <div className="block-left flex-column align-start">
+        <div className="flex-column mb-10 dotted">
+          <h3 className="flex-row align-center gap-5 color-secondary">
+            <strong className="color-yellow">
+              <Calendar size={20} />
+            </strong>
+            <strong className="flex-row align-center">Date de départ</strong>
+          </h3>
+          <p>{formatDateToFrench(departureDate)}</p>
+        </div>
+        <div className="flex-column mb-10 dotted">
+          <h3 className="flex-row align-center gap-5 color-secondary">
+            <strong className="color-yellow">
+              <MapPin size={20} />
+            </strong>
+            <strong className="flex-row align-center">Adresse de départ</strong>
+          </h3>
+          <p>
+            {departureAddress.street} {departureAddress.zip}{" "}
+            {departureAddress.city}
+          </p>
+        </div>
+        <div className="flex-column mb-10 dotted">
+          <h3 className="flex-row align-center gap-5 color-secondary">
+            <strong className="color-yellow">
+              <Target size={20} />
+            </strong>
+            Adresse de destination
+          </h3>
+          <p>
+            {destinationAddress.street} {destinationAddress.zip}{" "}
+            {destinationAddress.city}
+          </p>
+        </div>
 
-      <div>
-        <strong>📅 Date de départ :</strong> {formatDateToFrench(departureDate)}
+        <div className="flex-column mb-10 dotted">
+          <h3 className="flex-row align-center gap-5 color-secondary">
+            <strong className="color-yellow">
+              <Clock size={20} />
+            </strong>
+            Durée estimée
+          </h3>
+          <p>{displayDuration(duration) || "Non précisée"}</p>
+        </div>
       </div>
+      <div className="block-right">
+        <div className="flex-column mb-10 dotted">
+          <h3 className="flex-row align-center gap-5 color-secondary">
+            <strong className="color-yellow">
+              <Users size={20} />
+            </strong>
+            Places disponibles
+          </h3>
+          <p>
+            {availableSeats} place{availableSeats > 1 && "s"}
+          </p>
+        </div>
 
-      <div>
-        <strong>📍 Adresse de départ :</strong>
-        <br />
-        {departureAddress.street}, {departureAddress.zip}{" "}
-        {departureAddress.city}
-      </div>
+        <div className="flex-column mb-10 dotted">
+          <h3 className="flex-row align-center gap-5 color-secondary">
+            <strong className="color-yellow">
+              <CreditCard size={20} />
+            </strong>
+            Crédits par passager
+          </h3>
+          <p>{creditsPerPassenger} crédits/passager</p>
+        </div>
 
-      <div>
-        <strong>🎯 Adresse de destination :</strong>
-        <br />
-        {destinationAddress.street}, {destinationAddress.zip}{" "}
-        {destinationAddress.city}
-      </div>
+        <div className="flex-column mb-10 dotted">
+          <h3 className="flex-row align-center gap-5 color-secondary">
+            <strong className="color-yellow">
+              <Edit size={20} />
+            </strong>
+            Description
+          </h3>
+          <p>{description || "Aucune description fournie"}</p>
+        </div>
 
-      <div>
-        <strong>⏱️ Durée estimée :</strong> {duration || "Non précisée"}
-      </div>
-
-      <div>
-        <strong>👥 Places disponibles :</strong> {availableSeats}
-      </div>
-
-      <div>
-        <strong>💳 Crédits par passager :</strong> {creditsPerPassenger}
-      </div>
-
-      <div>
-        <strong>📝 Description :</strong>
-        <br />
-        {description || "Aucune description fournie"}
-      </div>
-
-      <div>
-        <strong>🚗 Véhicule :</strong> {vehicleId || "Non sélectionné"}
+        <div className="flex-column mb-10 dotted">
+          <h3 className="flex-row align-center gap-5 color-secondary">
+            <strong className="color-yellow">
+              <Truck size={20} />
+            </strong>
+            Véhicule
+          </h3>
+          <p>
+            {rideVehicle
+              ? `${rideVehicle.model} - ${rideVehicle.registration_number}`
+              : "Non sélectionné"}
+          </p>
+        </div>
       </div>
     </div>
   )
