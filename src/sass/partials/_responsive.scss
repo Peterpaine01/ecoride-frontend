@@ -243,9 +243,34 @@
 
   .framed {
     margin: 0 20px;
+    border-width: 3px;
+  }
+
+  .framed .block-left {
+    margin-bottom: 20px;
   }
 
   .new-ride {
     min-height: 0;
+  }
+
+  #publishRide {
+    h1 {
+      margin-bottom: 0px;
+    }
+  }
+
+  .indicator-wrapper {
+    margin: 0 15% 30px;
+  }
+
+  .step-indicator {
+    .steps {
+      width: 15px;
+      height: 15px;
+    }
+    .line {
+      display: none;
+    }
   }
 }

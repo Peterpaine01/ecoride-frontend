@@ -26,6 +26,7 @@ import Cover from "../components/Cover"
 import Footer from "../components/Footer"
 import Counter from "../components/Counter"
 import RideSummary from "../components/RideSummary"
+import StepIndicator from "../components/StepIndicator"
 
 const PublishRide = () => {
   const navigate = useNavigate()
@@ -306,9 +307,10 @@ const PublishRide = () => {
     <>
       <Header />
       <Cover />
-      <main>
+      <main id="publishRide">
         <section>
           <h1>Nouveau trajet</h1>
+          <StepIndicator currentStep={step} totalSteps={10} />
         </section>
 
         <section className="new-ride flex-row two-column framed">

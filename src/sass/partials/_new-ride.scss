@@ -1,7 +1,13 @@
 @use "variables";
 
+#publishRide {
+  h1 {
+    margin-bottom: 30px;
+  }
+}
+
 .new-ride {
-  min-height: 500px;
+  min-height: 400px;
 }
 
 .comission {
@@ -13,5 +19,26 @@
   }
   strong {
     font-size: 30px;
+  }
+}
+
+.indicator-wrapper {
+  margin: 0 25%;
+}
+
+.step-indicator {
+  .steps {
+    font-size: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 60px;
+    z-index: 10;
+    border: 3px solid variables.$color-dark;
+  }
+  .line {
+    width: calc(100% + 10px);
+    height: 3px;
+    border-radius: 60px;
+    z-index: 5;
   }
 }

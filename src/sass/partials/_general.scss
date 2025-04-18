@@ -115,8 +115,16 @@ section {
   justify-content: center;
 }
 
+.justify-between {
+  justify-content: space-between;
+}
+
 .w-100 {
   width: 100%;
+}
+
+.w-0 {
+  width: 0%;
 }
 
 .h-100 {
@@ -131,6 +139,14 @@ section {
   width: fit-content;
 }
 
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
 .emphase {
   font-size: 54px;
   color: variables.$color-primary;
@@ -139,6 +155,22 @@ section {
 
 .text-center {
   text-align: center;
+}
+
+.bg-green {
+  background: variables.$color-primary;
+}
+
+.bg-yellow {
+  background: variables.$color-accessibility;
+}
+
+.bg-gray {
+  background: variables.$color-dark-grey;
+}
+
+.transition-all {
+  transition: all 300ms ease;
 }
 
 // Headings
@@ -400,6 +432,7 @@ button:disabled {
 
 .btn-solid {
   background-color: variables.$color-primary;
+  border: 2px solid variables.$color-primary;
   &:hover {
     background-color: adjust-color(variables.$color-primary, $lightness: -10%);
   }
@@ -410,7 +443,8 @@ button:disabled {
   border: 2px solid variables.$color-primary;
 
   &:hover {
-    background-color: adjust-color(variables.$color-primary, $lightness: -10%);
+    border-color: adjust-color(variables.$color-primary, $lightness: -10%);
+    background-color: variables.$color-bg-dark;
   }
 }
 
