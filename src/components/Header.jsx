@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import Cookies from "js-cookie";
+import React, { useState, useRef, useEffect, useContext } from "react"
+import { AuthContext } from "../context/AuthContext"
+import Cookies from "js-cookie"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 import {
   User,
   ChevronRight,
@@ -10,58 +10,58 @@ import {
   Compass,
   UserPlus,
   PlusCircle,
-} from "react-feather";
+} from "react-feather"
 
 // Images
-import LogoHD from "../assets/logo-EcoRide-white-vert.png";
+import LogoHD from "../assets/logo-EcoRide-white-vert.png"
 
 // Component
-import SearchBlock from "./Search";
-import BurgerMenu from "./BurgerMenu";
-import ProfilMenu from "./ProfilMenu";
+import SearchBlock from "./Search"
+import BurgerMenu from "./BurgerMenu"
+import ProfilMenu from "./ProfilMenu"
 
 // Je récupère les props
 const Header = () => {
-  const { user, login, logout, isAuthenticated } = useContext(AuthContext);
-  const [isProfilOpen, setIsProfilOpen] = useState(false);
+  const { user, login, logout, isAuthenticated } = useContext(AuthContext)
+  const [isProfilOpen, setIsProfilOpen] = useState(false)
 
   // For testing
-  const [isToken, setIsToken] = useState(true);
+  const [isToken, setIsToken] = useState(true)
 
   // REF
-  const profilRef = useRef(null);
+  const profilRef = useRef(null)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profilRef.current && !profilRef.current.contains(event.target)) {
-        closeDropdown();
+        closeDropdown()
       }
-    };
+    }
 
     // Ajouter l'event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
 
     // Nettoyer l'event listener à la fin du cycle de vie
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   // Fonction pour basculer le menu
   const toggleDropdown = () => {
-    setIsProfilOpen((prevState) => !prevState);
-  };
+    setIsProfilOpen((prevState) => !prevState)
+  }
 
   // Fonction pour fermer le menu si l'utilisateur clique ailleurs
   const closeDropdown = () => {
-    setIsProfilOpen(false);
-  };
+    setIsProfilOpen(false)
+  }
 
   if (user && user.accountStatus === "pending") {
     // alert("Pensez à aciver votre compte. Rendez-vous sur votre boite mail.");
     console.log(
       "Compte inactif. Pensez à aciver votre compte. Rendez-vous sur votre boite mail."
-    );
+    )
   }
   // console.log("cookie token", Cookies.get("token"));
   // console.log("user", user);
@@ -83,7 +83,7 @@ const Header = () => {
               <nav className="flex-row">
                 <ul className="nav-list">
                   <li className="nav-item">
-                    <Link to={`/`}>Rechercher un trajet</Link>
+                    <Link to={`/recherche-trajet`}>Rechercher un trajet</Link>
                   </li>
                   <li className="nav-item">
                     <Link to={`/contact`}>Contact</Link>
@@ -215,7 +215,7 @@ const Header = () => {
         </div>
       </header>
     </>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

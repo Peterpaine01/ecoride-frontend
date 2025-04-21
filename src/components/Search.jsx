@@ -7,11 +7,16 @@ import "react-datepicker/dist/react-datepicker.css"
 import { registerLocale } from "react-datepicker"
 import fr from "date-fns/locale/fr"
 
+// Components
+import Counter from "../components/Counter"
+
 // Images
 import { Flag, Calendar, Users, Search, Plus, Minus } from "react-feather"
 
 // Je récupère les props
 const SearchBlock = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
   // console.log("searchParams", searchParams);
@@ -24,15 +29,21 @@ const SearchBlock = () => {
   }
 
   const [formData, setFormData] = useState({
-    departureCity: "" || searchQuery.departureCity,
-    destinationCity: "" || searchQuery.destinationCity,
-    departureDate: new Date() || searchQuery.departureDate,
-    availableSeats: 1 || searchQuery.availableSeats,
+    departureCity: searchQuery.departureCity || "",
+    destinationCity: searchQuery.destinationCity || "",
+    departureDate: searchQuery.departureDate || new Date(),
+    availableSeats: searchQuery.availableSeats || 1,
   })
 
-  const navigate = useNavigate()
-
   // HANDLE FORM DATA
+
+  const formatDateToLocal = (date) => {
+    const d = new Date(date)
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, "0")
+    const day = String(d.getDate()).padStart(2, "0")
+    return `${year}-${month}-${day}` // Exemple : "2025-04-22"
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -42,15 +53,38 @@ const SearchBlock = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    const queryParams = new URLSearchParams({
-      departureCity: formData.departureCity,
-      destinationCity: formData.destinationCity,
-      departureDate: formData.departureDate.toISOString(), // Convertir la date en string ISO
-      availableSeats: formData.availableSeats,
-    }).toString()
+    const isSearchPage = location.pathname === "/recherche-trajet"
 
-    // Aftfer submit, go to another page with queryparams
-    navigate(`/recherche-trajets?${queryParams}`)
+    const currentParams = new URLSearchParams(location.search)
+
+    currentParams.set("departureCity", formData.departureCity)
+    currentParams.set("destinationCity", formData.destinationCity)
+
+    const departureDate = new Date(formData.departureDate)
+    if (!isNaN(departureDate)) {
+      const formattedDate = formatDateToLocal(departureDate)
+      currentParams.set("departureDate", formattedDate)
+    }
+    currentParams.set("availableSeats", formData.availableSeats)
+
+    const encodedParams = new URLSearchParams()
+    for (const [key, value] of currentParams.entries()) {
+      encodedParams.set(key, value)
+    }
+
+    const newQuery = currentParams.toString()
+
+    if (isSearchPage) {
+      navigate(`${location.pathname}?${newQuery}`, { replace: true })
+    } else {
+      navigate(`/recherche-trajet?${newQuery}`)
+    }
+  }
+
+  const formatDepartureDate = (date) => {
+    return date instanceof Date && !isNaN(date)
+      ? new Intl.DateTimeFormat("fr-FR", options).format(date)
+      : ""
   }
 
   // HANDLE STATUS
@@ -60,10 +94,6 @@ const SearchBlock = () => {
 
   // REF
   const passengersRef = useRef(null)
-  const minusButtonRef = useRef(null)
-  const minusButtonModalRef = useRef(null)
-  const plusButtonRef = useRef(null)
-  const plusButtonModalRef = useRef(null)
 
   // HANDLE DROPDOWN MENU
 
@@ -78,44 +108,6 @@ const SearchBlock = () => {
         !passengersRef.current.contains(event.target)
       ) {
         closeDropdown()
-      }
-    }
-
-    // Accéder aux boutons via le DOM
-    const minusButton = minusButtonRef.current
-    const plusButton = plusButtonRef.current
-    const minusButtonModal = minusButtonModalRef.current
-    const plusButtonModal = plusButtonModalRef.current
-
-    // dropdown counter desktop
-    if (minusButton) {
-      if (formData.availableSeats === 1) {
-        minusButton.disabled = true
-      } else {
-        minusButton.disabled = false
-      }
-    }
-    if (plusButton) {
-      if (formData.availableSeats === 8) {
-        plusButton.disabled = true
-      } else {
-        plusButton.disabled = false
-      }
-    }
-    // modal counter mobile
-    if (minusButtonModal) {
-      if (formData.availableSeats === 1) {
-        minusButtonModal.disabled = true
-      } else {
-        minusButtonModal.disabled = false
-      }
-    }
-
-    if (plusButtonModal) {
-      if (formData.availableSeats === 8) {
-        plusButtonModal.disabled = true
-      } else {
-        plusButtonModal.disabled = false
       }
     }
 
@@ -150,18 +142,6 @@ const SearchBlock = () => {
   const displayDateMobile = new Intl.DateTimeFormat("fr-FR", options).format(
     today
   )
-
-  // HANDLE COUNTER PASSENGERS
-  const incrementCounter = () => {
-    if (formData.availableSeats >= 1 && formData.availableSeats < 8) {
-      setFormData({ ...formData, availableSeats: formData.availableSeats + 1 })
-    }
-  }
-  const decrementCounter = () => {
-    if (formData.availableSeats > 1 && formData.availableSeats <= 8) {
-      setFormData({ ...formData, availableSeats: formData.availableSeats - 1 })
-    }
-  }
 
   // HANDLE MODALS
 
@@ -224,9 +204,7 @@ const SearchBlock = () => {
                 autoComplete="off"
                 placeholder={displayDateMobile}
                 onChange={handleDateChange}
-                value={new Intl.DateTimeFormat("fr-FR", options).format(
-                  formData.departureDate
-                )}
+                value={formatDepartureDate(formData.departureDate)}
                 onFocus={toggleModal}
               />
             </div>
@@ -282,24 +260,14 @@ const SearchBlock = () => {
               {isPassengersOpen && (
                 <div className="dropdown-menu counter-block flex-row align-center desktop">
                   <p>Nombre de passagers</p>
-                  <div className="counter">
-                    <button
-                      type="button"
-                      onClick={decrementCounter}
-                      ref={minusButtonRef}
-                    >
-                      <Minus />
-                    </button>
-                    <p>{formData.availableSeats}</p>
 
-                    <button
-                      type="button"
-                      onClick={incrementCounter}
-                      ref={plusButtonRef}
-                    >
-                      <Plus />
-                    </button>
-                  </div>
+                  <Counter
+                    name={"availableSeats"}
+                    value={formData.availableSeats || 1}
+                    onChange={handleChange}
+                    minValue={1}
+                    maxValue={8}
+                  />
                 </div>
               )}
             </div>
@@ -398,24 +366,13 @@ const SearchBlock = () => {
 
             <h3>Nombre de passagers ?</h3>
             <div className=" counter-block flex-row align-center">
-              <div className="counter">
-                <button
-                  type="button"
-                  onClick={decrementCounter}
-                  ref={minusButtonRef}
-                >
-                  <Minus />
-                </button>
-                <p>{formData.availableSeats}</p>
-
-                <button
-                  type="button"
-                  onClick={incrementCounter}
-                  ref={plusButtonRef}
-                >
-                  <Plus />
-                </button>
-              </div>
+              <Counter
+                name={"availableSeats"}
+                value={formData.availableSeats || 1}
+                onChange={handleChange}
+                minValue={1}
+                maxValue={8}
+              />
             </div>
             <button type="button" className="btn-solid" onClick={toggleModal}>
               Valider

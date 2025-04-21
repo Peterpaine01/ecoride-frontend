@@ -14,7 +14,7 @@ const Counter = ({ name, onChange, value, minValue, maxValue }) => {
     }
   }
   return (
-    <div className="counter flex-row align-center">
+    <div className="counter flex-row align-center w-fit">
       <button
         type="button"
         onClick={decrementCounter}

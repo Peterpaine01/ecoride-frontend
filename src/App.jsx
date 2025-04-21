@@ -8,7 +8,6 @@ import "./App.scss"
 import Home from "./pages/Home"
 import Contact from "./pages/Contact"
 import PublishRide from "./pages/PublishRide"
-import PublishRideTest from "./pages/PublishRideTest"
 import Profil from "./pages/Profil"
 import SignIn from "./pages/SignIn"
 import SignUp from "./pages/SignUp"
@@ -46,7 +45,6 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/publier-trajet" element={<PublishRide />} />
-        <Route path="/publier-trajet-test" element={<PublishRideTest />} />
         <Route path="/profil" element={<Profil />} />
         <Route path="/se-connecter" element={<SignIn />} />
         <Route path="/creer-compte" element={<SignUp />} />
@@ -57,7 +55,7 @@ const App = () => {
 
         <Route path="/vos-trajets" element={<RidesSchedule />} />
         <Route path="/vos-trajets-archive" element={<RidesPast />} />
-        <Route path="/recherche-trajets" element={<RidesList />} />
+        <Route path="/recherche-trajet" element={<RidesList />} />
         <Route path="/trajet/:id" element={<RideDetails />} />
 
         <Route path="/avis" element={<OpinionList />} />

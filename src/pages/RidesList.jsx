@@ -15,10 +15,13 @@ import Search from "../components/Search"
 import Footer from "../components/Footer"
 import RideCard from "../components/RideCard"
 import { Key } from "react-feather"
+import Filters from "../components/Filters"
 
 const RidesList = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [ridesList, setRidesList] = useState()
+  const [fuzzyRides, setFuzzyRides] = useState([])
+  const [showFuzzy, setShowFuzzy] = useState(false)
 
   const navigate = useNavigate()
 
@@ -29,56 +32,56 @@ const RidesList = () => {
       destinationCity: searchParams.get("destinationCity") || "",
       departureDate: searchParams.get("departureDate") || "",
       availableSeats: parseInt(searchParams.get("availableSeats"), 10) || 1,
+      maxPrice: parseFloat(searchParams.get("maxPrice")) || undefined,
+      minRating: parseFloat(searchParams.get("minRating")) || undefined,
+      isElectric: searchParams.get("isElectric") === "true" || undefined,
+      acceptSmoking: searchParams.get("acceptSmoking") === "true" || undefined,
+      acceptAnimals: searchParams.get("acceptAnimals") === "true" || undefined,
     }),
     [searchParams]
   )
 
-  console.log("searchParams", searchParams)
-
   useEffect(() => {
     const fetchData = async () => {
-      if (searchQuery.departureCity && searchQuery.destinationCity) {
-        try {
-          const response = await axios.get("/search-rides", {
-            params: searchQuery,
-          })
-          console.log("Rides data:", response.data)
+      const today = new Date()
+      const formattedDate = today.toISOString().split("T")[0]
+      const hasSearchCriteria =
+        searchQuery.departureCity && searchQuery.destinationCity
 
-          setRidesList(response.data.rides || [])
-        } catch (error) {
-          console.error("Error fetching rides:", error)
-        }
+      const cleanDate = (date) => date?.split?.("T")?.[0] ?? date
+      const nonFuzzyParams = hasSearchCriteria
+        ? {
+            ...searchQuery,
+            departureDate: cleanDate(searchQuery.departureDate),
+            fuzzy: false,
+          }
+        : { departureDate: formattedDate, fuzzy: false }
+
+      const fuzzyParams = hasSearchCriteria
+        ? {
+            ...searchQuery,
+            departureDate: cleanDate(searchQuery.departureDate),
+            fuzzy: true,
+          }
+        : { departureDate: formattedDate, fuzzy: true }
+      try {
+        const response = await axios.get("/search-rides", {
+          params: nonFuzzyParams,
+        })
+        console.log(nonFuzzyParams)
+        setRidesList(response.data.rides || [])
+
+        const fuzzyResponse = await axios.get("/search-rides", {
+          params: fuzzyParams,
+        })
+        setFuzzyRides(fuzzyResponse.data.rides || [])
+      } catch (error) {
+        console.error("Error fetching rides:", error)
       }
     }
 
     fetchData()
-  }, [searchQuery])
-  console.log("ridesList", ridesList)
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-
-    const formData = new FormData(event.target)
-    const newParams = {}
-
-    formData.forEach((value, key) => {
-      if (value && value !== "--:--" && value !== "Indifférent") {
-        newParams[key] = value
-      }
-    })
-
-    newParams.isElectric = formData.get("isElectric") === "on"
-    newParams.acceptSmoking = formData.get("acceptSmoking") === "on"
-    newParams.acceptAnimals = formData.get("acceptAnimals") === "on"
-
-    const updatedParams = new URLSearchParams(searchParams)
-
-    Object.entries(newParams).forEach(([key, value]) => {
-      updatedParams.set(key, value)
-    })
-
-    navigate(`?${updatedParams.toString()}`)
-  }
+  }, [searchQuery, searchParams])
 
   const getDate = (date) => {
     const formattedDate = new Date(Date.parse(date))
@@ -94,64 +97,32 @@ const RidesList = () => {
       .toLocaleDateString("fr-FR", options)
       .replace(/^./, (c) => c.toUpperCase())
   }
-  console.log(searchQuery)
 
-  // COUNTER
+  let previousDate = null
+  let isFirstDate = true
 
-  // REF
-  const minusButtonRef = useRef(null)
-  const minusButtonModalRef = useRef(null)
-  const plusButtonRef = useRef(null)
-  const plusButtonModalRef = useRef(null)
+  const fuzzyRidesList = fuzzyRides.map((ride) => {
+    const rideDate = new Date(ride.departureDate).toLocaleDateString("fr-FR", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
 
-  // Accéder aux boutons via le DOM
-  const minusButton = minusButtonRef.current
-  const plusButton = plusButtonRef.current
-  const minusButtonModal = minusButtonModalRef.current
-  const plusButtonModal = plusButtonModalRef.current
+    const isNewDay = rideDate !== previousDate
+    const showDateHeader = isNewDay && !isFirstDate
+    if (isNewDay) {
+      previousDate = rideDate
+      if (isFirstDate) isFirstDate = false
+    }
 
-  // dropdown counter desktop
-  if (minusButton) {
-    if (formData.availableSeats === 1) {
-      minusButton.disabled = true
-    } else {
-      minusButton.disabled = false
-    }
-  }
-  if (plusButton) {
-    if (formData.availableSeats === 8) {
-      plusButton.disabled = true
-    } else {
-      plusButton.disabled = false
-    }
-  }
-  // modal counter mobile
-  if (minusButtonModal) {
-    if (formData.availableSeats === 1) {
-      minusButtonModal.disabled = true
-    } else {
-      minusButtonModal.disabled = false
-    }
-  }
-
-  if (plusButtonModal) {
-    if (formData.availableSeats === 8) {
-      plusButtonModal.disabled = true
-    } else {
-      plusButtonModal.disabled = false
-    }
-  }
-
-  const incrementCounter = () => {
-    if (formData.availableSeats >= 1 && formData.availableSeats < 8) {
-      setFormData({ ...formData, passengers: formData.availableSeats + 1 })
-    }
-  }
-  const decrementCounter = () => {
-    if (formData.availableSeats > 1 && formData.availableSeats <= 8) {
-      setFormData({ ...formData, passengers: formData.availableSeats - 1 })
-    }
-  }
+    return (
+      <div key={ride._id}>
+        {showDateHeader && <h3 className="next-day">{rideDate}</h3>}
+        <RideCard ride={ride} />
+      </div>
+    )
+  })
 
   return (
     <>
@@ -160,113 +131,49 @@ const RidesList = () => {
       <main>
         <div className="container">
           <section className="filters-layout flex-row">
-            <aside className="filters one-third-column">
-              <div className="filter-header flex-row">
-                <h2>Filtrer</h2>
-                <a href="#" class="reset">
-                  tout effacer
-                </a>
-              </div>
-              <form onSubmit={handleSubmit}>
-                <div className="input-group">
-                  <h3>Votre voyage</h3>
-                  <div className="criteria">
-                    <label>Prix max (en crédits)</label>
-                    <input
-                      type="number"
-                      name="maxPrice"
-                      min="2"
-                      defaultValue="2"
-                    />
-                    {/* <div className="counter">
-                    <button
-                      type="button"
-                      onClick={decrementCounter}
-                      ref={minusButtonRef}
-                    >
-                      <Minus />
-                    </button>
-                    <p>{formData.availableSeats}</p>
-
-                    <button
-                      type="button"
-                      onClick={incrementCounter}
-                      ref={plusButtonRef}
-                    >
-                      <Plus />
-                    </button>
-                  </div> */}
-                  </div>
-
-                  <div className="criteria flex-row">
-                    <label>Durée max</label>
-                    <select>
-                      <option>--:--</option>
-                      <option value="30">30 min</option>
-                      <option value="60">1h</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="input-group">
-                  <h3>Votre conducteur</h3>
-                  <div className="criteria flex-row">
-                    <label>Note minimal</label>
-                    <input
-                      type="number"
-                      name="minRating"
-                      min="0"
-                      max="5"
-                      defaultValue="0"
-                    />
-                  </div>
-
-                  <div className="criteria flex-row">
-                    <label>Genre</label>
-                    <select>
-                      <option>Indifférent</option>
-                      <option>Homme</option>
-                      <option>Femme</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="input-group">
-                  <h3>Vos préférences</h3>
-                  <div class="criteria toggle flex-row">
-                    <label>
-                      Voyage écologique <small>Voiture électrique</small>
-                    </label>
-                    <input type="checkbox" />
-                  </div>
-
-                  <div class="criteria toggle flex-row">
-                    <label>Véhicule non fumeur</label>
-                    <input type="checkbox" checked />
-                  </div>
-
-                  <div class=" criteria toggle flex-row">
-                    <label>Pas d’animaux</label>
-                    <input type="checkbox" />
-                  </div>
-                </div>
-                <button type="submit" className="btn-solid">
-                  Voir les trajets
-                </button>
-              </form>
-            </aside>
-            <div className="results-search">
-              <h1>{getDate(searchQuery.departureDate)}</h1>
-
-              <div className="results-list flex-column gap-15">
-                {ridesList ? (
-                  ridesList.map((ride) => {
-                    console.log("ride", ride)
-                    return <RideCard key={ride._id} ride={ride} />
-                  })
+            <Filters searchQuery={searchQuery} />
+            {ridesList && (
+              <div className="results-search">
+                {searchQuery.departureDate ? (
+                  <h1>{getDate(searchQuery.departureDate)}</h1>
                 ) : (
-                  <p>Pas de trajet trouvé avec ces critères.</p>
+                  <h1>Trajets à venir</h1>
+                )}
+                {!showFuzzy ? (
+                  <>
+                    <div className="results-list flex-column gap-15">
+                      {ridesList ? (
+                        ridesList.map((ride) => {
+                          return <RideCard key={ride._id} ride={ride} />
+                        })
+                      ) : (
+                        <p>Pas de trajet trouvé avec ces critères.</p>
+                      )}
+                    </div>
+                    {ridesList.length > 0 &&
+                      fuzzyRides.length > 0 &&
+                      !showFuzzy && (
+                        <div className="mt-20 flex-row justify-center w-100">
+                          <button
+                            className="btn-link"
+                            onClick={() => setShowFuzzy(true)}
+                          >
+                            Voir les jours suivants
+                          </button>
+                        </div>
+                      )}
+                  </>
+                ) : (
+                  <div className="results-list flex-column gap-15">
+                    {fuzzyRides ? (
+                      fuzzyRidesList
+                    ) : (
+                      <p>Pas de trajet trouvé avec ces critères.</p>
+                    )}
+                  </div>
                 )}
               </div>
-            </div>
+            )}
           </section>
         </div>
       </main>

@@ -627,7 +627,7 @@ const PublishRide = () => {
           {step === 8 && (
             <>
               <div className="block-left flex-column align-center">
-                <h2>Quand partez-vous ?</h2>
+                <h2>Combien de crédits par passager ?</h2>
 
                 <Counter
                   name={"creditsPerPassenger"}

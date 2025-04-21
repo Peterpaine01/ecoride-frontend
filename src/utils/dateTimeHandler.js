@@ -7,7 +7,7 @@ export const displayDuration = (duration) => {
   if (roundDuration >= 60) {
     const hours = Math.floor(roundDuration / 60)
     const minutes = roundDuration % 60
-    return `${hours}h${minutes > 0 ? ` ${minutes} min` : ""}`
+    return `${hours}h${minutes > 0 ? `${minutes}` : ""}`
   } else {
     return `${roundDuration} min`
   }
