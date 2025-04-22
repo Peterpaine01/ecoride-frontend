@@ -4,6 +4,15 @@ import React, { useState } from "react"
 // Components
 import Counter from "../components/Counter"
 
+// Icones
+import EnergySavingsLeafOutlinedIcon from "@mui/icons-material/EnergySavingsLeafOutlined"
+import TransgenderOutlinedIcon from "@mui/icons-material/TransgenderOutlined"
+import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined"
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined"
+import SmokingRoomsOutlinedIcon from "@mui/icons-material/SmokingRoomsOutlined"
+import TollOutlinedIcon from "@mui/icons-material/TollOutlined"
+import PetsOutlinedIcon from "@mui/icons-material/PetsOutlined"
+
 const Filters = ({ searchQuery }) => {
   const location = useLocation()
   const navigate = useNavigate()
@@ -89,8 +98,15 @@ const Filters = ({ searchQuery }) => {
       <form key={resetKey} onSubmit={handleSubmit}>
         <div className="input-group">
           <h3>Votre voyage</h3>
-          <div className="criteria">
-            <label>Prix max (en crédits)</label>
+          <div className="criteria flex-row space-between align-center gap-5 mb-20">
+            <div className="flex-row space-between align-center gap-5">
+              <TollOutlinedIcon sx={{ color: "#f7c134", fontSize: 28 }} />
+              <div className="flex-column ">
+                <label>Prix maximum</label>
+                <small>(en crédits)</small>
+              </div>
+            </div>
+
             <Counter
               name="maxPrice"
               value={maxPrice}
@@ -100,22 +116,35 @@ const Filters = ({ searchQuery }) => {
             />
           </div>
 
-          <div className="criteria flex-row">
-            <label>Durée max</label>
+          <div className="criteria  flex-row space-between align-center gap-5 mb-20">
+            <div className="flex-row space-between align-center gap-5">
+              <div className="flex-row space-between align-center gap-5">
+                <AccessTimeOutlinedIcon
+                  sx={{ color: "#f7c134", fontSize: 28 }}
+                />
+                <label>Durée maximum</label>
+              </div>
+            </div>
+
             <input
               type="time"
               name="maxDuration"
               value={maxDuration}
               onChange={(e) => setMaxDuration(e.target.value)}
-              step="60" // pour éviter les secondes
+              step="60"
             />
           </div>
         </div>
 
         <div className="input-group">
           <h3>Votre conducteur</h3>
-          <div className="criteria flex-row">
-            <label>Note minimal</label>
+          <div className="criteria  flex-row space-between align-center gap-5 mb-20">
+            <div className="flex-row space-between align-center gap-5">
+              <StarOutlineOutlinedIcon
+                sx={{ color: "#f7c134", fontSize: 28 }}
+              />
+              <label>Note minimal</label>
+            </div>
             <Counter
               name="minRating"
               value={minRating}
@@ -125,9 +154,14 @@ const Filters = ({ searchQuery }) => {
             />
           </div>
 
-          <div className="criteria flex-row">
-            <label>Genre</label>
-            <select name="gender">
+          <div className="criteria  flex-row space-between align-center gap-5 mb-20">
+            <div className="flex-row space-between align-center gap-5">
+              <TransgenderOutlinedIcon
+                sx={{ color: "#f7c134", fontSize: 28 }}
+              />
+              <label>Genre</label>
+            </div>
+            <select class="custom-select-minimal" name="gender">
               <option>Indifférent</option>
               <option value="male">Homme</option>
               <option value="female">Femme</option>
@@ -138,27 +172,52 @@ const Filters = ({ searchQuery }) => {
         <div className="input-group">
           <h3>Vos préférences</h3>
 
-          <div className="criteria toggle flex-row">
-            <label>
-              Voyage écologique <small>Voiture électrique</small>
+          <div className="criteria toggle  flex-row space-between align-center gap-5 mb-20">
+            <div className="flex-row space-between align-center gap-5">
+              <EnergySavingsLeafOutlinedIcon
+                sx={{ color: "#f7c134", fontSize: 28 }}
+              />
+              <div className="flex-column ">
+                <label>Voyage écologique</label>
+                <small>(Voiture électrique)</small>
+              </div>
+            </div>
+
+            <label class="switch">
+              <input type="checkbox" name="isElectric" />
+              <span class="slider"></span>
             </label>
-            <input type="checkbox" name="isElectric" />
           </div>
 
-          <div className="criteria toggle flex-row">
-            <label>Véhicule non fumeur</label>
-            <input type="checkbox" name="acceptSmoking" />
+          <div className="criteria toggle  flex-row space-between align-center gap-5 mb-20">
+            <div className="flex-row space-between align-center gap-5">
+              <SmokingRoomsOutlinedIcon
+                sx={{ color: "#f7c134", fontSize: 28 }}
+              />
+              <label>Véhicule fumeur</label>
+            </div>
+            <label class="switch">
+              <input type="checkbox" name="acceptSmoking" />
+              <span class="slider"></span>
+            </label>
           </div>
 
-          <div className="criteria toggle flex-row">
-            <label>Pas d’animaux</label>
-            <input type="checkbox" name="acceptAnimals" />
+          <div className="criteria toggle  flex-row space-between align-center gap-5 mb-20">
+            <div className="flex-row space-between align-center gap-5">
+              <PetsOutlinedIcon sx={{ color: "#f7c134", fontSize: 28 }} />
+              <label>Animaux acceptés</label>
+            </div>
+            <label class="switch">
+              <input type="checkbox" name="acceptAnimals" />
+              <span class="slider"></span>
+            </label>
           </div>
         </div>
-
-        <button type="submit" className="btn-solid">
-          Voir les trajets
-        </button>
+        <div className="flex-row justify-center align-center gap-5 ">
+          <button type="submit" className="btn-solid mt-20">
+            Voir les trajets
+          </button>
+        </div>
       </form>
     </aside>
   )

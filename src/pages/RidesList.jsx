@@ -68,13 +68,13 @@ const RidesList = () => {
         const response = await axios.get("/search-rides", {
           params: nonFuzzyParams,
         })
-        console.log(nonFuzzyParams)
-        setRidesList(response.data.rides || [])
 
+        setRidesList(response.data.rides || [])
         const fuzzyResponse = await axios.get("/search-rides", {
           params: fuzzyParams,
         })
         setFuzzyRides(fuzzyResponse.data.rides || [])
+        setShowFuzzy(false)
       } catch (error) {
         console.error("Error fetching rides:", error)
       }
@@ -82,6 +82,10 @@ const RidesList = () => {
 
     fetchData()
   }, [searchQuery, searchParams])
+
+  useEffect(() => {
+    console.log("ridesList has been updated ✅", ridesList)
+  }, [ridesList])
 
   const getDate = (date) => {
     const formattedDate = new Date(Date.parse(date))
@@ -137,22 +141,23 @@ const RidesList = () => {
                 {searchQuery.departureDate ? (
                   <h1>{getDate(searchQuery.departureDate)}</h1>
                 ) : (
-                  <h1>Trajets à venir</h1>
+                  <h1>Aujourd'hui</h1>
                 )}
                 {!showFuzzy ? (
                   <>
                     <div className="results-list flex-column gap-15">
-                      {ridesList ? (
+                      {ridesList.length > 0 ? (
                         ridesList.map((ride) => {
                           return <RideCard key={ride._id} ride={ride} />
                         })
                       ) : (
-                        <p>Pas de trajet trouvé avec ces critères.</p>
+                        <div className="flex-row justify-center dotted mb-20">
+                          <p>Pas de trajet trouvé avec ces critères.</p>
+                        </div>
                       )}
                     </div>
-                    {ridesList.length > 0 &&
-                      fuzzyRides.length > 0 &&
-                      !showFuzzy && (
+                    {fuzzyRides.length > 0 &&
+                      fuzzyRides.length > ridesList.length && (
                         <div className="mt-20 flex-row justify-center w-100">
                           <button
                             className="btn-link"

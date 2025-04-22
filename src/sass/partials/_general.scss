@@ -143,6 +143,10 @@ section {
   margin-bottom: 10px;
 }
 
+.mb-20 {
+  margin-bottom: 20px;
+}
+
 .fit-content {
   width: fit-content;
 }
@@ -246,6 +250,12 @@ p {
   font-size: 12px;
 }
 
+small {
+  font-size: 10px;
+  color: #fff;
+  margin: 5px 0;
+}
+
 // Images
 
 img {
@@ -312,7 +322,7 @@ em {
 input {
   padding: 10px 10px;
   font-size: 16px;
-  border: 1px solid variables.$color-primary;
+  border: 2px solid variables.$color-primary;
   border-radius: 10px;
   color: variables.$color-dark;
   &::placeholder {
@@ -408,6 +418,56 @@ form.framed {
     pointer-events: none;
     z-index: 3;
   }
+}
+
+// Toogle input
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* curseur */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: variables.$color-dark-grey;
+  transition: background-color 0.4s;
+  border-radius: 28px;
+}
+
+/* cercle */
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: transform 0.4s;
+  border-radius: 50%;
+}
+
+/* active */
+input:checked + .slider {
+  background-color: variables.$color-primary;
+}
+
+input:checked + .slider::before {
+  transform: translateX(22px);
 }
 
 // BUTTON
