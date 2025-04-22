@@ -19,7 +19,7 @@ const Filters = ({ searchQuery }) => {
   const [searchParams] = useSearchParams()
   const [resetKey, setResetKey] = useState(0)
 
-  const [maxPrice, setMaxPrice] = useState(Number(searchQuery.maxPrice) || 2)
+  const [maxPrice, setMaxPrice] = useState(Number(searchQuery.maxPrice) || "")
   const [minRating, setMinRating] = useState(Number(searchQuery.minRating) || 0)
   const [maxDuration, setMaxDuration] = useState(
     searchQuery.maxDuration ? convertMinutesToTime(searchQuery.maxDuration) : ""
@@ -65,7 +65,7 @@ const Filters = ({ searchQuery }) => {
   }
 
   return (
-    <aside className="filters one-third-column">
+    <>
       <div className="filter-header flex-row">
         <h2>Filtrer</h2>
         <button
@@ -107,12 +107,20 @@ const Filters = ({ searchQuery }) => {
               </div>
             </div>
 
-            <Counter
+            {/* <Counter
               name="maxPrice"
               value={maxPrice}
               minValue={2}
               maxValue={1000}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
+            /> */}
+            <input
+              type="number"
+              name="maxPrice"
+              id="maxPrice"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
+              className="small-input"
             />
           </div>
 
@@ -145,6 +153,7 @@ const Filters = ({ searchQuery }) => {
               />
               <label>Note minimal</label>
             </div>
+
             <Counter
               name="minRating"
               value={minRating}
@@ -219,7 +228,7 @@ const Filters = ({ searchQuery }) => {
           </button>
         </div>
       </form>
-    </aside>
+    </>
   )
 }
 

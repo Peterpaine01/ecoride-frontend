@@ -204,7 +204,7 @@
     background-color: variables.$color-primary;
     height: 60px;
     justify-content: space-between;
-    z-index: 500;
+    z-index: 400;
     .container {
       width: 100%;
       padding: 0;
@@ -291,6 +291,12 @@
   .description-textarea {
     width: 100%;
     margin-top: 0;
+  }
+  .filters-layout {
+    margin: 20px 0;
+    h1 {
+      margin-bottom: 0;
+    }
   }
 }
 

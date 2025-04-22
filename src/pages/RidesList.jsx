@@ -16,12 +16,14 @@ import Footer from "../components/Footer"
 import RideCard from "../components/RideCard"
 import { Key } from "react-feather"
 import Filters from "../components/Filters"
+import FiltersModal from "../components/FiltersModal"
 
 const RidesList = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [ridesList, setRidesList] = useState()
   const [fuzzyRides, setFuzzyRides] = useState([])
   const [showFuzzy, setShowFuzzy] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   const navigate = useNavigate()
 
@@ -87,6 +89,13 @@ const RidesList = () => {
     console.log("ridesList has been updated ✅", ridesList)
   }, [ridesList])
 
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
+
   const getDate = (date) => {
     const formattedDate = new Date(Date.parse(date))
 
@@ -135,14 +144,24 @@ const RidesList = () => {
       <main>
         <div className="container">
           <section className="filters-layout flex-row">
-            <Filters searchQuery={searchQuery} />
+            {!isMobile && (
+              <aside className="filters one-third-column">
+                <Filters searchQuery={searchQuery} />
+              </aside>
+            )}
+
             {ridesList && (
               <div className="results-search">
-                {searchQuery.departureDate ? (
-                  <h1>{getDate(searchQuery.departureDate)}</h1>
-                ) : (
-                  <h1>Aujourd'hui</h1>
-                )}
+                <div className="flex-row space-between align-center">
+                  {searchQuery.departureDate ? (
+                    <h1>{getDate(searchQuery.departureDate)}</h1>
+                  ) : (
+                    <h1>Aujourd'hui</h1>
+                  )}
+
+                  {isMobile && <FiltersModal searchQuery={searchQuery} />}
+                </div>
+
                 {!showFuzzy ? (
                   <>
                     <div className="results-list flex-column gap-15">
