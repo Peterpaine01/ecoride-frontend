@@ -121,6 +121,7 @@ const Filters = ({ searchQuery }) => {
               value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
               className="small-input"
+              placeholder="2"
             />
           </div>
 

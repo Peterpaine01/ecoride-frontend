@@ -130,7 +130,7 @@ const SignIn = () => {
                 {loading ? "Connexion..." : "Accéder"}
               </button>
 
-              <Link to="/forgot-password" className="forgot-link mt-2">
+              <Link to="/forgot-password" className="btn-link mt-20 align-self">
                 Mot de passe oublié ?
               </Link>
             </form>

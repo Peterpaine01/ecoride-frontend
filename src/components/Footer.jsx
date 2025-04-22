@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import { Link } from "react-router-dom"
+import React, { useState } from "react"
 
 // Images
-import LogoHD from "../assets/logo-EcoRide-secondary.svg";
+import LogoHD from "../assets/logo-EcoRide-secondary.svg"
 import {
   Search,
   PlusCircle,
@@ -10,12 +10,12 @@ import {
   Instagram,
   Facebook,
   Linkedin,
-} from "react-feather";
+} from "react-feather"
 
 // Je récupère les props
 const Footer = () => {
   // For testing
-  const [isToken, setIsToken] = useState(true);
+  const [isToken, setIsToken] = useState(true)
 
   return (
     <>
@@ -23,7 +23,7 @@ const Footer = () => {
         {/* MOBILE */}
         <div className="container mobile">
           <Link
-            to="/"
+            to="/recherche-trajet"
             className={`btn-footer flex-column align-center ${
               isToken && "user-logged"
             }`}
@@ -101,7 +101,7 @@ const Footer = () => {
         </div>
       </footer>
     </>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

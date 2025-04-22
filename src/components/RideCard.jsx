@@ -11,11 +11,14 @@ import {
   ChevronLeft,
 } from "react-feather"
 
+import EnergySavingsLeafOutlinedIcon from "@mui/icons-material/EnergySavingsLeafOutlined"
+
 import { displayDuration } from "../utils/dateTimeHandler"
 
+import StarRating from "../components/StarRating"
+
 const RideCard = ({ ride }) => {
-  const { user, login, logout, isAuthenticated } = useContext(AuthContext)
-  const [isOpen, setIsOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   const {
     availableSeats,
@@ -27,6 +30,15 @@ const RideCard = ({ ride }) => {
     duration,
     driver,
   } = ride
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 500)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
+
+  console.log(window.innerWidth)
 
   const getTimeFromDate = (date) => {
     const formattedDate = new Date(Date.parse(date))
@@ -63,58 +75,158 @@ const RideCard = ({ ride }) => {
 
   return (
     <Link>
-      <article className="ride-card flex-column">
-        <div className="top-ride-card flex-row">
-          <div className="info-ride">
-            <div className="departure">
-              <p>{departureDate ? getTimeFromDate(departureDate) : "--:--"}</p>
-              <p>{departureAddress?.city || "Ville inconnue"}</p>
+      {isMobile ? (
+        <article className="ride-card flex-column">
+          <div className="top-ride-card ">
+            <div className="info-ride flex-row justify-left">
+              <div className="flex-column space-between">
+                <p>
+                  {departureDate ? getTimeFromDate(departureDate) : "--:--"}
+                </p>
+                <p>
+                  {departureDate && typeof duration === "number"
+                    ? getTimeFromDate(arrivalDate)
+                    : "--:--"}
+                </p>
+              </div>
+              <div className="timing flex-row">
+                <div className="ride-line">
+                  <span className="round"></span>
+                  <span className="timeline"></span>
+                  <span className="round"></span>
+                </div>
+              </div>
+              <div className="flex-column space-between">
+                <p>{departureAddress?.city || "Ville inconnue"}</p>
+                <div className="timing">
+                  <p>
+                    {typeof duration === "number"
+                      ? displayDuration(duration)
+                      : "Durée inconnue"}
+                  </p>
+                </div>
+
+                <p>{destinationAddress?.city || "Ville inconnue"}</p>
+              </div>
             </div>
-            <div className="timing">
-              <div className="timeline"></div>
-              <p>
-                {typeof duration === "number"
-                  ? displayDuration(duration)
-                  : "Durée inconnue"}
+            <div className="credits">
+              <p>{creditsPerPassenger ?? "--"}</p>
+              <p>crédits</p>
+            </div>
+          </div>
+          <div className="bottom-ride-card flex-row align-center space-between">
+            <div className="driver-infos flex-row space-between align-center gap-15">
+              <div className="profil-icon">
+                {driver?.photo ? (
+                  <img src={driver.photo} alt="photo profil par défaut" />
+                ) : (
+                  <div className="default-icon" />
+                )}
+              </div>
+              <div className="flex-column gap-5">
+                <p className="text-bold">
+                  {driver?.username || "Conducteur inconnu"}
+                </p>
+                {driver?.average_rating && (
+                  <StarRating rating={driver.average_rating} />
+                )}
+              </div>
+            </div>
+            <div className="seats flex-row space-between align-center gap-5">
+              <p className="text-big">{availableSeats ?? "--"}</p>
+              <p className="text-tiny">
+                place{availableSeats > 1 && "s"} <br />{" "}
+                <span>disponible{availableSeats > 1 && "s"}</span>
               </p>
             </div>
-            <div className="arrival">
-              <p>
-                {departureDate && typeof duration === "number"
-                  ? getTimeFromDate(arrivalDate)
-                  : "--:--"}
+            <div className="flex-column align-center">
+              {car?.energy_id === 3 ||
+                (car?.energy === "Électricité" && (
+                  <>
+                    <EnergySavingsLeafOutlinedIcon
+                      sx={{ color: "#42ba92", fontSize: 38 }}
+                    />
+                    <small className="text-center">écolo</small>
+                  </>
+                ))}
+            </div>
+          </div>
+        </article>
+      ) : (
+        <article className="ride-card flex-column">
+          <div className="top-ride-card flex-row">
+            <div className="info-ride">
+              <div className="departure">
+                <p>
+                  {departureDate ? getTimeFromDate(departureDate) : "--:--"}
+                </p>
+                <p>{departureAddress?.city || "Ville inconnue"}</p>
+              </div>
+              <div className="timing">
+                <div className="ride-line">
+                  <span className="round"></span>
+                  <span className="timeline"></span>
+                  <span className="round"></span>
+                </div>
+                <p>
+                  {typeof duration === "number"
+                    ? displayDuration(duration)
+                    : "Durée inconnue"}
+                </p>
+              </div>
+              <div className="arrival">
+                <p>
+                  {departureDate && typeof duration === "number"
+                    ? getTimeFromDate(arrivalDate)
+                    : "--:--"}
+                </p>
+                <p>{destinationAddress?.city || "Ville inconnue"}</p>
+              </div>
+            </div>
+            <div className="credits">
+              <p>{creditsPerPassenger ?? "--"}</p>
+              <p>crédits</p>
+            </div>
+          </div>
+          <div className="bottom-ride-card flex-row align-center space-between">
+            <div className="driver-infos flex-row space-between align-center gap-15">
+              <div className="profil-icon">
+                {driver?.photo ? (
+                  <img src={driver.photo} alt="photo profil par défaut" />
+                ) : (
+                  <div className="default-icon" />
+                )}
+              </div>
+              <div className="flex-column gap-5">
+                <p className="text-bold">
+                  {driver?.username || "Conducteur inconnu"}
+                </p>
+                {driver?.average_rating && (
+                  <StarRating rating={driver.average_rating} />
+                )}
+              </div>
+            </div>
+            <div className="seats flex-row space-between align-center gap-5">
+              <p className="text-big">{availableSeats ?? "--"}</p>
+              <p className="text-tiny">
+                place{availableSeats > 1 && "s"} <br />{" "}
+                <span>disponible{availableSeats > 1 && "s"}</span>
               </p>
-              <p>{destinationAddress?.city || "Ville inconnue"}</p>
+            </div>
+            <div className="flex-column align-center">
+              {car?.energy_id === 3 ||
+                (car?.energy === "Électricité" && (
+                  <>
+                    <EnergySavingsLeafOutlinedIcon
+                      sx={{ color: "#42ba92", fontSize: 38 }}
+                    />
+                    <small className="text-center">écolo</small>
+                  </>
+                ))}
             </div>
           </div>
-          <div className="credits">
-            <p>{creditsPerPassenger ?? "--"}</p>
-            <p>crédits</p>
-          </div>
-        </div>
-        <div className="bottom-ride-card flex-row">
-          <div className="driver-infos flex-column">
-            <div className="profil-icon">
-              {driver?.photo ? (
-                <img src={driver.photo} alt="photo profil par défaut" />
-              ) : (
-                <div className="default-icon" />
-              )}
-            </div>
-            <p>{driver?.username || "Conducteur inconnu"}</p>
-            <p>{driver?.average_rating ?? "–"}</p>
-          </div>
-          <div className="ride-criteria">
-            <div className="seats">
-              <p>{availableSeats ?? "--"}</p>
-              <p>
-                places <span>disponibles</span>
-              </p>
-            </div>
-            {car?.energy_id === 3 && <p>voyage ecolo</p>}
-          </div>
-        </div>
-      </article>
+        </article>
+      )}
     </Link>
   )
 }

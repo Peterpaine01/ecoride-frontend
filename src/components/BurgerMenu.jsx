@@ -1,21 +1,21 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Facebook, Instagram, Linkedin } from "react-feather";
+import React, { useState } from "react"
+import { Link } from "react-router-dom"
+import { Facebook, Instagram, Linkedin } from "react-feather"
 
 const BurgerMenu = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
-    const profils = document.getElementsByClassName("profil-icon");
+    setIsOpen(!isOpen)
+    const profils = document.getElementsByClassName("profil-icon")
     for (let i = 0; i < profils.length; i++) {
       if (!isOpen) {
-        profils[i].classList.remove("visible");
+        profils[i].classList.remove("visible")
       } else {
-        profils[i].classList.add("visible");
+        profils[i].classList.add("visible")
       }
     }
-  };
+  }
 
   return (
     <div className="burger-menu-container">
@@ -38,7 +38,7 @@ const BurgerMenu = () => {
         <nav className="flex-column align-center ">
           <ul>
             <li>
-              <Link to="/">Rechercher un trajet</Link>
+              <Link to="/recherche-trajet">Rechercher un trajet</Link>
             </li>
             <li>
               <Link to="/comment-fonctionne-ecoride">Comment ça marche ?</Link>
@@ -68,7 +68,7 @@ const BurgerMenu = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BurgerMenu;
+export default BurgerMenu

@@ -309,4 +309,28 @@
       flex-direction: column;
     }
   }
+
+  .ride-card {
+    .top-ride-card {
+      height: fit-content;
+    }
+    .info-ride {
+      width: fit-content;
+    }
+    .ride-line {
+      width: fit-content;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 6px 0;
+    }
+
+    .timeline {
+      height: 100px;
+      width: 3px;
+    }
+    .timing p {
+      margin: 0;
+    }
+  }
 }

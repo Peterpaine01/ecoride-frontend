@@ -248,6 +248,13 @@ p {
 
 .text-tiny {
   font-size: 12px;
+  margin: 0;
+  line-height: 14px;
+}
+
+.text-bold {
+  font-size: 20px;
+  font-weight: 600;
 }
 
 small {
@@ -325,6 +332,7 @@ input {
   border: 2px solid variables.$color-primary;
   border-radius: 10px;
   color: variables.$color-dark;
+  height: 47px;
   &::placeholder {
     color: variables.$color-dark-grey;
     font-style: italic;
@@ -522,6 +530,7 @@ button:disabled {
   padding-bottom: 2px;
   border-bottom: 1px dotted variables.$color-accessibility;
   border-radius: 0;
+  text-decoration: none;
   &:hover {
     border-bottom: 1px dashed variables.$color-accessibility;
     background: none;
