@@ -34,8 +34,6 @@ import AddressForm from "../components/AddressForm"
 const PublishRide = () => {
   const navigate = useNavigate()
 
-  const mapRef = useRef(null)
-
   const [step, setStep] = useState(1)
   const [vehicles, setVehicles] = useState([])
   const [formData, setFormData] = useState({
@@ -49,6 +47,7 @@ const PublishRide = () => {
     vehicleId: "",
   })
   const [routeCoords, setRouteCoords] = useState([])
+  const [map, setMap] = useState(null)
   const [geolocFailed, setGeolocFailed] = useState(false)
   const [errors, setErrors] = useState("")
 
@@ -353,8 +352,18 @@ const PublishRide = () => {
     }
   }
 
-  console.log(formData)
-  console.log(vehicles[0])
+  // console.log(formData)
+  // console.log(vehicles[0])
+
+  useEffect(() => {
+    if (map && routeCoords.length > 0) {
+      const bounds =
+        routeCoords.length === 1
+          ? map.getBounds().extend(routeCoords[0]) // fallback pour un seul point
+          : routeCoords
+      map.fitBounds(bounds, { padding: [20, 20] })
+    }
+  }, [map, routeCoords])
 
   return (
     <>
@@ -481,7 +490,7 @@ const PublishRide = () => {
                   center={formData.departureAddress.coords || [48.8566, 2.3522]}
                   zoom={13}
                   style={{ minHeight: "300px", aspectRatio: 1 }}
-                  ref={mapRef}
+                  ref={setMap}
                 >
                   <TileLayer
                     attribution="&copy; OpenStreetMap"

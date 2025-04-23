@@ -39,6 +39,7 @@ import {
 
 const RoadMap = ({ rideDetail }) => {
   const [routeCoords, setRouteCoords] = useState([])
+  const [map, setMap] = useState(null)
 
   const formatDateToFrench = (isoDate) => {
     if (!isoDate) return ""
@@ -66,6 +67,16 @@ const RoadMap = ({ rideDetail }) => {
 
       fetchRoute()
     }, [])
+
+    useEffect(() => {
+      if (map && routeCoords.length > 0) {
+        const bounds =
+          routeCoords.length === 1
+            ? map.getBounds().extend(routeCoords[0]) // fallback pour un seul point
+            : routeCoords
+        map.fitBounds(bounds, { padding: [20, 20] })
+      }
+    }, [map, routeCoords])
 
     return formatted.charAt(0).toUpperCase() + formatted.slice(1)
   }
@@ -97,7 +108,7 @@ const RoadMap = ({ rideDetail }) => {
             <small>DÉPART</small>
             <p
               className="flex-row justify-center align-center"
-              style={{ "font-size": 22 }}
+              style={{ fontSize: 22 }}
             >
               {formatTimeToFrench(rideDetail.departureDate)}
             </p>
@@ -212,7 +223,7 @@ const RoadMap = ({ rideDetail }) => {
                 <small>CRÉDITS</small>
                 <p
                   className="flex-row justify-center align-center"
-                  style={{ "font-size": 22 }}
+                  style={{ fontSize: 22 }}
                 >
                   {rideDetail.creditsPerPassenger}
                 </p>
@@ -224,7 +235,7 @@ const RoadMap = ({ rideDetail }) => {
                 <small>PLACES</small>
                 <p
                   className="flex-row justify-center align-center"
-                  style={{ "font-size": 22 }}
+                  style={{ fontSize: 22 }}
                 >
                   {rideDetail.availableSeats}
                 </p>
@@ -234,7 +245,7 @@ const RoadMap = ({ rideDetail }) => {
                 <small>DURÉE</small>
                 <p
                   className="flex-row justify-center align-center"
-                  style={{ "font-size": 22 }}
+                  style={{ fontSize: 22 }}
                 >
                   {displayDuration(rideDetail.duration)}
                 </p>
@@ -268,7 +279,7 @@ const RoadMap = ({ rideDetail }) => {
               center={rideDetail.departureAddress.coords || [48.8566, 2.3522]}
               zoom={13}
               style={{ minHeight: "300px", aspectRatio: 1 }}
-              className="map"
+              ref={setMap}
             >
               <TileLayer
                 attribution="&copy; OpenStreetMap"
