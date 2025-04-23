@@ -21,7 +21,7 @@ const RideCard = ({ ride }) => {
   const [isMobile, setIsMobile] = useState(false)
 
   const {
-    id,
+    _id,
     availableSeats,
     car,
     creditsPerPassenger,
@@ -32,7 +32,7 @@ const RideCard = ({ ride }) => {
     driver,
   } = ride
 
-  console.log(ride)
+  console.log(_id)
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 500)
@@ -64,7 +64,7 @@ const RideCard = ({ ride }) => {
   const arrivalDate = setArrivalDate(departureDate, duration)
 
   return (
-    <Link to={`/trajet/${id}`}>
+    <Link to={`/trajet/${_id}`}>
       {isMobile ? (
         <article className="ride-card flex-column">
           <div className="top-ride-card ">
