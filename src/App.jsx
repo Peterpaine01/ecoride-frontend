@@ -1,8 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import "./App.scss"
 
-// Images
-//import LogoHD from "../src/assets/logo-EcoRide.svg";
+import PrivateRoute from "./components/PrivateRoute"
 
 // Pages
 import Home from "./pages/Home"
@@ -44,8 +43,22 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/publier-trajet" element={<PublishRide />} />
-        <Route path="/profil" element={<Profil />} />
+        <Route
+          path="/publier-trajet"
+          element={
+            <PrivateRoute>
+              <PublishRide />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profil"
+          element={
+            <PrivateRoute>
+              <Profil />
+            </PrivateRoute>
+          }
+        />
         <Route path="/se-connecter" element={<SignIn />} />
         <Route path="/creer-compte" element={<SignUp />} />
 
@@ -53,8 +66,22 @@ const App = () => {
         <Route path="/comment-fonctionne-ecoride" element={<HowItWorks />} />
         <Route path="/mentions-legales" element={<LegalNotices />} />
 
-        <Route path="/vos-trajets" element={<RidesSchedule />} />
-        <Route path="/vos-trajets-archive" element={<RidesPast />} />
+        <Route
+          path="/vos-trajets"
+          element={
+            <PrivateRoute>
+              <RidesSchedule />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/vos-trajets-archive"
+          element={
+            <PrivateRoute>
+              <RidesPast />
+            </PrivateRoute>
+          }
+        />
         <Route path="/recherche-trajet" element={<RidesList />} />
         <Route path="/trajet/:id" element={<RideDetails />} />
 
@@ -62,18 +89,88 @@ const App = () => {
         <Route path="/vehicule/:id" element={<CarDetails />} />
 
         {/* ADMIN */}
-        <Route path="/espace-admin" element={<AdminHome />} />
-        <Route path="/staff" element={<StaffList />} />
-        <Route path="/staff/:id" element={<StaffDetails />} />
-        <Route path="/users" element={<UsersList />} />
-        <Route path="/user/:id" element={<UserDetails />} />
+        <Route
+          path="/espace-admin"
+          element={
+            <PrivateRoute>
+              <AdminHome />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/staff"
+          element={
+            <PrivateRoute>
+              <StaffList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/staff/:id"
+          element={
+            <PrivateRoute>
+              <StaffDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <PrivateRoute>
+              <UsersList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/user/:id"
+          element={
+            <PrivateRoute>
+              <UserDetails />
+            </PrivateRoute>
+          }
+        />
 
         {/* STAFF */}
-        <Route path="/espace-staff" element={<StaffHome />} />
-        <Route path="/litiges" element={<DisputesList />} />
-        <Route path="/litige/:id" element={<DisputeDetails />} />
-        <Route path="/avis-utilisateurs" element={<OpinionsList />} />
-        <Route path="/avis/:id" element={<OpinionDetails />} />
+        <Route
+          path="/espace-staff"
+          element={
+            <PrivateRoute>
+              <StaffHome />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/litiges"
+          element={
+            <PrivateRoute>
+              <DisputesList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/litige/:id"
+          element={
+            <PrivateRoute>
+              <DisputeDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/avis-utilisateurs"
+          element={
+            <PrivateRoute>
+              <OpinionsList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/avis/:id"
+          element={
+            <PrivateRoute>
+              <OpinionDetails />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   )
