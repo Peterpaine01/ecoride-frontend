@@ -19,22 +19,19 @@ const FiltersModal = ({ searchQuery }) => {
       </button>
 
       {isOpen && (
-        <div className="modal-overlay" onClick={() => setIsOpen(false)}>
+        <div
+          className="modal-overlay-filters "
+          onClick={() => setIsOpen(false)}
+        >
           <div
-            className={`burger-icon ${isOpen ? "open" : ""}`}
-            onClick={() => setIsOpen(false)}
-          >
-            <span className="line line-1"></span>
-            <span className="line line-2"></span>
-            <span className="line line-3"></span>
-          </div>
-          <div
-            className="modal-content filters "
+            className="modal-content-filters filters "
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Bouton burger */}
-
-            <Filters searchQuery={searchQuery} />
+            <Filters
+              searchQuery={searchQuery}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+            />
           </div>
         </div>
       )}

@@ -31,7 +31,9 @@ const SearchBlock = () => {
   const [formData, setFormData] = useState({
     departureCity: searchQuery.departureCity || "",
     destinationCity: searchQuery.destinationCity || "",
-    departureDate: searchQuery.departureDate || new Date(),
+    departureDate: searchQuery.departureDate
+      ? new Date(searchQuery.departureDate)
+      : new Date(),
     availableSeats: searchQuery.availableSeats || 1,
   })
 
@@ -81,12 +83,6 @@ const SearchBlock = () => {
     }
   }
 
-  const formatDepartureDate = (date) => {
-    return date instanceof Date && !isNaN(date)
-      ? new Intl.DateTimeFormat("fr-FR", options).format(date)
-      : ""
-  }
-
   // HANDLE STATUS
   const [isPassengersOpen, setIsPassengersOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -127,7 +123,10 @@ const SearchBlock = () => {
   registerLocale("fr", fr)
 
   const handleDateChange = (date) => {
-    setFormData({ ...formData, departureDate: date })
+    const dateObj = new Date(date)
+    if (!isNaN(dateObj)) {
+      setFormData({ ...formData, departureDate: dateObj })
+    }
   }
 
   const today = new Date()
@@ -143,6 +142,12 @@ const SearchBlock = () => {
     today
   )
 
+  const formatDepartureDate = (date) => {
+    return date instanceof Date && !isNaN(date)
+      ? new Intl.DateTimeFormat("fr-FR", options).format(date)
+      : ""
+  }
+
   // HANDLE MODALS
 
   const toggleModal = (e) => {
@@ -150,7 +155,6 @@ const SearchBlock = () => {
       const { name } = e.target
       setIsModalOpen(!isModalOpen)
       setModalContent(name)
-      console.log(name)
     }
   }
 
@@ -204,7 +208,11 @@ const SearchBlock = () => {
                 autoComplete="off"
                 placeholder={displayDateMobile}
                 onChange={handleDateChange}
-                value={formatDepartureDate(formData.departureDate)}
+                value={
+                  formData.departureDate
+                    ? formatDepartureDate(formData.departureDate)
+                    : ""
+                }
                 onFocus={toggleModal}
               />
             </div>
@@ -224,7 +232,7 @@ const SearchBlock = () => {
                 autoComplete="off"
                 placeholder={new Date()}
                 onChange={handleDateChange}
-                value={formData.departureDate}
+                value={formData.departureDate || new Date()}
                 onFocus={toggleModal}
                 className="mobile"
               />
@@ -313,7 +321,7 @@ const SearchBlock = () => {
                   placeholder={
                     modalContent === "departureCity" ? "Départ" : "Destination"
                   }
-                  value={formData.modalContent}
+                  value={formData[modalContent]}
                   onChange={handleChange}
                 />
               </div>

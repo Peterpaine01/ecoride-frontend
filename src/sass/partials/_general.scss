@@ -88,6 +88,10 @@ section {
   align-items: center;
 }
 
+.align-end {
+  align-items: flex-end;
+}
+
 .align-start {
   align-items: flex-start;
 }
@@ -117,6 +121,14 @@ section {
 
 .justify-between {
   justify-content: space-between;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
 }
 
 .w-100 {
@@ -273,11 +285,6 @@ img {
 
 .two-column {
   gap: 40px;
-}
-
-.filters-layout {
-  justify-content: space-between;
-  gap: 70px;
 }
 
 .block-left,

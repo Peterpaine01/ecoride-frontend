@@ -21,6 +21,7 @@ const RideCard = ({ ride }) => {
   const [isMobile, setIsMobile] = useState(false)
 
   const {
+    id,
     availableSeats,
     car,
     creditsPerPassenger,
@@ -31,14 +32,14 @@ const RideCard = ({ ride }) => {
     driver,
   } = ride
 
+  console.log(ride)
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 500)
     checkMobile()
     window.addEventListener("resize", checkMobile)
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
-
-  console.log(window.innerWidth)
 
   const getTimeFromDate = (date) => {
     const formattedDate = new Date(Date.parse(date))
@@ -60,21 +61,10 @@ const RideCard = ({ ride }) => {
     return newDate
   }
 
-  const setFormattedDuration = (duration) => {
-    if (typeof duration !== "number" || isNaN(duration)) {
-      throw new Error("Duration must be a number.")
-    }
-
-    const hours = Math.floor(duration / 60)
-    const mins = duration % 60
-
-    return `${String(hours).padStart(2)}h${String(mins).padStart(2, "0")}`
-  }
-
   const arrivalDate = setArrivalDate(departureDate, duration)
 
   return (
-    <Link>
+    <Link to={`/trajet/${id}`}>
       {isMobile ? (
         <article className="ride-card flex-column">
           <div className="top-ride-card ">

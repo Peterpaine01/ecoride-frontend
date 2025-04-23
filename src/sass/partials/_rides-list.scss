@@ -6,22 +6,36 @@ h3.next-day {
   color: white;
 }
 
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: variables.$color-dark;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  z-index: 1000;
-  padding: 40px 20px;
-  gap: 20px;
+.filters-layout {
+  justify-content: space-between;
+  gap: 70px;
+  .modal-overlay-filters {
+    position: fixed;
+    inset: 0;
+    background-color: variables.$color-dark;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 1000;
+    padding-bottom: 20px;
+
+    gap: 20px;
+    overflow: scroll;
+  }
+
+  .modal-content-filters {
+    position: relative;
+    width: 100%;
+  }
+  .back-btn {
+    align-self: flex-start;
+  }
 }
 
-.modal-content {
-  position: relative;
-  width: calc(100% - 80px);
+.back-btn {
+  background: none;
+  padding: 0;
 }
 
 .close-button {

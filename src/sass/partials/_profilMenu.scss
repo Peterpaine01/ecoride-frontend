@@ -14,7 +14,7 @@
     width: 40px;
     height: 40px;
     border: 3px solid variables.$color-secondary;
-    z-index: 20;
+    z-index: 900;
     cursor: pointer;
     &.user-logged {
       border-color: variables.$color-accessibility;
@@ -62,7 +62,7 @@
     align-items: center;
     transform: translateX(200%);
     transition: transform 0.4s ease;
-    z-index: 15;
+    z-index: 850;
 
     .back-btn {
       position: absolute;

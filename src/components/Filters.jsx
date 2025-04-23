@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
-import React, { useState } from "react"
+import { useEffect, useState } from "react"
 
 // Components
 import Counter from "../components/Counter"
@@ -12,9 +12,11 @@ import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined"
 import SmokingRoomsOutlinedIcon from "@mui/icons-material/SmokingRoomsOutlined"
 import TollOutlinedIcon from "@mui/icons-material/TollOutlined"
 import PetsOutlinedIcon from "@mui/icons-material/PetsOutlined"
+import { ChevronLeft } from "react-feather"
 
-const Filters = ({ searchQuery }) => {
+const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
   const location = useLocation()
+  const [isMobile, setIsMobile] = useState(false)
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [resetKey, setResetKey] = useState(0)
@@ -24,6 +26,13 @@ const Filters = ({ searchQuery }) => {
   const [maxDuration, setMaxDuration] = useState(
     searchQuery.maxDuration ? convertMinutesToTime(searchQuery.maxDuration) : ""
   )
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 500)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -67,33 +76,48 @@ const Filters = ({ searchQuery }) => {
   return (
     <>
       <div className="filter-header flex-row">
-        <h2>Filtrer</h2>
-        <button
-          type="button"
-          className="reset btn-light btn-link"
-          onClick={() => {
-            setMaxPrice(2)
-            setMinRating(0)
+        {isOpen && (
+          <div className="filter-header-layout">
+            <button
+              className="back-btn flex-row align-end"
+              onClick={() => setIsOpen(false)}
+            >
+              <ChevronLeft size={28} />
+            </button>
+          </div>
+        )}
+        <div className="filter-header-layout flex-row justify-center">
+          <h2>Filtrer</h2>
+        </div>
 
-            setResetKey((prev) => prev + 1)
+        <div className="filter-header-layout flex-row justify-end">
+          <button
+            type="button"
+            className="reset btn-light btn-link"
+            onClick={() => {
+              setMaxPrice(2)
+              setMinRating(0)
 
-            const updatedParams = new URLSearchParams(searchParams)
-            const filterKeys = [
-              "maxPrice",
-              "minRating",
-              "maxDuration",
-              "gender",
-              "isElectric",
-              "acceptSmoking",
-              "acceptAnimals",
-            ]
-            filterKeys.forEach((key) => updatedParams.delete(key))
+              setResetKey((prev) => prev + 1)
 
-            navigate(`?${updatedParams.toString()}`)
-          }}
-        >
-          Tout effacer
-        </button>
+              const updatedParams = new URLSearchParams(searchParams)
+              const filterKeys = [
+                "maxPrice",
+                "minRating",
+                "maxDuration",
+                "gender",
+                "isElectric",
+                "acceptSmoking",
+                "acceptAnimals",
+              ]
+              filterKeys.forEach((key) => updatedParams.delete(key))
+
+              navigate(`?${updatedParams.toString()}`)
+            }}
+          >
+            Tout effacer
+          </button>
+        </div>
       </div>
       <form key={resetKey} onSubmit={handleSubmit}>
         <div className="input-group">
@@ -172,7 +196,7 @@ const Filters = ({ searchQuery }) => {
               <label>Genre</label>
             </div>
             <select class="custom-select-minimal" name="gender">
-              <option>Indifférent</option>
+              <option value="all">Indifférent</option>
               <option value="male">Homme</option>
               <option value="female">Femme</option>
             </select>

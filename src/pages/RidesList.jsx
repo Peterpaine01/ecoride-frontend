@@ -32,7 +32,7 @@ const RidesList = () => {
     () => ({
       departureCity: searchParams.get("departureCity") || "",
       destinationCity: searchParams.get("destinationCity") || "",
-      departureDate: searchParams.get("departureDate") || "",
+      departureDate: searchParams.get("departureDate") || new Date(),
       availableSeats: parseInt(searchParams.get("availableSeats"), 10) || 1,
       maxPrice: parseFloat(searchParams.get("maxPrice")) || undefined,
       minRating: parseFloat(searchParams.get("minRating")) || undefined,
@@ -86,8 +86,9 @@ const RidesList = () => {
   }, [searchQuery, searchParams])
 
   useEffect(() => {
-    console.log("ridesList has been updated ✅", ridesList)
-  }, [ridesList])
+    // console.log("ridesList has been updated ✅", ridesList)
+    console.log("searchQuery", searchQuery)
+  }, [ridesList, searchQuery])
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768)
