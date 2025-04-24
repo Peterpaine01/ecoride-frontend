@@ -102,7 +102,6 @@ h3.next-day {
   }
 }
 
-/* Overlay derrière la modale */
 .overlay {
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(3px);
@@ -117,7 +116,6 @@ h3.next-day {
   align-items: center;
 }
 
-/* Contenu de la modale */
 .modal {
   background: variables.$color-secondary;
   width: 70vw;
@@ -126,7 +124,11 @@ h3.next-day {
   padding: 2rem;
   position: relative;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  display: flex;
   h2 {
+    color: variables.$color-primary;
+  }
+  p {
     color: variables.$color-dark;
   }
 }
@@ -145,4 +147,8 @@ h3.next-day {
 /* Texte erreur */
 .text-red-500 {
   color: #dc2626;
+}
+
+.leaflet-container .leaflet-control-attribution {
+  display: none;
 }

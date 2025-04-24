@@ -172,14 +172,13 @@ const RoadMap = ({ rideDetail }) => {
               {rideDetail.driver?.average_rating && (
                 <StarRating rating={rideDetail.driver.average_rating} />
               )}
-              {rideDetail.driver?.total_reviews > 0 && (
-                <Link to={"/"}>
-                  <small>{rideDetail.driver?.total_reviews} avis</small>
+              {rideDetail.driver?.total_reviews.length > 0 ? (
+                <Link to={"/"} className="link mt-5">
+                  {rideDetail.driver?.total_reviews} avis
                 </Link>
+              ) : (
+                <p className="text-tiny">Pas encore d'avis</p>
               )}
-              <Link to={"/"} className="link mt-5">
-                {rideDetail.driver?.total_reviews} avis
-              </Link>
             </div>
           </div>
         </div>
@@ -267,7 +266,7 @@ const RoadMap = ({ rideDetail }) => {
                 />
                 {rideDetail.car
                   ? `${rideDetail.car.model} - ${rideDetail.car.registration_number}`
-                  : "Non sélectionné"}
+                  : "Non renseigné"}
               </p>
               <p className="text-tiny">
                 {rideDetail.car && rideDetail.car.color}

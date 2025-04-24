@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import React, { useState, useContext, useEffect } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { Eye, EyeOff, Lock, Unlock, Mail } from "react-feather"
@@ -12,6 +12,7 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -37,7 +38,9 @@ const LoginForm = () => {
     const result = await login(formData.email, formData.password)
 
     if (result.success) {
-      navigate("/")
+      if (location.pathname === "/se-connecter") {
+        navigate("/")
+      }
     } else {
       setErrorMessage(result.message || "Identifiants incorrects.")
     }
@@ -113,7 +116,7 @@ const LoginForm = () => {
         {loading ? "Connexion..." : "Accéder"}
       </button>
 
-      <Link to="/forgot-password" className="btn-link mt-20 align-self">
+      <Link to="/nouveau-password" className="btn-link mt-20 align-self">
         Mot de passe oublié ?
       </Link>
     </form>

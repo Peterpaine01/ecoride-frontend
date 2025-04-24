@@ -69,8 +69,22 @@ export const AuthProvider = ({ children }) => {
     setToken(null)
   }
 
+  const refreshUser = async () => {
+    try {
+      const response = await axios.get("/me") // ou `/profile`, selon ton endpoint
+      setUser(response.data)
+    } catch (error) {
+      console.error(
+        "Erreur lors du rafraîchissement des données utilisateur",
+        error
+      )
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, login, logout, fetchUser, refreshUser }}
+    >
       {children}
     </AuthContext.Provider>
   )

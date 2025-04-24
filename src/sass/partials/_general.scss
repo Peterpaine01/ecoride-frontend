@@ -135,6 +135,10 @@ section {
   justify-content: space-around;
 }
 
+.flex-1 {
+  flex: 1;
+}
+
 .w-100 {
   width: 100%;
 }
@@ -171,6 +175,10 @@ section {
   margin-bottom: 20px;
 }
 
+.pb-20 {
+  padding-bottom: 20px;
+}
+
 .fit-content {
   width: fit-content;
 }
@@ -205,8 +213,16 @@ section {
   background: variables.$color-dark-grey;
 }
 
+.color-primary {
+  color: variables.$color-primary;
+}
+
 .color-secondary {
   color: variables.$color-secondary;
+}
+
+.color-dark {
+  color: variables.$color-dark;
 }
 
 .color-yellow {
@@ -228,6 +244,7 @@ h1 {
   line-height: 40px;
   padding: 30px 0;
   margin-bottom: 60px;
+  font-family: variables.$main-font;
 }
 h2 {
   font-size: 32px;
@@ -235,11 +252,13 @@ h2 {
   font-weight: 500;
   color: variables.$color-secondary;
   margin-bottom: 20px;
+  font-family: variables.$main-font;
 }
 
 h3 {
   font-size: 16px;
   text-transform: uppercase;
+  font-family: variables.$main-font;
 }
 
 //   Texts
@@ -285,6 +304,13 @@ small {
   font-size: 10px;
   color: #fff;
   margin: 5px 0;
+}
+
+.error-msg {
+  margin-top: 7px;
+  color: #f75252 !important;
+  font-weight: 400;
+  // display: none;
 }
 
 // Images
