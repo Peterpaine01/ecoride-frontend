@@ -7,6 +7,7 @@ import Header from "../components/Header"
 import Cover from "../components/Cover"
 import Footer from "../components/Footer"
 import RoadMap from "../components/RoadMap"
+import BookingModal from "../components/BookingModal"
 
 const RideDetails = () => {
   const [rideDetail, setRideDetail] = useState()
@@ -43,9 +44,7 @@ const RideDetails = () => {
       <main>
         <RoadMap rideDetail={rideDetail} />
         <section className="flex-row justify-center">
-          <button onClick="" className="btn-solid">
-            Réserver une place
-          </button>
+          <BookingModal rideDetail={rideDetail} />
         </section>
       </main>
       <Footer />

@@ -101,3 +101,48 @@ h3.next-day {
     height: 100%;
   }
 }
+
+/* Overlay derrière la modale */
+.overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Contenu de la modale */
+.modal {
+  background: variables.$color-secondary;
+  width: 70vw;
+  height: 70vh;
+  border-radius: 5px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  h2 {
+    color: variables.$color-dark;
+  }
+}
+
+/* Bouton de fermeture */
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* Texte erreur */
+.text-red-500 {
+  color: #dc2626;
+}
