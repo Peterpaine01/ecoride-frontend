@@ -356,4 +356,14 @@
       margin: 0;
     }
   }
+
+  .ride-details {
+    h1 {
+      padding-bottom: 0px;
+    }
+    section {
+      margin-bottom: 80px;
+      align-items: flex-start;
+    }
+  }
 }

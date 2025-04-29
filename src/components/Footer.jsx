@@ -97,7 +97,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="container-fluid desktop">
-          <p className="copyright">© Développement par Flocon dev</p>
+          <p className="copyright">© Développement par Fanny Carlier</p>
         </div>
       </footer>
     </>

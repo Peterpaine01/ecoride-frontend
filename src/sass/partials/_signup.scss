@@ -69,6 +69,7 @@ form.user-connect {
     }
   }
 }
+
 .icone-verif {
   width: 30px;
   position: absolute;
@@ -112,6 +113,20 @@ form.user-connect {
   }
 }
 
+.input-checkbox-container {
+  margin-bottom: 20px;
+  [type="checkbox"] {
+    height: 15px;
+    width: 15px;
+  }
+  label {
+    color: #fff;
+  }
+  a {
+    color: variables.$color-accessibility;
+  }
+}
+
 select {
   padding: 5px 15px 5px 10px;
   font-size: 16px;
@@ -147,32 +162,6 @@ select::-ms-expand {
 .custom-select-minimal:focus {
   border-color: variables.$color-primary;
   outline: none;
-}
-
-// [type="checkbox"] {
-//   appearance: none;
-//   aspect-ratio: 1;
-//   box-sizing: border-box;
-//   font-size: 1em;
-//   width: 1em;
-//   border-radius: 3px;
-//   padding: 0;
-//   border-color: #fff;
-//   padding-right: 5px;
-// }
-
-.input-checkbox-container {
-  margin-bottom: 20px;
-  [type="checkbox"] {
-    height: 15px;
-    width: 15px;
-  }
-  label {
-    color: #fff;
-  }
-  a {
-    color: variables.$color-accessibility;
-  }
 }
 
 @supports (-webkit-appearance: none) or (-moz-appearance: none) {

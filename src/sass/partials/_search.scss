@@ -313,7 +313,7 @@
   width: fit-content;
   p {
     min-width: 45px;
-    text-align: center;
+    text-align: center !important;
     color: variables.$color-dark;
     font-size: 24px;
     font-weight: 400;

@@ -82,29 +82,6 @@ const BookingModal = ({ rideDetail }) => {
     }
   }
 
-  const checkBookingEligibility = () => {
-    if (!user) return
-
-    const availableSeats = rideDetail?.availableSeats || 0
-    const userCredits = user?.credits || 0
-    const rideCredits = rideDetail?.creditsPerPassenger || 0
-
-    if (availableSeats < 1) {
-      setErrorMessage("Il n'y a plus de place disponible pour ce trajet.")
-      return false
-    }
-
-    if (userCredits < rideCredits) {
-      setErrorMessage(
-        "Vous n'avez pas assez de crédits pour réserver ce trajet."
-      )
-      return false
-    }
-
-    setErrorMessage("")
-    return true
-  }
-
   return (
     <>
       <button onClick={openModal} className="btn-solid">
@@ -127,7 +104,7 @@ const BookingModal = ({ rideDetail }) => {
             <div className="flex-column align-center flex-1 w-100">
               <h2 className="mb-20 mt-20">Confirmer la réservation</h2>
               <div className="flex-column align-center">
-                <h3>Trajet à réservé</h3>
+                <h3>Trajet réservé</h3>
                 <p className="text-big flex-row align-center">
                   {rideDetail?.departureAddress.city}{" "}
                   <ArrowRightAltOutlinedIcon
@@ -161,10 +138,6 @@ const BookingModal = ({ rideDetail }) => {
                     </p>
                   </>
                 )}
-
-                {/* {errorMessage && (
-                  <p className="error-message mt-10">{errorMessage}</p>
-                )} */}
 
                 {successMessage && (
                   <p className="success-message mt-10">{successMessage}</p>

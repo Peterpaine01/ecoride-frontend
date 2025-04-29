@@ -7,30 +7,38 @@ export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
   const [token, setToken] = useState(Cookies.get("token") || null)
+  const [showLoginModal, setShowLoginModal] = useState(false)
+
+  const openLoginModal = () => setShowLoginModal(true)
+  const closeLoginModal = () => setShowLoginModal(false)
+
+  const isAuthenticated = !!user
 
   useEffect(() => {
+    console.log("Token au démarrage", token)
     if (token) {
       try {
         const decodedToken = jwtDecode(token)
         const userId = decodedToken.id
 
-        setIsAuthenticated(true)
         fetchUser(userId)
       } catch (error) {
         console.error("Token invalid", error)
         logout()
       }
     }
-  }, [isAuthenticated, token])
+  }, [token])
 
-  const fetchUser = async (userId) => {
-    console.log(userId)
+  const fetchUser = async (userIdFromParam) => {
     try {
+      const decoded = jwtDecode(Cookies.get("token"))
+      const userId = userIdFromParam || decoded.id
+
+      if (!userId) return
       const response = await axios.get(`/user/${userId}`)
       setUser(response.data)
-      console.log(response.data)
     } catch (error) {
       console.error("Error fetching user", error)
       logout()
@@ -47,8 +55,7 @@ export const AuthProvider = ({ children }) => {
 
       Cookies.set("token", token, { expires: 365 })
       const decodedToken = jwtDecode(token)
-      setIsAuthenticated(true)
-      await fetchUser(decodedToken.id) // ← potentiellement async
+      await fetchUser(decodedToken.id)
       return { success: true }
     } catch (error) {
       console.error(
@@ -63,7 +70,6 @@ export const AuthProvider = ({ children }) => {
   }
 
   const logout = () => {
-    setIsAuthenticated(false)
     Cookies.remove("token")
     setUser(null)
     setToken(null)
@@ -71,8 +77,7 @@ export const AuthProvider = ({ children }) => {
 
   const refreshUser = async () => {
     try {
-      const response = await axios.get("/me") // ou `/profile`, selon ton endpoint
-      setUser(response.data)
+      fetchUser()
     } catch (error) {
       console.error(
         "Erreur lors du rafraîchissement des données utilisateur",
@@ -83,7 +88,17 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout, fetchUser, refreshUser }}
+      value={{
+        user,
+        isAuthenticated,
+        login,
+        logout,
+        fetchUser,
+        refreshUser,
+        showLoginModal,
+        openLoginModal,
+        closeLoginModal,
+      }}
     >
       {children}
     </AuthContext.Provider>

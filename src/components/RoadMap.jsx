@@ -96,6 +96,7 @@ const RoadMap = ({ rideDetail }) => {
   return (
     <div className="container ride-details">
       <section className="flex-column justify-center align-center">
+        <div className="flex-column"></div>
         <h1 className="flex-row justify-center align-center">
           {rideDetail.departureAddress.city}{" "}
           <ArrowRightAltOutlinedIcon sx={{ color: "#f7c134", fontSize: 38 }} />{" "}

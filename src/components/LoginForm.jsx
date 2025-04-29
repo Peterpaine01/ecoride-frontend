@@ -1,10 +1,10 @@
 import { Link, useNavigate, useLocation } from "react-router-dom"
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { Eye, EyeOff, Lock, Unlock, Mail } from "react-feather"
 
 const LoginForm = () => {
-  const { login, isAuthenticated } = useContext(AuthContext)
+  const { login, fetchUser } = useContext(AuthContext)
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [validationEmail, setValidationEmail] = useState(false)
@@ -38,6 +38,7 @@ const LoginForm = () => {
     const result = await login(formData.email, formData.password)
 
     if (result.success) {
+      fetchUser()
       if (location.pathname === "/se-connecter") {
         navigate("/")
       }
@@ -113,7 +114,7 @@ const LoginForm = () => {
         className="btn-solid"
         disabled={!validationEmail || loading}
       >
-        {loading ? "Connexion..." : "Accéder"}
+        {loading ? "Connexion..." : "Se connecter"}
       </button>
 
       <Link to="/nouveau-password" className="btn-link mt-20 align-self">

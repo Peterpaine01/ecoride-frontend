@@ -1,9 +1,10 @@
 @use "variables";
 
-.mapboxgl-control-container {
-  display: none;
-}
-
 .content-form {
   margin-bottom: 40px;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 400 !important;
 }

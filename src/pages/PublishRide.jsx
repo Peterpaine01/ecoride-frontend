@@ -20,6 +20,7 @@ import {
 import { displayDuration } from "../utils/dateTimeHandler"
 
 import axios from "../config/axiosConfig"
+import { toast } from "react-toastify"
 
 // Components
 import Header from "../components/Header"
@@ -33,6 +34,22 @@ import AddressForm from "../components/AddressForm"
 
 const PublishRide = () => {
   const navigate = useNavigate()
+  const { user } = useContext(AuthContext)
+
+  // Redirection
+  useEffect(() => {
+    if (!user) {
+      navigate("/se-connecter")
+    } else if (!user.is_driver) {
+      if (!sessionStorage.getItem("hasShownDriverToast")) {
+        toast.info(
+          "Pour accéder à cette fonctionnalité, merci de modifier votre profil en vous définissant comme conducteur."
+        )
+        sessionStorage.setItem("hasShownDriverToast", "true")
+      }
+      navigate("/profil")
+    }
+  }, [user, navigate])
 
   const [step, setStep] = useState(1)
   const [vehicles, setVehicles] = useState([])
@@ -50,9 +67,6 @@ const PublishRide = () => {
   const [map, setMap] = useState(null)
   const [geolocFailed, setGeolocFailed] = useState(false)
   const [errors, setErrors] = useState("")
-
-  const { user } = useContext(AuthContext)
-  console.log(vehicles[0])
 
   const nextStep = () => {
     hydrateFormStepData()
@@ -369,365 +383,373 @@ const PublishRide = () => {
     <>
       <Header />
       <Cover />
-      <main id="publishRide">
-        <section>
-          <h1>Nouveau trajet</h1>
-          <StepIndicator currentStep={step} totalSteps={10} />
-        </section>
+      <main>
+        <div className="container" id="publishRide">
+          <section>
+            <h1>Nouveau trajet</h1>
+            <StepIndicator currentStep={step} totalSteps={10} />
+          </section>
 
-        <section className="new-ride flex-row two-column framed">
-          {(step === 1 || step === 2 || step === 3) && (
-            <>
-              <div className="block-left">
-                {/* Étape 1 : Adresse de départ */}
-                {step === 1 && (
-                  <>
-                    <AddressForm
-                      label="Où souhaitez-vous récupérer vos passagers ?"
-                      address={formData.departureAddress}
-                      errors={errors}
-                      onChange={(updatedAddress) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          departureAddress: {
-                            ...prev.departureAddress,
-                            ...updatedAddress,
-                          },
-                        }))
-                      }
-                      onSubmit={async () => {
-                        try {
-                          const coords = await getCoordinates(
-                            formData.departureAddress
-                          )
+          <section className="new-ride flex-row two-column framed">
+            {(step === 1 || step === 2 || step === 3) && (
+              <>
+                <div className="block-left">
+                  {/* Étape 1 : Adresse de départ */}
+                  {step === 1 && (
+                    <>
+                      <AddressForm
+                        label="Où souhaitez-vous récupérer vos passagers ?"
+                        address={formData.departureAddress}
+                        errors={errors}
+                        onChange={(updatedAddress) =>
                           setFormData((prev) => ({
                             ...prev,
                             departureAddress: {
                               ...prev.departureAddress,
-                              coords,
+                              ...updatedAddress,
                             },
                           }))
-                          setErrors("")
-                        } catch {
-                          console.log(
-                            "Impossible de localiser l’adresse de départ."
-                          )
-                          setErrors(
-                            "Impossible de localiser l’adresse de départ."
-                          )
                         }
-                      }}
-                    />
-                    {geolocFailed && (
-                      <p>
-                        Impossible d’accéder à votre position. Saisissez
-                        l’adresse de départ manuellement.
-                      </p>
-                    )}
-                  </>
-                )}
-                {/* Étape 2 : Adresse de destination */}
-                {step === 2 && (
-                  <>
-                    <AddressForm
-                      label="Où allez-vous ?"
-                      address={formData.destinationAddress}
-                      errors={errors}
-                      onChange={(updatedAddress) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          destinationAddress: {
-                            ...prev.destinationAddress,
-                            ...updatedAddress,
-                          },
-                        }))
-                      }
-                      onSubmit={async () => {
-                        try {
-                          const coords = await getCoordinates(
-                            formData.destinationAddress
-                          )
+                        onSubmit={async () => {
+                          try {
+                            const coords = await getCoordinates(
+                              formData.departureAddress
+                            )
+                            setFormData((prev) => ({
+                              ...prev,
+                              departureAddress: {
+                                ...prev.departureAddress,
+                                coords,
+                              },
+                            }))
+                            setErrors("")
+                          } catch {
+                            console.log(
+                              "Impossible de localiser l’adresse de départ."
+                            )
+                            setErrors(
+                              "Impossible de localiser l’adresse de départ."
+                            )
+                          }
+                        }}
+                      />
+                      {geolocFailed && (
+                        <p>
+                          Impossible d’accéder à votre position. Saisissez
+                          l’adresse de départ manuellement.
+                        </p>
+                      )}
+                    </>
+                  )}
+                  {/* Étape 2 : Adresse de destination */}
+                  {step === 2 && (
+                    <>
+                      <AddressForm
+                        label="Où allez-vous ?"
+                        address={formData.destinationAddress}
+                        errors={errors}
+                        onChange={(updatedAddress) =>
                           setFormData((prev) => ({
                             ...prev,
                             destinationAddress: {
                               ...prev.destinationAddress,
-                              coords,
+                              ...updatedAddress,
                             },
                           }))
-                          setErrors("")
-                        } catch {
-                          console.log(
-                            "Impossible de localiser l’adresse de destination."
-                          )
-                          setErrors(
-                            "Impossible de localiser l’adresse de destination."
-                          )
                         }
-                      }}
-                    />
-                  </>
-                )}
-                {/* Étape 3 : Calcul itinéraire */}
-                {step === 3 && (
-                  <div className="flex-column align-center">
-                    <h2 className="text-lg font-semibold">
-                      Temps de trajet estimé
-                    </h2>
-                    {formData.duration ? (
-                      <p className="emphase mt-20">
-                        {displayDuration(formData.duration)}
-                      </p>
-                    ) : (
-                      <p className="text-red-600">
-                        Calcul en cours ou impossible.
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="block-right">
-                <MapContainer
-                  center={formData.departureAddress.coords || [48.8566, 2.3522]}
-                  zoom={13}
-                  style={{ minHeight: "300px", aspectRatio: 1 }}
-                  ref={setMap}
-                >
-                  <TileLayer
-                    attribution="&copy; OpenStreetMap"
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-
-                  {formData.departureAddress.coords && (
-                    <MapMarker
-                      position={formData.departureAddress.coords}
-                      label="Départ"
-                    />
+                        onSubmit={async () => {
+                          try {
+                            const coords = await getCoordinates(
+                              formData.destinationAddress
+                            )
+                            setFormData((prev) => ({
+                              ...prev,
+                              destinationAddress: {
+                                ...prev.destinationAddress,
+                                coords,
+                              },
+                            }))
+                            setErrors("")
+                          } catch {
+                            console.log(
+                              "Impossible de localiser l’adresse de destination."
+                            )
+                            setErrors(
+                              "Impossible de localiser l’adresse de destination."
+                            )
+                          }
+                        }}
+                      />
+                    </>
                   )}
-                  {formData.destinationAddress.coords && (
-                    <MapMarker
-                      position={formData.destinationAddress.coords}
-                      label="Arrivée"
-                    />
+                  {/* Étape 3 : Calcul itinéraire */}
+                  {step === 3 && (
+                    <div className="flex-column align-center">
+                      <h2 className="text-lg font-semibold">
+                        Temps de trajet estimé
+                      </h2>
+                      {formData.duration ? (
+                        <p className="emphase mt-20">
+                          {displayDuration(formData.duration)}
+                        </p>
+                      ) : (
+                        <p className="text-red-600">
+                          Calcul en cours ou impossible.
+                        </p>
+                      )}
+                    </div>
                   )}
-                  {routeCoords.length > 0 && (
-                    <Polyline positions={routeCoords} color="blue" />
-                  )}
-                </MapContainer>
-              </div>
-            </>
-          )}
-
-          {/* Étape 4 : Date de départ */}
-          {step === 4 && (
-            <>
-              <div className="block-left flex-column align-center">
-                <h2>Quand partez-vous ?</h2>
-                <p className="emphase mt-20">
-                  {formData.departureDate
-                    ? new Date(formData.departureDate)
-                        .toLocaleDateString("fr-FR", {
-                          weekday: "short",
-                          day: "2-digit",
-                          month: "long",
-                        })
-                        .replace(".", "")
-                        .replace(/^\w/, (c) => c.toUpperCase())
-                    : new Date()
-                        .toLocaleDateString("fr-FR", {
-                          weekday: "short",
-                          day: "2-digit",
-                          month: "long",
-                        })
-                        .replace(".", "")
-                        .replace(/^\w/, (c) => c.toUpperCase())}
-                </p>
-              </div>
-
-              <div className="block-right date-picker-content">
-                <DatePicker
-                  className="drop-btn"
-                  locale="fr"
-                  selected={formData.departureDate}
-                  onChange={handleDateChange}
-                  dateFormat="dd/MM/yyyy"
-                  minDate={new Date()}
-                  inline
-                />
-              </div>
-            </>
-          )}
-
-          {/* Étape 5 : Heure de départ */}
-          {step === 5 && (
-            <>
-              <div className="flex-column align-center w-100">
-                <h2>A quelle heure ?</h2>
-
-                <input
-                  type="time"
-                  name="departureTime"
-                  value={
-                    formData.departureDate
-                      ? formatTimeToFrench(formData.departureDate).slice(0, 5)
-                      : ""
-                  }
-                  onChange={handleChange}
-                />
-              </div>
-            </>
-          )}
-
-          {/* Étape 6 : Véhicule */}
-          {step === 6 && (
-            <>
-              <div className="flex-column align-center w-100">
-                <h2>Avec quel véhicule ?</h2>
-
-                <div className="custom-select mt-20">
-                  <div className="select" tabIndex="1">
-                    {vehicles.map((vehicle, index) => {
-                      const inputId = `vehicle-${vehicle.id}`
-                      console.log(formData.vehicleId)
-
-                      return (
-                        <div className="wrapper-select" key={vehicle.id}>
-                          <input
-                            className="selectopt"
-                            name="vehicleId"
-                            type="radio"
-                            id={inputId}
-                            value={vehicle.id}
-                            checked={
-                              formData.vehicleId
-                                ? formData.vehicleId === String(vehicle.id)
-                                : index === 0 // coche le premier par défaut
-                            }
-                            onChange={handleChange}
-                          />
-                          <label htmlFor={inputId} className="option">
-                            {vehicle.model} - {vehicle.registration_number}
-                          </label>
-                        </div>
-                      )
-                    })}
-                  </div>
                 </div>
-              </div>
-            </>
-          )}
+                <div className="block-right">
+                  <MapContainer
+                    center={
+                      formData.departureAddress.coords || [48.8566, 2.3522]
+                    }
+                    zoom={13}
+                    style={{ minHeight: "300px", aspectRatio: 1 }}
+                    ref={setMap}
+                  >
+                    <TileLayer
+                      attribution="&copy; OpenStreetMap"
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
 
-          {/* Étape 7 : Nombre de passagers */}
-          {step === 7 && (
-            <>
-              <div className="flex-column align-center w-100">
-                <h2>Combien de passagers ?</h2>
-                <Counter
-                  name={"availableSeats"}
-                  value={formData.availableSeats || 1}
-                  onChange={handleChange}
-                  minValue={1}
-                  maxValue={8}
-                />
-              </div>
-            </>
-          )}
+                    {formData.departureAddress.coords && (
+                      <MapMarker
+                        position={formData.departureAddress.coords}
+                        label="Départ"
+                      />
+                    )}
+                    {formData.destinationAddress.coords && (
+                      <MapMarker
+                        position={formData.destinationAddress.coords}
+                        label="Arrivée"
+                      />
+                    )}
+                    {routeCoords.length > 0 && (
+                      <Polyline positions={routeCoords} color="blue" />
+                    )}
+                  </MapContainer>
+                </div>
+              </>
+            )}
 
-          {/* Étape 8 : Nombre de crédits par passager */}
-          {step === 8 && (
-            <>
-              <div className="block-left flex-column align-center">
-                <h2>Combien de crédits par passager ?</h2>
-
-                <Counter
-                  name={"creditsPerPassenger"}
-                  value={formData.creditsPerPassenger || 2}
-                  onChange={handleChange}
-                  minValue={2}
-                  maxValue={1000}
-                />
-              </div>
-
-              <div className="block-right justify-left">
-                <p>
-                  <strong>Prix idéal :</strong>{" "}
-                  {calculateDistanceAndPrice(
-                    formData.departureAddress.coords,
-                    formData.destinationAddress.coords
-                  )}{" "}
-                  crédits
-                </p>
-                <p>
-                  Ecoride vous conseille d'adapter votre prix
-                  proportionnellement au nombre de kilomètres parcourus.
-                </p>
-
-                <div className="flex-row align-center gap-15 mt-20">
-                  <div className="comission flex-colunm align-center">
-                    <p>
-                      <strong>2</strong> crédits
-                    </p>
-                  </div>
-                  <p>
-                    La plateforme EcoRide prélève 2 crédits de commission par
-                    trajet.
+            {/* Étape 4 : Date de départ */}
+            {step === 4 && (
+              <>
+                <div className="block-left flex-column align-center">
+                  <h2>Quand partez-vous ?</h2>
+                  <p className="emphase mt-20">
+                    {formData.departureDate
+                      ? new Date(formData.departureDate)
+                          .toLocaleDateString("fr-FR", {
+                            weekday: "short",
+                            day: "2-digit",
+                            month: "long",
+                          })
+                          .replace(".", "")
+                          .replace(/^\w/, (c) => c.toUpperCase())
+                      : new Date()
+                          .toLocaleDateString("fr-FR", {
+                            weekday: "short",
+                            day: "2-digit",
+                            month: "long",
+                          })
+                          .replace(".", "")
+                          .replace(/^\w/, (c) => c.toUpperCase())}
                   </p>
                 </div>
-              </div>
-            </>
-          )}
 
-          {/* Étape 9 : Description */}
-          {step === 9 && (
-            <div className="flex-column align-center text-align w-100">
-              <h2>Quelque chose à partager sur votre trajet ?</h2>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                rows="10"
-                cols="10"
-                className="description-textarea"
-                placeholder="Vous êtes flexible quant au lieu de rencontre ? L’espace dans votre coffre est limité ? Dites le à vos passagers !"
-              ></textarea>
-            </div>
-          )}
-          {/* Étape 10 : Résumé */}
-          {step === 10 && (
-            <div className="summary  flex-column two-column w-100">
-              <h2>Résumé du trajet</h2>
-              <RideSummary formData={formData} vehicles={vehicles} />
-            </div>
-          )}
-        </section>
-        <section className="flex-row gap-15 justify-center">
-          {/* Navigation entre les étapes */}
-          {step > 1 && (
-            <button className="btn-light" onClick={prevStep}>
-              Précédent
-            </button>
-          )}
-          {step < 10 ? (
-            <button
-              onClick={nextStep}
-              className="btn-solid"
-              disabled={
-                step === 1
-                  ? !formData.departureAddress.street ||
-                    !formData.departureAddress.zip ||
-                    !formData.departureAddress.city
-                  : step === 2
-                  ? !formData.destinationAddress.coords
-                  : ""
-              }
-            >
-              Continuer
-            </button>
-          ) : (
-            <button type="submit" onClick={handleSubmit} className="btn-solid">
-              Publier
-            </button>
-          )}
-        </section>
+                <div className="block-right date-picker-content">
+                  <DatePicker
+                    className="drop-btn"
+                    locale="fr"
+                    selected={formData.departureDate}
+                    onChange={handleDateChange}
+                    dateFormat="dd/MM/yyyy"
+                    minDate={new Date()}
+                    inline
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Étape 5 : Heure de départ */}
+            {step === 5 && (
+              <>
+                <div className="flex-column align-center w-100">
+                  <h2>A quelle heure ?</h2>
+
+                  <input
+                    type="time"
+                    name="departureTime"
+                    value={
+                      formData.departureDate
+                        ? formatTimeToFrench(formData.departureDate).slice(0, 5)
+                        : ""
+                    }
+                    onChange={handleChange}
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Étape 6 : Véhicule */}
+            {step === 6 && (
+              <>
+                <div className="flex-column align-center w-100">
+                  <h2>Avec quel véhicule ?</h2>
+
+                  <div className="custom-select mt-20">
+                    <div className="select" tabIndex="1">
+                      {vehicles.map((vehicle, index) => {
+                        const inputId = `vehicle-${vehicle.id}`
+                        console.log(formData.vehicleId)
+
+                        return (
+                          <div className="wrapper-select" key={vehicle.id}>
+                            <input
+                              className="selectopt"
+                              name="vehicleId"
+                              type="radio"
+                              id={inputId}
+                              value={vehicle.id}
+                              checked={
+                                formData.vehicleId
+                                  ? formData.vehicleId === String(vehicle.id)
+                                  : index === 0 // coche le premier par défaut
+                              }
+                              onChange={handleChange}
+                            />
+                            <label htmlFor={inputId} className="option">
+                              {vehicle.model} - {vehicle.registration_number}
+                            </label>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Étape 7 : Nombre de passagers */}
+            {step === 7 && (
+              <>
+                <div className="flex-column align-center w-100">
+                  <h2>Combien de passagers ?</h2>
+                  <Counter
+                    name={"availableSeats"}
+                    value={formData.availableSeats || 1}
+                    onChange={handleChange}
+                    minValue={1}
+                    maxValue={8}
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Étape 8 : Nombre de crédits par passager */}
+            {step === 8 && (
+              <>
+                <div className="block-left flex-column align-center">
+                  <h2>Combien de crédits par passager ?</h2>
+
+                  <Counter
+                    name={"creditsPerPassenger"}
+                    value={formData.creditsPerPassenger || 2}
+                    onChange={handleChange}
+                    minValue={2}
+                    maxValue={1000}
+                  />
+                </div>
+
+                <div className="block-right justify-left">
+                  <p>
+                    <strong>Prix idéal :</strong>{" "}
+                    {calculateDistanceAndPrice(
+                      formData.departureAddress.coords,
+                      formData.destinationAddress.coords
+                    )}{" "}
+                    crédits
+                  </p>
+                  <p>
+                    Ecoride vous conseille d'adapter votre prix
+                    proportionnellement au nombre de kilomètres parcourus.
+                  </p>
+
+                  <div className="flex-row align-center gap-15 mt-20">
+                    <div className="comission flex-colunm align-center">
+                      <p>
+                        <strong>2</strong> crédits
+                      </p>
+                    </div>
+                    <p>
+                      La plateforme EcoRide prélève 2 crédits de commission par
+                      trajet.
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Étape 9 : Description */}
+            {step === 9 && (
+              <div className="flex-column align-center text-align w-100">
+                <h2>Quelque chose à partager sur votre trajet ?</h2>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows="10"
+                  cols="10"
+                  className="description-textarea"
+                  placeholder="Vous êtes flexible quant au lieu de rencontre ? L’espace dans votre coffre est limité ? Dites le à vos passagers !"
+                ></textarea>
+              </div>
+            )}
+            {/* Étape 10 : Résumé */}
+            {step === 10 && (
+              <div className="summary  flex-column two-column w-100">
+                <h2>Résumé du trajet</h2>
+                <RideSummary formData={formData} vehicles={vehicles} />
+              </div>
+            )}
+          </section>
+          <section className="flex-row gap-15 justify-center">
+            {/* Navigation entre les étapes */}
+            {step > 1 && (
+              <button className="btn-light" onClick={prevStep}>
+                Précédent
+              </button>
+            )}
+            {step < 10 ? (
+              <button
+                onClick={nextStep}
+                className="btn-solid"
+                disabled={
+                  step === 1
+                    ? !formData.departureAddress.street ||
+                      !formData.departureAddress.zip ||
+                      !formData.departureAddress.city
+                    : step === 2
+                    ? !formData.destinationAddress.coords
+                    : ""
+                }
+              >
+                Continuer
+              </button>
+            ) : (
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="btn-solid"
+              >
+                Publier
+              </button>
+            )}
+          </section>
+        </div>
       </main>
       <Footer />
     </>

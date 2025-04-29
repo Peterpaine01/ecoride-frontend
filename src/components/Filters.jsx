@@ -130,14 +130,6 @@ const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
                 <small>(en crédits)</small>
               </div>
             </div>
-
-            {/* <Counter
-              name="maxPrice"
-              value={maxPrice}
-              minValue={2}
-              maxValue={1000}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
-            /> */}
             <input
               type="number"
               name="maxPrice"

@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "../config/axiosConfig"
 
@@ -16,12 +16,14 @@ const RideDetails = () => {
   const params = useParams()
   const id = params.id
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`/ride/${id}`)
         setRideDetail(response.data)
-        console.log(response.data)
+
         setIsLoading(false)
       } catch (error) {
         console.log(error.message)
@@ -44,7 +46,12 @@ const RideDetails = () => {
       <main>
         <RoadMap rideDetail={rideDetail} />
         <section className="flex-row justify-center">
-          <BookingModal rideDetail={rideDetail} />
+          <button
+            onClick={() => navigate(`/reservation/${rideDetail._id}`)}
+            className="btn-solid"
+          >
+            Réserver ce trajet
+          </button>
         </section>
       </main>
       <Footer />
