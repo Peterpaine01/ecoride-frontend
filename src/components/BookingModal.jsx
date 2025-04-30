@@ -9,7 +9,7 @@ Modal.setAppElement("#root")
 
 import ArrowRightAltOutlinedIcon from "@mui/icons-material/ArrowRightAltOutlined"
 
-const BookingModal = ({ rideDetail }) => {
+const BookingModal = ({ rideDetail, seats }) => {
   const { user, isAuthenticated, refreshUser } = useContext(AuthContext)
   const [isOpen, setIsOpen] = useState(false)
   const [showBooking, setShowBooking] = useState(false)
@@ -17,7 +17,6 @@ const BookingModal = ({ rideDetail }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
 
-  console.log(user)
   const navigate = useNavigate()
 
   const openModal = () => {
@@ -33,39 +32,11 @@ const BookingModal = ({ rideDetail }) => {
     setErrorMessage("")
   }
 
-  useEffect(() => {
-    const runEligibilityCheck = async () => {
-      await refreshUser()
-      setShowBooking(true)
-      checkBookingEligibility()
-    }
-
-    if (isAuthenticated && isOpen) {
-      runEligibilityCheck()
-    }
-  }, [isAuthenticated, isOpen])
-
   const handleBooking = async () => {
-    const availableSeats = rideDetail?.availableSeats || 0
-    const userCredits = user?.credits || 0
-    const rideCredits = rideDetail?.creditsPerPassenger || 0
-
-    if (availableSeats < 1) {
-      setErrorMessage("Il n'y a plus de place disponible pour ce trajet.")
-      return
-    }
-
-    if (userCredits < rideCredits) {
-      setErrorMessage(
-        "Vous n'avez pas assez de crédits pour réserver ce trajet."
-      )
-      return
-    }
-
     try {
       setIsLoading(true)
       const response = await axios.post(`/create-booking/${rideDetail._id}`, {
-        bookingData: { seats: 1 },
+        bookingData: { seats },
       })
       setSuccessMessage("Réservation confirmée ! ")
       if (response.status === 201 || response.status === 200) {
@@ -99,7 +70,7 @@ const BookingModal = ({ rideDetail }) => {
           ✕
         </button>
 
-        {showBooking ? (
+        {showBooking && (
           <div className="flex-column space-between align-center flex-1">
             <div className="flex-column align-center flex-1 w-100">
               <h2 className="mb-20 mt-20">Confirmer la réservation</h2>
@@ -128,7 +99,7 @@ const BookingModal = ({ rideDetail }) => {
                     <div className="dotted mt-20 mb-20">
                       <p>
                         <strong className="text-emphase">
-                          {rideDetail?.creditsPerPassenger} crédits
+                          {rideDetail?.creditsPerPassenger * seats} crédits
                         </strong>{" "}
                         vont être débités de votre compte.
                       </p>
@@ -170,11 +141,6 @@ const BookingModal = ({ rideDetail }) => {
                 Voir ma réservation
               </button>
             )}
-          </div>
-        ) : (
-          <div className="flex-column space-between align-center flex-1 pb-20">
-            <h2 className="mb-20 mt-20">Connectez-vous pour réserver</h2>
-            <LoginForm />
           </div>
         )}
       </Modal>

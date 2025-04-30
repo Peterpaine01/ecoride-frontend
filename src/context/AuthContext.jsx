@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   const [token, setToken] = useState(Cookies.get("token") || null)
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [authLoading, setAuthLoading] = useState(true)
 
   const openLoginModal = () => setShowLoginModal(true)
   const closeLoginModal = () => setShowLoginModal(false)
@@ -17,18 +18,20 @@ export const AuthProvider = ({ children }) => {
   const isAuthenticated = !!user
 
   useEffect(() => {
-    console.log("Token au démarrage", token)
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token)
-        const userId = decodedToken.id
-
-        fetchUser(userId)
-      } catch (error) {
-        console.error("Token invalid", error)
-        logout()
+    const initializeAuth = async () => {
+      if (token) {
+        try {
+          const decodedToken = jwtDecode(token)
+          await fetchUser(decodedToken.id)
+        } catch (error) {
+          console.error("Token invalid", error)
+          logout()
+        }
       }
+      setAuthLoading(false)
     }
+
+    initializeAuth()
   }, [token])
 
   const fetchUser = async (userIdFromParam) => {
@@ -91,6 +94,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         isAuthenticated,
+        authLoading,
         login,
         logout,
         fetchUser,

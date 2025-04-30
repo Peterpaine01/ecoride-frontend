@@ -1,9 +1,16 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
 
 export default defineConfig({
   server: {
     host: true,
+    proxy: {
+      "/api": {
+        target: "https://ecoride--ecoride-backend--hbtbyqs8v9w2.code.run",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   plugins: [react()],
 
@@ -16,4 +23,4 @@ export default defineConfig({
       "mapbox-gl": "mapbox-gl/dist/mapbox-gl.js",
     },
   },
-});
+})

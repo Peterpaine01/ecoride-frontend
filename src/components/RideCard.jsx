@@ -1,15 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { Link } from "react-router-dom"
-import {
-  User,
-  ChevronRight,
-  XCircle,
-  Compass,
-  UserPlus,
-  PlusCircle,
-  ChevronLeft,
-} from "react-feather"
 
 import EnergySavingsLeafOutlinedIcon from "@mui/icons-material/EnergySavingsLeafOutlined"
 
@@ -31,8 +22,6 @@ const RideCard = ({ ride }) => {
     duration,
     driver,
   } = ride
-
-  console.log(_id)
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 500)

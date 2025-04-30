@@ -93,16 +93,77 @@ const RoadMap = ({ rideDetail }) => {
     return formattedDate[0] + "h" + formattedDate[1]
   }
 
+  const getTimeFromDate = (date) => {
+    const formattedDate = new Date(Date.parse(date))
+
+    const hours = String(formattedDate.getHours()).padStart(2, "0")
+    const minutes = String(formattedDate.getMinutes()).padStart(2, "0")
+
+    return `${hours}:${minutes}`
+  }
+
+  const setArrivalDate = (date, duration) => {
+    const formattedDate = new Date(Date.parse(date))
+
+    if (typeof duration !== "number" || isNaN(duration)) {
+      throw new Error("Duration must be a number.")
+    }
+
+    const newDate = new Date(formattedDate.getTime() + duration * 60000)
+    return newDate
+  }
+
+  const arrivalDate = setArrivalDate(
+    rideDetail.departureDate,
+    rideDetail.duration
+  )
+
   return (
     <div className="container ride-details">
       <section className="flex-column justify-center align-center">
         <div className="flex-column"></div>
         <h1 className="flex-row justify-center align-center">
-          {rideDetail.departureAddress.city}{" "}
-          <ArrowRightAltOutlinedIcon sx={{ color: "#f7c134", fontSize: 38 }} />{" "}
-          {rideDetail.destinationAddress.city}
+          {formatDateToFrench(rideDetail.departureDate)}
         </h1>
-        <h2>{formatDateToFrench(rideDetail.departureDate)}</h2>
+
+        <div className="roadmap-card">
+          <div className="ride-card flex-column">
+            <div className="info-ride flex-row justify-left">
+              <div className="hours flex-column space-between">
+                <p>
+                  {rideDetail.departureDate
+                    ? getTimeFromDate(rideDetail.departureDate)
+                    : "--:--"}
+                </p>
+                <p>
+                  {rideDetail.departureDate && typeof duration === "number"
+                    ? getTimeFromDate(arrivalDate)
+                    : "--:--"}
+                </p>
+              </div>
+              <div className="timing flex-row">
+                <div className="ride-line">
+                  <span className="round"></span>
+                  <span className="timeline"></span>
+                  <span className="round"></span>
+                </div>
+              </div>
+              <div className="cities flex-column space-between">
+                <p>{rideDetail.departureAddress?.city || "Ville inconnue"}</p>
+                <div className="timing">
+                  <p>
+                    {typeof duration === "number"
+                      ? displayDuration(duration)
+                      : "Durée inconnue"}
+                  </p>
+                </div>
+
+                <p>{rideDetail.destinationAddress?.city || "Ville inconnue"}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="flex-row justify-center align-center gap-15">
           <div className="dotted w-fit flex-column justify-center align-start">
             <AccessTimeOutlinedIcon sx={{ color: "#f7c134", fontSize: 18 }} />

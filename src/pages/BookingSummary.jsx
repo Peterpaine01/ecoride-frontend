@@ -22,6 +22,7 @@ const BookingSummary = () => {
     openLoginModal,
     showLoginModal,
     closeLoginModal,
+    authLoading,
   } = useContext(AuthContext)
   const [rideDetail, setRideDetail] = useState(null)
   const [seats, setSeats] = useState(1)
@@ -32,9 +33,9 @@ const BookingSummary = () => {
 
   const navigate = useNavigate()
 
-  console.log("isAuth 1", isAuthenticated)
-
   useEffect(() => {
+    setErrorMessage("")
+    setSuccessMessage("")
     const fetchRideDetail = async () => {
       try {
         console.log("rideId", rideId)
@@ -52,17 +53,29 @@ const BookingSummary = () => {
   }, [rideId])
 
   useEffect(() => {
+    setErrorMessage("")
+    setSuccessMessage("")
     if (isAuthenticated) {
-      console.log("isAuth 2", isAuthenticated)
       refreshUser()
-      const result = checkBookingEligibility()
-      setIsEligible(result)
+      if (rideDetail) {
+        const result = checkBookingEligibility(seats)
+        setIsEligible(result)
+      }
     } else {
       openLoginModal()
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, rideDetail])
 
-  const checkBookingEligibility = () => {
+  useEffect(() => {
+    setErrorMessage("")
+    setSuccessMessage("")
+    if (rideDetail) {
+      const result = checkBookingEligibility(seats)
+      setIsEligible(result)
+    }
+  }, [seats, rideDetail])
+
+  const checkBookingEligibility = (seats) => {
     if (!user) return
 
     const availableSeats = rideDetail?.availableSeats || 0
@@ -72,7 +85,7 @@ const BookingSummary = () => {
     console.log("availableSeats", availableSeats)
     console.log("userCredits", userCredits)
 
-    if (userCredits < rideCredits) {
+    if (userCredits < rideCredits * seats) {
       setErrorMessage(
         "Vous n'avez pas assez de crédits pour réserver ce trajet."
       )
@@ -137,6 +150,8 @@ const BookingSummary = () => {
     return formattedDate[0] + "h" + formattedDate[1]
   }
 
+  if (authLoading) return null
+
   return (
     <>
       <Header />
@@ -161,15 +176,9 @@ const BookingSummary = () => {
                   </p>
                   <p className="mt-10">
                     {rideDetail.creditsPerPassenger} crédits / place –{" "}
-                    {rideDetail.availableSeats && rideDetail.availableSeats}{" "}
-                    place
-                    {rideDetail.availableSeats &&
-                      rideDetail.availableSeats > 1 &&
-                      "s"}{" "}
-                    disponible
-                    {rideDetail.availableSeats &&
-                      rideDetail.availableSeats > 1 &&
-                      "s"}
+                    {rideDetail.availableSeats} place
+                    {rideDetail.availableSeats > 1 && "s"} disponible
+                    {rideDetail.availableSeats > 1 && "s"}
                   </p>
                 </div>
                 <div></div>
@@ -194,42 +203,41 @@ const BookingSummary = () => {
 
           {isAuthenticated && rideDetail ? (
             <>
-              <div className="booking-detail">
-                <div className="mb-20 mt-20">
-                  {errorMessage ? (
-                    <div className="flex-row justify-center">
-                      <p className="error-msg text-center">{errorMessage}</p>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="mb-20 flex-row align-center gap-15">
-                        <p className="text-emphase">
-                          Nombre de places à réserver :
-                        </p>
-                        <Counter
-                          name="seats"
-                          value={seats}
-                          minValue={1}
-                          maxValue={rideDetail.availableSeats}
-                          onChange={(e) => setSeats(Number(e.target.value))}
-                        />
-                      </div>
-                      <p className="text-emphase">
-                        Total :{" "}
-                        <strong className="text-primary">
-                          {seats * rideDetail.creditsPerPassenger} crédits
-                        </strong>
-                      </p>
-                    </>
-                  )}
+              <div className="booking-detail mb-20">
+                <div className="">
+                  <div className="mb-20 flex-row align-center gap-15">
+                    <p className="text-emphase">
+                      Nombre de places à réserver :
+                    </p>
+                    <Counter
+                      name="seats"
+                      value={seats}
+                      minValue={1}
+                      maxValue={rideDetail.availableSeats}
+                      onChange={(e) => setSeats(Number(e.target.value))}
+                    />
+                  </div>
+
+                  <p className="text-emphase">
+                    Total :{" "}
+                    <strong className="text-primary">
+                      {seats * rideDetail.creditsPerPassenger} crédits
+                    </strong>
+                  </p>
                 </div>
               </div>
-
+              {errorMessage && (
+                <div className="flex-row justify-center mt-20">
+                  <p className="error-msg text-emphase text-center">
+                    {errorMessage}
+                  </p>
+                </div>
+              )}
               {successMessage && (
                 <p className="success-message">{successMessage}</p>
               )}
 
-              <section className="flex-row justify-center">
+              <div className="flex-row justify-center">
                 {!isEligible ? (
                   <button
                     onClick={() => navigate(-1)}
@@ -238,14 +246,14 @@ const BookingSummary = () => {
                     ← Retour
                   </button>
                 ) : (
-                  <BookingModal rideDetail={rideDetail} />
+                  <BookingModal rideDetail={rideDetail} seats={seats} />
                 )}
-              </section>
+              </div>
             </>
           ) : (
             <p>Chargement</p>
           )}
-          {showLoginModal && (
+          {!isAuthenticated && showLoginModal && (
             <LoginModal isOpen={showLoginModal} onClose={closeLoginModal} />
           )}
         </div>

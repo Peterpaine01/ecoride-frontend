@@ -1,12 +1,19 @@
-// src/components/PrivateRoute.jsx
 import { useContext } from "react"
 import { Navigate } from "react-router-dom"
 import { AuthContext } from "../context/AuthContext"
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useContext(AuthContext)
+  const { isAuthenticated, authLoading } = useContext(AuthContext)
 
-  return isAuthenticated ? children : <Navigate to="/se-connecter" replace />
+  if (authLoading) {
+    return null
+  }
+
+  if (isAuthenticated) {
+    return children
+  }
+
+  return <Navigate to="/se-connecter" replace />
 }
 
 export default PrivateRoute
