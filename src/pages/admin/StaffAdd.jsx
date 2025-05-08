@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import axios from "../../config/axiosConfig"
 
@@ -12,7 +12,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import ModeEditIcon from "@mui/icons-material/ModeEdit"
 
 const StaffList = () => {
-  const navigate = useNavigate()
   const [webmastersList, setWebmastersList] = useState()
   useEffect(() => {
     fetchData()
@@ -35,17 +34,7 @@ const StaffList = () => {
       <main>
         <div className="container">
           <section>
-            <h1>Webmasters</h1>
-            <div className="flex-column align-center">
-              <hr className="mt-20 w-100 mb-20" />
-              <button
-                onClick={() => navigate("/ajouter-staff")}
-                className="btn-solid fit-content"
-              >
-                Ajouter un webmaster
-              </button>
-              <hr className="mt-20 w-100 mb-20" />
-            </div>
+            <h1>Ajouter un webmaster</h1>
 
             {webmastersList &&
               webmastersList.map((webmaster) => {

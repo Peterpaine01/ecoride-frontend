@@ -33,6 +33,7 @@ import CarDetails from "./pages/CarDetails"
 import AdminHome from "./pages/admin/AdminHome"
 import StaffList from "./pages/admin/StaffList"
 import StaffDetails from "./pages/admin/StaffDetails"
+import StaffAdd from "./pages/admin/StaffAdd"
 import UsersList from "./pages/admin/UsersList"
 import UserDetails from "./pages/admin/UserDetails"
 
@@ -121,6 +122,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <StaffDetails />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/ajouter-staff"
+            element={
+              <PrivateRoute>
+                <StaffAdd />
               </PrivateRoute>
             }
           />
