@@ -51,7 +51,7 @@ const RoadMapCard = ({ ride, isDriver }) => {
   }
 
   return (
-    <article className="roadmap-card flex-row space-between">
+    <article className="roadmap-card bg-white br-10 b-shadow flex-row space-between">
       <div className="ride-card flex-column">
         <div className="info-ride flex-row justify-left">
           <div className="hours flex-column space-between">

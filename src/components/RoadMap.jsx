@@ -12,6 +12,12 @@ import {
   Truck,
 } from "react-feather"
 
+// Utils
+import {
+  getCoordinates,
+  reverseGeocode,
+  calculateRoute,
+} from "../utils/geolocation"
 import { displayDuration } from "../utils/dateTimeHandler"
 import StarRating from "../components/StarRating"
 
@@ -23,19 +29,13 @@ import SmokeFreeOutlinedIcon from "@mui/icons-material/SmokeFreeOutlined"
 import PetsOutlinedIcon from "@mui/icons-material/PetsOutlined"
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined"
 import DirectionsCarFilledOutlinedIcon from "@mui/icons-material/DirectionsCarFilledOutlined"
-import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined"
+import TollOutlinedIcon from "@mui/icons-material/TollOutlined"
+import GroupIcon from "@mui/icons-material/Group"
 
 import { MapContainer, TileLayer, Polyline } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
 
 import MapMarker from "../components/MapMarker"
-
-// Utils
-import {
-  getCoordinates,
-  reverseGeocode,
-  calculateRoute,
-} from "../utils/geolocation"
 
 const RoadMap = ({ rideDetail }) => {
   const [routeCoords, setRouteCoords] = useState([])
@@ -58,6 +58,8 @@ const RoadMap = ({ rideDetail }) => {
             rideDetail.departureAddress.coords,
             rideDetail.destinationAddress.coords
           )
+          console.log(result)
+
           setRouteCoords(result.routeCoords)
         } catch (err) {
           console.error(err)
@@ -66,7 +68,7 @@ const RoadMap = ({ rideDetail }) => {
       }
 
       fetchRoute()
-    }, [])
+    }, [rideDetail])
 
     useEffect(() => {
       if (map && routeCoords.length > 0) {
@@ -119,250 +121,215 @@ const RoadMap = ({ rideDetail }) => {
   )
 
   return (
-    <div className="container ride-details">
-      <section className="flex-column justify-center align-center">
-        <div className="flex-column"></div>
-        <h1 className="flex-row justify-center align-center">
-          {formatDateToFrench(rideDetail.departureDate)}
-        </h1>
+    <>
+      <div className="container-full ride-details">
+        <section className="flex-column justify-center align-center bg-secondary">
+          <div className="flex-column"></div>
+          <h1 className="flex-row justify-center align-center">
+            {formatDateToFrench(rideDetail.departureDate)}
+          </h1>
+          <div className="flex-row justify-center align-center gap-15">
+            <div className="flex-column align-start">
+              {rideDetail?.availableSeats && (
+                <p className="flex-row justify-start align-center gap-5 color-dark">
+                  <GroupIcon sx={{ color: "#023560", fontSize: 28 }} />{" "}
+                  {rideDetail.availableSeats} place
+                  {rideDetail.availableSeats > 1 && "s"} disponible
+                  {rideDetail.availableSeats > 1 && "s"}
+                </p>
+              )}
+            </div>
+          </div>
 
-        <div className="roadmap-card">
-          <div className="ride-card flex-column">
-            <div className="info-ride flex-row justify-left">
-              <div className="hours flex-column space-between">
-                <p>
-                  {rideDetail.departureDate
-                    ? getTimeFromDate(rideDetail.departureDate)
-                    : "--:--"}
-                </p>
-                <p>
-                  {rideDetail.departureDate && typeof duration === "number"
-                    ? getTimeFromDate(arrivalDate)
-                    : "--:--"}
-                </p>
-              </div>
-              <div className="timing flex-row">
-                <div className="ride-line">
-                  <span className="round"></span>
-                  <span className="timeline"></span>
-                  <span className="round"></span>
-                </div>
-              </div>
-              <div className="cities flex-column space-between">
-                <p>{rideDetail.departureAddress?.city || "Ville inconnue"}</p>
-                <div className="timing">
+          <div className="roadmap-card flex-row space-between">
+            <div className="ride-card flex-column">
+              <div className="info-ride flex-row justify-left">
+                <div className="hours flex-column space-between">
                   <p>
-                    {typeof duration === "number"
-                      ? displayDuration(duration)
-                      : "Durée inconnue"}
+                    {rideDetail.departureDate
+                      ? getTimeFromDate(rideDetail.departureDate)
+                      : "--:--"}
+                  </p>
+                  <p>
+                    {rideDetail.departureDate &&
+                    typeof rideDetail.duration === "number"
+                      ? getTimeFromDate(arrivalDate)
+                      : "--:--"}
                   </p>
                 </div>
+                <div className="timing flex-row">
+                  <div className="ride-line">
+                    <span className="round"></span>
+                    <span className="timeline"></span>
+                    <span className="round"></span>
+                  </div>
+                </div>
+                <div className="cities flex-column space-between">
+                  <p>{rideDetail.departureAddress?.city || "Ville inconnue"}</p>
+                  <div className="timing">
+                    <p>
+                      {typeof rideDetail.duration === "number"
+                        ? displayDuration(rideDetail.duration)
+                        : "Durée inconnue"}
+                    </p>
+                  </div>
 
-                <p>{rideDetail.destinationAddress?.city || "Ville inconnue"}</p>
+                  <p>
+                    {rideDetail.destinationAddress?.city || "Ville inconnue"}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div className="flex-row justify-center align-center gap-15">
-          <div className="dotted w-fit flex-column justify-center align-start">
-            <AccessTimeOutlinedIcon sx={{ color: "#f7c134", fontSize: 18 }} />
-            <small>DÉPART</small>
-            <p
-              className="flex-row justify-center align-center"
-              style={{ fontSize: 22 }}
-            >
-              {formatTimeToFrench(rideDetail.departureDate)}
-            </p>
-          </div>
-          <div className="flex-column align-start">
-            {rideDetail.driver?.accept_smoking === 0 ? (
-              <p className="flex-row justify-start align-center gap-5">
-                <SmokeFreeOutlinedIcon
-                  sx={{ color: "#f7c134", fontSize: 28 }}
-                />{" "}
-                Véhicule non fumeur
+            <div className="dotted w-fit flex-column justify-center align-start">
+              <TollOutlinedIcon sx={{ color: "#42ba92", fontSize: 24 }} />
+              <small className="color-dark">
+                CRÉDITS <br />
+                par passager
+              </small>
+              <p
+                className="flex-row justify-center align-center color-dark"
+                style={{ fontSize: 24 }}
+              >
+                <strong>{rideDetail.creditsPerPassenger}</strong>
               </p>
-            ) : (
-              <p className="flex-row justify-start align-center gap-5">
-                <SmokingRoomsOutlinedIcon
-                  sx={{ color: "#f7c134", fontSize: 28 }}
-                />{" "}
-                Véhicule fumeur
-              </p>
-            )}
-            {rideDetail.driver?.accept_animals === 0 ? (
-              <p className="flex-row justify-start align-center gap-5">
-                <BlockOutlinedIcon sx={{ color: "#f7c134", fontSize: 28 }} />
-                Animaux non admis
-              </p>
-            ) : (
-              <p className="flex-row justify-start align-center gap-5">
-                <PetsOutlinedIcon sx={{ color: "#f7c134", fontSize: 28 }} />{" "}
-                Animaux bienvenus !
-              </p>
-            )}
-            {rideDetail.car?.energy === "Électricité" && (
-              <p className="flex-row justify-start align-center gap-5">
-                <EnergySavingsLeafOutlinedIcon
-                  sx={{ color: "#f7c134", fontSize: 28 }}
-                />{" "}
-                Voyage écologique
-              </p>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="flex-row justify-start align-center gap-15">
-          <div className="driver-infos flex-row space-between align-center gap-15 mb-20">
-            <div className="profil-icon">
-              {rideDetail.driver?.photo ? (
-                <img
-                  src={rideDetail.driver.photo}
-                  alt="photo profil par défaut"
-                />
-              ) : (
-                <div className="default-icon" />
-              )}
-            </div>
-            <div className="flex-column gap-5">
-              <p className="text-bold">
-                {rideDetail.driver?.username || "Conducteur inconnu"}
-              </p>
-              {rideDetail.driver?.average_rating && (
-                <StarRating rating={rideDetail.driver.average_rating} />
-              )}
-              {rideDetail.driver?.total_reviews.length > 0 ? (
-                <Link to={"/"} className="link mt-5">
-                  {rideDetail.driver?.total_reviews} avis
-                </Link>
-              ) : (
-                <p className="text-tiny">Pas encore d'avis</p>
-              )}
             </div>
           </div>
-        </div>
-        <div className="flex-row two-column align-start w-100">
-          <div className="block-left flex-column align-start">
-            <div className="flex-column mb-10 dotted">
-              <div className="detail">
+        </section>
+      </div>
+      <div className="container ride-details">
+        <section>
+          <div className="flex-row two-column align-start w-100">
+            <div className="block-left flex-column align-start">
+              <div className="flex-column mb-10 dotted justify-left">
+                <h3 className="flex-row align-center gap-5 color-secondary mb-20">
+                  {rideDetail.driver?.gender === "male" ||
+                  rideDetail.driver?.gender === "other"
+                    ? "Conducteur"
+                    : "Conductrice"}
+                </h3>
+                <div className="driver-infos flex-row justify-left align-center gap-15 ">
+                  <div className="profil-icon">
+                    {rideDetail.driver?.photo ? (
+                      <img
+                        src={rideDetail.driver.photo}
+                        alt="photo profil par défaut"
+                      />
+                    ) : (
+                      <div className="default-icon" />
+                    )}
+                  </div>
+                  <div className="flex-column gap-5">
+                    <p className="text-bold">
+                      {rideDetail.driver?.username || "Conducteur inconnu"}
+                    </p>
+                    {rideDetail.driver?.average_rating && (
+                      <StarRating rating={rideDetail.driver.average_rating} />
+                    )}
+                    {rideDetail.driver?.total_reviews.length > 0 ? (
+                      <Link to={"/"} className="link mt-5">
+                        {rideDetail.driver?.total_reviews} avis
+                      </Link>
+                    ) : (
+                      <p className="text-tiny">Pas encore d'avis</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="flex-column mb-10 dotted">
                 <h3 className="flex-row align-center gap-5 color-secondary">
                   <strong className="color-yellow">
-                    <MapPin size={20} />
+                    <Edit size={20} />
                   </strong>
-                  <strong className="flex-row align-center">
-                    Adresse de départ
-                  </strong>
+                  Description
                 </h3>
-                <p>
-                  {rideDetail.departureAddress.street}{" "}
-                  {rideDetail.departureAddress.zip}{" "}
-                  {rideDetail.departureAddress.city}
-                </p>
-              </div>
-              <div className="detail">
-                <h3 className="flex-row align-center gap-5 color-secondary">
-                  <strong className="color-yellow">
-                    <Target size={20} />
-                  </strong>
-                  Adresse de destination
-                </h3>
-                <p>
-                  {rideDetail.destinationAddress.street}{" "}
-                  {rideDetail.destinationAddress.zip}{" "}
-                  {rideDetail.destinationAddress.city}
-                </p>
-              </div>
-            </div>
-            <div className="flex-row mb-10 dotted justify-around">
-              <div className="w-fit flex-column justify-center align-start">
-                <AccessTimeOutlinedIcon
-                  sx={{ color: "#f7c134", fontSize: 18 }}
-                />
-                <small>CRÉDITS</small>
-                <p
-                  className="flex-row justify-center align-center"
-                  style={{ fontSize: 22 }}
-                >
-                  {rideDetail.creditsPerPassenger}
-                </p>
-              </div>
-              <div className="w-fit flex-column justify-center align-start">
-                <strong className="color-yellow">
-                  <Users size={18} />
-                </strong>
-                <small>PLACES</small>
-                <p
-                  className="flex-row justify-center align-center"
-                  style={{ fontSize: 22 }}
-                >
-                  {rideDetail.availableSeats}
-                </p>
-              </div>
-              <div className="w-fit flex-column justify-center align-start">
-                <UpdateOutlinedIcon sx={{ color: "#f7c134", fontSize: 18 }} />
-                <small>DURÉE</small>
-                <p
-                  className="flex-row justify-center align-center"
-                  style={{ fontSize: 22 }}
-                >
-                  {displayDuration(rideDetail.duration)}
-                </p>
-              </div>
-            </div>
-            <div className="flex-column mb-10 dotted">
-              <h3 className="flex-row align-center gap-5 color-secondary">
-                <strong className="color-yellow">
-                  <Edit size={20} />
-                </strong>
-                Description
-              </h3>
-              <p>{rideDetail.description}</p>
-            </div>
-            <div className="flex-row mb-10 dotted align-center justify-start gap-15">
-              <p className="flex-row align-center justify-start gap-5">
-                <DirectionsCarFilledOutlinedIcon
-                  sx={{ color: "#f7c134", fontSize: 24 }}
-                />
-                {rideDetail.car
-                  ? `${rideDetail.car.model} - ${rideDetail.car.registration_number}`
-                  : "Non renseigné"}
-              </p>
-              <p className="text-tiny">
-                {rideDetail.car && rideDetail.car.color}
-              </p>
-            </div>
-          </div>
-          <div className="block-right">
-            <MapContainer
-              center={rideDetail.departureAddress.coords || [48.8566, 2.3522]}
-              zoom={13}
-              style={{ minHeight: "300px", aspectRatio: 1 }}
-              ref={setMap}
-            >
-              <TileLayer
-                attribution="&copy; OpenStreetMap"
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
+                <p>{rideDetail.description}</p>
+                <hr className="mt-20 mb-10" />
 
-              <MapMarker
-                position={rideDetail.departureAddress.coords}
-                label="Départ"
-              />
-              <MapMarker
-                position={rideDetail.destinationAddress.coords}
-                label="Arrivée"
-              />
-              {routeCoords.length > 0 && (
-                <Polyline positions={routeCoords} color="blue" />
-              )}
-            </MapContainer>
+                {rideDetail.driver?.accept_smoking === 0 ? (
+                  <p className="flex-row justify-start align-center gap-5">
+                    <SmokeFreeOutlinedIcon
+                      sx={{ color: "#f7c134", fontSize: 28 }}
+                    />{" "}
+                    Véhicule non fumeur
+                  </p>
+                ) : (
+                  <p className="flex-row justify-start align-center gap-5">
+                    <SmokingRoomsOutlinedIcon
+                      sx={{ color: "#f7c134", fontSize: 28 }}
+                    />{" "}
+                    Véhicule fumeur
+                  </p>
+                )}
+
+                {rideDetail.driver?.accept_animals === 0 ? (
+                  <p className="flex-row justify-start align-center gap-5">
+                    <BlockOutlinedIcon
+                      sx={{ color: "#f7c134", fontSize: 28 }}
+                    />
+                    Animaux non admis
+                  </p>
+                ) : (
+                  <p className="flex-row justify-start align-center gap-5">
+                    <PetsOutlinedIcon sx={{ color: "#f7c134", fontSize: 28 }} />{" "}
+                    Animaux bienvenus !
+                  </p>
+                )}
+                {rideDetail.car?.energy === "Électricité" && (
+                  <p className="flex-row justify-start align-center gap-5">
+                    <EnergySavingsLeafOutlinedIcon
+                      sx={{ color: "#42ba92", fontSize: 28 }}
+                    />{" "}
+                    Voyage écologique
+                  </p>
+                )}
+              </div>
+              <div className="flex-row mb-10 dotted align-center justify-start gap-15">
+                <p className="flex-row align-center justify-start gap-5">
+                  <DirectionsCarFilledOutlinedIcon
+                    sx={{ color: "#f7c134", fontSize: 24 }}
+                  />
+                </p>
+                <div className="flex-column justify-left">
+                  <p className="flex-row align-center justify-start">
+                    {rideDetail.car
+                      ? `${rideDetail.car.model} - ${rideDetail.car.registration_number}`
+                      : "Non renseigné"}
+                  </p>
+                  <p className="text-tiny">
+                    {rideDetail.car && rideDetail.car.color}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="block-right">
+              <MapContainer
+                center={rideDetail.departureAddress.coords || [48.8566, 2.3522]}
+                zoom={13}
+                style={{ minHeight: "300px", aspectRatio: 1 }}
+                ref={setMap}
+              >
+                <TileLayer
+                  attribution="&copy; OpenStreetMap"
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+
+                <MapMarker
+                  position={rideDetail.departureAddress.coords}
+                  label="Départ"
+                />
+                <MapMarker
+                  position={rideDetail.destinationAddress.coords}
+                  label="Arrivée"
+                />
+                {routeCoords.length > 0 && (
+                  <Polyline positions={routeCoords} color="blue" />
+                )}
+              </MapContainer>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   )
 }
 

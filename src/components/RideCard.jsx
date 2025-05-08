@@ -55,7 +55,7 @@ const RideCard = ({ ride }) => {
   return (
     <Link to={`/trajet/${_id}`}>
       {isMobile ? (
-        <article className="ride-card flex-column">
+        <article className="ride-card br-10 b-shadow bg-white flex-column">
           <div className="top-ride-card ">
             <div className="info-ride flex-row justify-left">
               <div className="flex-column space-between">
@@ -132,7 +132,7 @@ const RideCard = ({ ride }) => {
           </div>
         </article>
       ) : (
-        <article className="ride-card flex-column">
+        <article className="ride-card bg-white br-10 flex-column">
           <div className="top-ride-card flex-row">
             <div className="info-ride">
               <div className="departure">

@@ -37,7 +37,7 @@ const RideDetails = () => {
     return <p>Loading</p>
   }
 
-  console.log("rideDetail >", rideDetail)
+  // console.log("rideDetail >", rideDetail)
 
   return (
     <>
@@ -50,7 +50,7 @@ const RideDetails = () => {
             onClick={() => navigate(`/reservation/${rideDetail._id}`)}
             className="btn-solid"
           >
-            Réserver ce trajet
+            Participer au trajet
           </button>
         </section>
       </main>

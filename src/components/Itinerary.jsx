@@ -66,7 +66,7 @@ const Itinerary = ({ ride }) => {
   return (
     <Link to={`/trajet/${_id}`}>
       {isMobile ? (
-        <article className="ride-card flex-column">
+        <article className="ride-card br-10 bg-white flex-column">
           <div className="top-ride-card ">
             <div className="info-ride flex-row justify-left">
               <div className="flex-column space-between">

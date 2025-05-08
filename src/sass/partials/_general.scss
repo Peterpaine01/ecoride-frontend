@@ -58,7 +58,7 @@ body {
 }
 
 section {
-  margin: 60px 100px;
+  padding: 60px 100px;
   p {
     padding: 10px 0;
     text-align: justify;
@@ -205,16 +205,32 @@ section {
   text-align: center;
 }
 
-.bg-green {
+.bg-primary {
   background: variables.$color-primary;
 }
 
-.bg-yellow {
+.bg-access {
   background: variables.$color-accessibility;
 }
 
 .bg-gray {
   background: variables.$color-dark-grey;
+}
+
+.bg-secondary {
+  background: variables.$color-secondary;
+}
+
+.bg-white {
+  background: white;
+}
+
+.br-10 {
+  border-radius: 10px;
+}
+
+.b-shadow {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .color-primary {
@@ -247,7 +263,6 @@ h1 {
   position: relative;
   line-height: 40px;
   padding: 30px 0;
-  margin-bottom: 60px;
   font-family: variables.$main-font;
 }
 h2 {
@@ -309,9 +324,13 @@ p {
 }
 
 small {
-  font-size: 10px;
+  font-size: 12px;
   color: #fff;
   margin: 5px 0;
+}
+
+strong {
+  font-weight: 600;
 }
 
 .error-msg {
@@ -319,6 +338,15 @@ small {
   color: #f75252 !important;
   font-weight: 400;
   // display: none;
+}
+
+hr {
+  display: block;
+  clear: both;
+  height: 0;
+  padding: 0;
+  border: 0;
+  border-bottom: 2px dotted variables.$color-dark-grey;
 }
 
 // Images

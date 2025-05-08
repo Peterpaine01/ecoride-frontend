@@ -187,7 +187,7 @@ const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
               />
               <label>Genre</label>
             </div>
-            <select class="custom-select-minimal" name="gender">
+            <select className="custom-select-minimal" name="gender">
               <option value="all">Indifférent</option>
               <option value="male">Homme</option>
               <option value="female">Femme</option>
@@ -209,9 +209,9 @@ const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
               </div>
             </div>
 
-            <label class="switch">
+            <label className="switch">
               <input type="checkbox" name="isElectric" />
-              <span class="slider"></span>
+              <span className="slider"></span>
             </label>
           </div>
 
@@ -222,9 +222,9 @@ const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
               />
               <label>Véhicule fumeur</label>
             </div>
-            <label class="switch">
+            <label className="switch">
               <input type="checkbox" name="acceptSmoking" />
-              <span class="slider"></span>
+              <span className="slider"></span>
             </label>
           </div>
 
@@ -233,9 +233,9 @@ const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
               <PetsOutlinedIcon sx={{ color: "#f7c134", fontSize: 28 }} />
               <label>Animaux acceptés</label>
             </div>
-            <label class="switch">
+            <label className="switch">
               <input type="checkbox" name="acceptAnimals" />
-              <span class="slider"></span>
+              <span className="slider"></span>
             </label>
           </div>
         </div>

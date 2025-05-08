@@ -18,7 +18,11 @@ const StepIndicator = ({ currentStep, totalSteps }) => {
             <div
               className={`flex-row align-center justify-center steps transition-all
                 ${
-                  isCompleted ? "bg-green" : isActive ? "bg-yellow" : "bg-gray"
+                  isCompleted
+                    ? "bg-primary"
+                    : isActive
+                    ? "bg-access"
+                    : "bg-gray"
                 }`}
             >
               {index + 1}
@@ -29,7 +33,7 @@ const StepIndicator = ({ currentStep, totalSteps }) => {
               <div className="absolute line bg-gray">
                 <div
                   className={`line absolute transition-all duration-300 ${
-                    isCompleted ? "bg-green w-100" : "bg-gray w-0"
+                    isCompleted ? "bg-primary w-100" : "bg-gray w-0"
                   }`}
                 ></div>
               </div>
