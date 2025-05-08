@@ -93,6 +93,20 @@ const Header = () => {
             </div>
             <nav className="flex-row">
               <ul className="nav-list">
+                {user &&
+                  user.account_type === "webmaster" &&
+                  user.role_label === "administrator" && (
+                    <li className="nav-item">
+                      <Link to={`/espace-admin`}>Espace admin</Link>
+                    </li>
+                  )}
+                {user &&
+                  user.account_type === "webmaster" &&
+                  user.role_label === "moderator" && (
+                    <li className="nav-item">
+                      <Link to={`/espace-admin`}>Espace webmaster</Link>
+                    </li>
+                  )}
                 {user && user.accountStatus === "active" && user.is_driver && (
                   <li className="nav-item">
                     <Link className="add-btn" to={`/publier-trajet`}>
