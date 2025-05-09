@@ -100,6 +100,10 @@ section {
   align-self: center;
 }
 
+.align-self-start {
+  align-self: flex-start;
+}
+
 .gap-5 {
   gap: 5px;
 }
@@ -107,6 +111,11 @@ section {
 .gap-15 {
   gap: 15px;
 }
+
+.gap-20 {
+  gap: 20px;
+}
+
 .gap-30 {
   gap: 30px;
 }
@@ -628,12 +637,17 @@ button:disabled {
   font-size: 16px;
   padding: 0;
   padding-bottom: 2px;
-  border-bottom: 1px dotted variables.$color-accessibility;
+
   border-radius: 0;
   text-decoration: none;
-  &:hover {
-    border-bottom: 1px dashed variables.$color-accessibility;
-    background: none;
+
+  span {
+    border-bottom: 1px dotted variables.$color-accessibility;
+    padding-bottom: 2px;
+    &:hover {
+      border-bottom: 1px dashed variables.$color-accessibility;
+      background: none;
+    }
   }
 }
 

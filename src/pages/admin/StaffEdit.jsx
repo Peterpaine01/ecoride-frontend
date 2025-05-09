@@ -1,9 +1,6 @@
-import { Link, useNavigate } from "react-router-dom"
-import React, { useEffect, useState, useContext } from "react"
+import { Link } from "react-router-dom"
+import React, { useEffect, useState } from "react"
 import axios from "../../config/axiosConfig"
-import { AuthContext } from "../../context/AuthContext"
-
-import Cookies from "js-cookie"
 
 // Components
 import Header from "../../components/Header"
@@ -15,8 +12,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import ModeEditIcon from "@mui/icons-material/ModeEdit"
 
 const StaffList = () => {
-  const { token } = useContext(AuthContext)
-  const navigate = useNavigate()
   const [webmastersList, setWebmastersList] = useState()
   useEffect(() => {
     fetchData()
@@ -32,20 +27,6 @@ const StaffList = () => {
     }
   }
 
-  const deleteStaff = async (id) => {
-    try {
-      await axios.delete(`/delete-staff-member/${id}`)
-      fetchData() // recharge la liste
-    } catch (error) {
-      console.error(
-        "Erreur suppression :",
-        error.response?.data?.error || error.message
-      )
-    }
-  }
-
-  console.log("Token dans le cookie :", Cookies.get("token"))
-
   return (
     <>
       <Header />
@@ -53,17 +34,7 @@ const StaffList = () => {
       <main>
         <div className="container">
           <section>
-            <h1>Webmasters</h1>
-            <div className="flex-column align-center">
-              <hr className="mt-20 w-100 mb-20" />
-              <button
-                onClick={() => navigate("/ajouter-staff")}
-                className="btn-solid fit-content"
-              >
-                Ajouter un webmaster
-              </button>
-              <hr className="mt-20 w-100 mb-40" />
-            </div>
+            <h1>Modifier un webmaster</h1>
 
             {webmastersList &&
               webmastersList.map((webmaster) => {
@@ -78,31 +49,18 @@ const StaffList = () => {
                       {webmaster.first_name} {webmaster.last_name}
                     </div>
                     <div>
-                      {webmaster.role === "administrator"
+                      {webmaster.first_role === "administrator"
                         ? "Administrateur"
                         : "Modérateur"}
                     </div>
                     <div className="flex-row space-between align-center gap-15">
-                      <button
-                        onClick={() => deleteStaff(webmaster.account_id)}
-                        className="btn-icon flex-row justify-center align-center color-dark"
-                      >
+                      <button className="btn-icon flex-row justify-center align-center color-dark">
                         <DeleteForeverIcon />
                       </button>
-                      <button
-                        onClick={() =>
-                          navigate(`/modifier-staff/${webmaster.account_id}`)
-                        }
-                        className="btn-icon flex-row justify-center align-center color-dark"
-                      >
+                      <button className="btn-icon flex-row justify-center align-center color-dark">
                         <ModeEditIcon />
                       </button>
-                      <button
-                        onClick={() =>
-                          navigate(`/staff/${webmaster.account_id}`)
-                        }
-                        className="btn-icon flex-row justify-center align-center color-dark"
-                      >
+                      <button className="btn-icon flex-row justify-center align-center color-dark">
                         <KeyboardArrowRightIcon />
                       </button>
                     </div>

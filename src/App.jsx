@@ -34,6 +34,7 @@ import AdminHome from "./pages/admin/AdminHome"
 import StaffList from "./pages/admin/StaffList"
 import StaffDetails from "./pages/admin/StaffDetails"
 import StaffAdd from "./pages/admin/StaffAdd"
+import StaffEdit from "./pages/admin/StaffEdit"
 import UsersList from "./pages/admin/UsersList"
 import UserDetails from "./pages/admin/UserDetails"
 
@@ -130,6 +131,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <StaffAdd />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/modifier-staff/:id"
+            element={
+              <PrivateRoute>
+                <StaffEdit />
               </PrivateRoute>
             }
           />
