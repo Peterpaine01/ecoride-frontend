@@ -13,6 +13,10 @@ import Cover from "../../components/Cover"
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
 import ModeEditIcon from "@mui/icons-material/ModeEdit"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import CancelIcon from "@mui/icons-material/Cancel"
+import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb"
+import PendingIcon from "@mui/icons-material/Pending"
 
 const StaffList = () => {
   const { token } = useContext(AuthContext)
@@ -74,9 +78,29 @@ const StaffList = () => {
                     key={webmaster.id}
                     className="btn-arrow flex-row space-between align-center mb-20 gap-15"
                   >
-                    <div className="w-50">
-                      {webmaster.first_name} {webmaster.last_name}
+                    <div
+                      className="flex-row space-between align-center 
+                     gap-5"
+                    >
+                      <div>
+                        {webmaster.account_status === "pending" && (
+                          <PendingIcon sx={{ color: "#ebae15" }} />
+                        )}
+                        {webmaster.account_status === "active" && (
+                          <CheckCircleIcon sx={{ color: "#42ba92" }} />
+                        )}
+                        {webmaster.account_status === "suspended" && (
+                          <CancelIcon sx={{ color: "#e01700" }} />
+                        )}
+                        {webmaster.account_status === "deleted" && (
+                          <DoNotDisturbIcon sx={{ color: "#678eae" }} />
+                        )}
+                      </div>
+                      <div className="w-50">
+                        {webmaster.first_name} {webmaster.last_name}
+                      </div>
                     </div>
+
                     <div>
                       {webmaster.role === "administrator"
                         ? "Administrateur"
