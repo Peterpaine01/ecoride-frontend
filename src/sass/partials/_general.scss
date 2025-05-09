@@ -108,6 +108,10 @@ section {
   gap: 5px;
 }
 
+.gap-10 {
+  gap: 5px;
+}
+
 .gap-15 {
   gap: 15px;
 }
@@ -433,6 +437,14 @@ em {
   position: absolute;
   white-space: nowrap;
   width: 1px;
+}
+
+label {
+  color: variables.$color-primary;
+}
+
+.form-full {
+  width: 500px;
 }
 
 input {

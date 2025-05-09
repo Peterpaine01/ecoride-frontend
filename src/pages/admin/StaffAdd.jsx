@@ -11,7 +11,7 @@ import Cover from "../../components/Cover"
 
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft"
 
-const StaffList = () => {
+const StaffAdd = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -159,4 +159,4 @@ const StaffList = () => {
   )
 }
 
-export default StaffList
+export default StaffAdd
