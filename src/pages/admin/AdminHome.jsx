@@ -57,7 +57,7 @@ const AdminHome = () => {
               Webmasters <KeyboardArrowRightIcon />
             </Link>
             <Link
-              to={"/users"}
+              to={"/utilisateurs"}
               className="btn-arrow flex-row space-between align-center"
             >
               Utilisateurs <KeyboardArrowRightIcon />

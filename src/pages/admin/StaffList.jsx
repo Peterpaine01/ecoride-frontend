@@ -79,8 +79,8 @@ const StaffList = () => {
                     className="btn-arrow flex-row space-between align-center mb-20 gap-15"
                   >
                     <div
-                      className="flex-row space-between align-center 
-                     gap-5"
+                      className="flex-row justify-left align-center 
+                     gap-15 w-50"
                     >
                       <div>
                         {webmaster.account_status === "pending" && (
@@ -90,13 +90,13 @@ const StaffList = () => {
                           <CheckCircleIcon sx={{ color: "#42ba92" }} />
                         )}
                         {webmaster.account_status === "suspended" && (
-                          <CancelIcon sx={{ color: "#e01700" }} />
-                        )}
-                        {webmaster.account_status === "deleted" && (
                           <DoNotDisturbIcon sx={{ color: "#678eae" }} />
                         )}
+                        {webmaster.account_status === "deleted" && (
+                          <CancelIcon sx={{ color: "#e01700" }} />
+                        )}
                       </div>
-                      <div className="w-50">
+                      <div>
                         {webmaster.first_name} {webmaster.last_name}
                       </div>
                     </div>

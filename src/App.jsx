@@ -143,7 +143,7 @@ const App = () => {
             }
           />
           <Route
-            path="/users"
+            path="/utilisateurs"
             element={
               <PrivateRoute>
                 <UsersList />
@@ -151,7 +151,7 @@ const App = () => {
             }
           />
           <Route
-            path="/user/:id"
+            path="/utilisateur/:id"
             element={
               <PrivateRoute>
                 <UserDetails />
