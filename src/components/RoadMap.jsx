@@ -58,7 +58,6 @@ const RoadMap = ({ rideDetail }) => {
             rideDetail.departureAddress.coords,
             rideDetail.destinationAddress.coords
           )
-          console.log(result)
 
           setRouteCoords(result.routeCoords)
         } catch (err) {
@@ -124,21 +123,23 @@ const RoadMap = ({ rideDetail }) => {
     <>
       <div className="container-full ride-details">
         <section className="flex-column justify-center align-center bg-secondary">
-          <div className="flex-column"></div>
           <h1 className="flex-row justify-center align-center">
             {formatDateToFrench(rideDetail.departureDate)}
           </h1>
+
           <div className="flex-row justify-center align-center gap-15">
-            <div className="flex-column align-start">
-              {rideDetail?.availableSeats && (
-                <p className="flex-row justify-start align-center gap-5 color-dark">
-                  <GroupIcon sx={{ color: "#023560", fontSize: 28 }} />{" "}
-                  {rideDetail.availableSeats} place
-                  {rideDetail.availableSeats > 1 && "s"} disponible
-                  {rideDetail.availableSeats > 1 && "s"}
-                </p>
-              )}
-            </div>
+            {rideDetail && rideDetail.availableSeats > 0 ? (
+              <p className="flex-row justify-start align-center gap-5 color-dark">
+                <GroupIcon sx={{ color: "#023560", fontSize: 28 }} />{" "}
+                {rideDetail.availableSeats} place
+                {rideDetail.availableSeats > 1 && "s"} disponible
+                {rideDetail.availableSeats > 1 && "s"}
+              </p>
+            ) : (
+              <p className="flex-row justify-start align-center gap-5 color-dark">
+                <GroupIcon sx={{ color: "#023560", fontSize: 28 }} /> Complet
+              </p>
+            )}
           </div>
 
           <div className="roadmap-card flex-row space-between">

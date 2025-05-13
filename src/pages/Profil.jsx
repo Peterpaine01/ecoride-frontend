@@ -8,6 +8,20 @@ import axios from "../config/axiosConfig"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import Cover from "../components/Cover"
+import StarRating from "../components/StarRating"
+
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
+import ArrowRightAltOutlinedIcon from "@mui/icons-material/ArrowRightAltOutlined"
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined"
+import EnergySavingsLeafOutlinedIcon from "@mui/icons-material/EnergySavingsLeafOutlined"
+import SmokingRoomsOutlinedIcon from "@mui/icons-material/SmokingRoomsOutlined"
+import SmokeFreeOutlinedIcon from "@mui/icons-material/SmokeFreeOutlined"
+import PetsOutlinedIcon from "@mui/icons-material/PetsOutlined"
+import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined"
+import DirectionsCarFilledOutlinedIcon from "@mui/icons-material/DirectionsCarFilledOutlined"
+import TollOutlinedIcon from "@mui/icons-material/TollOutlined"
+import GroupIcon from "@mui/icons-material/Group"
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
 
 const Profil = () => {
   const { user, login, logout, isAuthenticated } = useContext(AuthContext)
@@ -80,6 +94,7 @@ const Profil = () => {
   // }
 
   // console.log("token", Cookies.get("token"));
+  console.log("user >", user)
 
   return (
     <>
@@ -88,61 +103,85 @@ const Profil = () => {
       {user ? (
         <main>
           <div className="container profile">
-            <section className="profile-header">
-              <div className="flex-row gap-15">
-                <div className="profil-icon user-logged">
-                  <img src={user.photo} alt={`Photo de ${user.username}`} />
+            <section>
+              <div className="profile-header">
+                <div className="flex-row gap-15">
+                  <div className="profil-icon user-logged">
+                    <img src={user.photo} alt={`Photo de ${user.username}`} />
+                  </div>
+                  <div className="profile">
+                    <h1>{user.username}</h1>
+                    {user?.driverInfos.average_rating && (
+                      <StarRating rating={user.driverInfos.average_rating} />
+                    )}
+                  </div>
                 </div>
-                <div className="profile">
-                  <h1>{user.username}</h1>
-                  <p>{user.credits} crédits</p>
-                </div>
+                <Link
+                  to="/"
+                  className="edit-profile btn-link flex-row align-center"
+                >
+                  <span>Modifier le profil</span> <KeyboardArrowRightIcon />
+                </Link>
               </div>
-
-              <Link className="edit-profile btn-solid">Modifier le profil</Link>
             </section>
             <section className="filters-layout flex-row">
-              <aside className="sidebar one-third-column">
-                <h2>Compte</h2>
-                <nav className="menu">
-                  <ul>
-                    <li>
-                      <a href="#">Mot de passe</a>
-                    </li>
-                    <li>
-                      <a href="#">Conditions générales</a>
-                    </li>
-                    <li>
-                      <a href="#">Protections des données</a>
-                    </li>
-                    <li>
-                      <a href="#">Fermer le compte</a>
-                    </li>
-                  </ul>
-                </nav>
-                <Link
-                  onClick={logout}
-                  to={"/se-connecter"}
-                  className="btn-solid"
-                >
-                  Se déconnecter
-                </Link>
+              <aside className="one-third-column">
+                <div className="sidebar flex-column gap-15">
+                  <h2>Compte</h2>
+                  <nav className="menu">
+                    <ul>
+                      <li className="mb-10">
+                        <Link
+                          to="/"
+                          className="btn-link flex-row align-center space-between"
+                        >
+                          Mot de passe <KeyboardArrowRightIcon />
+                        </Link>
+                      </li>
+                      <li className="mb-10">
+                        <Link
+                          to="/"
+                          className="btn-link flex-row align-center space-between"
+                        >
+                          Conditions générales <KeyboardArrowRightIcon />
+                        </Link>
+                      </li>
+                      <li className="mb-10">
+                        <Link
+                          to="/"
+                          className="btn-link flex-row align-center space-between"
+                        >
+                          Protections des données <KeyboardArrowRightIcon />
+                        </Link>
+                      </li>
+                      <li className="mb-10">
+                        <Link
+                          to="/"
+                          className="btn-link flex-row align-center space-between"
+                        >
+                          Fermer le compte
+                          <KeyboardArrowRightIcon />
+                        </Link>
+                      </li>
+                    </ul>
+                  </nav>
+                  <button
+                    onClick={logout}
+                    to={"/se-connecter"}
+                    className="btn-solid align-self-center w-100"
+                  >
+                    Se déconnecter
+                  </button>
+                </div>
               </aside>
               <div className="user-infos">
-                <h2>Présentez-vous</h2>
+                <h2 className="mt-20">Présentez-vous</h2>
                 <div className="row">
-                  <section className="profile-info">
-                    <p>{user.email}</p>
+                  <div className="profile-info">
                     <p>
-                      At vero eos et accusamus et iusto odio dignissimos ducimus
-                      qui blanditiis praesentium voluptatum deleniti atque
-                      corrupti quos dolores.
+                      <span className="text-big">{user.credits}</span> crédits
                     </p>
-                  </section>
-                  <section className="ecoride">
-                    <h3>SUR ECORIDE</h3>
-                    {user.is_driver && <p> Je suis chauffeur</p>}
-                    <p> Je suis passager</p>
+                    <p>Email : {user.email}</p>
                     <p className="gender">
                       Je m'identifie comme{" "}
                       <strong>
@@ -153,42 +192,88 @@ const Profil = () => {
                           : "homme"}
                       </strong>
                     </p>
-                  </section>
+                  </div>
+                  <div className="ecoride">
+                    <h3>SUR ECORIDE</h3>
+                    {user.is_driver && <p> Je suis chauffeur</p>}
+                    <p> Je suis passager</p>
+                  </div>
                 </div>
                 <div className="row">
-                  <section className="preferences">
+                  <div className="preferences">
                     <h3>VOS PRÉFÉRENCES</h3>
-                    <ul>
-                      {user && user.driverInfos.accept_smoking ? (
-                        <li>cigarette accepté</li>
-                      ) : (
-                        <li>🚭 Pas de cigarette</li>
-                      )}
-                      {user && user.driverInfos.accept_animals ? (
-                        <li>🐾 J'aime les animaux</li>
-                      ) : (
-                        <li>Pas d'animaux</li>
-                      )}
-                      <li>💬 J'aime discuter</li>
-                      <li>🎵 J'adore la musique</li>
-                    </ul>
-                  </section>
-                  <section className="vehicles flex-column">
+
+                    {user && user.driverInfos?.accept_smoking === 0 ? (
+                      <p className="flex-row justify-start align-center gap-5">
+                        <SmokeFreeOutlinedIcon
+                          sx={{ color: "#f7c134", fontSize: 28 }}
+                        />{" "}
+                        Véhicule non fumeur
+                      </p>
+                    ) : (
+                      <p className="flex-row justify-start align-center gap-5">
+                        <SmokingRoomsOutlinedIcon
+                          sx={{ color: "#f7c134", fontSize: 28 }}
+                        />{" "}
+                        Véhicule fumeur
+                      </p>
+                    )}
+
+                    {user && user.driverInfos?.accept_animals === 0 ? (
+                      <p className="flex-row justify-start align-center gap-5">
+                        <BlockOutlinedIcon
+                          sx={{ color: "#f7c134", fontSize: 28 }}
+                        />
+                        Animaux non admis
+                      </p>
+                    ) : (
+                      <p className="flex-row justify-start align-center gap-5">
+                        <PetsOutlinedIcon
+                          sx={{ color: "#f7c134", fontSize: 28 }}
+                        />{" "}
+                        Animaux bienvenus !
+                      </p>
+                    )}
+                  </div>
+                  <div className="vehicles flex-column">
                     <h3>VOS VÉHICULES</h3>
                     {user &&
                       user.driverInfos.cars.map((car) => {
                         return (
-                          <Link key={car.id} className="vehicle">
-                            🚗 {car.model} - {car.color}
+                          <Link
+                            key={car.id}
+                            className="vehicle flex-row mb-10 align-center space-between gap-15"
+                          >
+                            <div className="flex-row align-center justify-start gap-15">
+                              <p className="flex-row align-center justify-start gap-5">
+                                <DirectionsCarFilledOutlinedIcon
+                                  sx={{ color: "#002340", fontSize: 24 }}
+                                />
+                              </p>
+                              <div className="flex-column justify-left">
+                                <p className="flex-row align-center justify-start">
+                                  {car
+                                    ? `${car.model} - ${car.registration_number}`
+                                    : "Non renseigné"}
+                                </p>
+                                <p className="text-tiny">{car && car.color}</p>
+                              </div>
+                            </div>
+
+                            <KeyboardArrowRightIcon
+                              sx={{ color: "#002340", fontSize: 24 }}
+                            />
                           </Link>
                         )
                       })}
 
-                    <button>Ajouter un véhicule</button>
-                  </section>
+                    <button className="btn-link mt-20 flex-row align-center gap-5">
+                      <AddCircleOutlineIcon /> Ajouter un véhicule
+                    </button>
+                  </div>
                 </div>
                 <div className="row">
-                  <section className="reviews">
+                  <div className="reviews">
                     <h3>AVIS</h3>
                     <div className="last-reviews">
                       {reviewsDataTest
@@ -209,7 +294,7 @@ const Profil = () => {
                           </article>
                         ))}
                     </div>
-                  </section>
+                  </div>
                 </div>
                 <Link>Tous les avis </Link>
               </div>

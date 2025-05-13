@@ -14,7 +14,10 @@
 .profile {
   h1 {
     margin: 0;
-    padding: 0;
+    padding: 5px;
+  }
+  .star {
+    color: variables.$color-disabled;
   }
   h3 {
     color: #fff;
@@ -70,10 +73,13 @@
   border-radius: 15px;
   text-decoration: none;
   color: variables.$color-bg-dark;
-  margin-bottom: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   &:hover {
     background-color: variables.$color-accessibility;
+  }
+  p {
+    color: variables.$color-bg-dark;
+    padding: 0;
   }
 }
 
@@ -98,4 +104,10 @@
   img {
     width: 100%;
   }
+}
+
+.sidebar {
+  background-color: variables.$color-bg-dark;
+  padding: 20px;
+  border-radius: 10px;
 }

@@ -1,10 +1,15 @@
+import axios from "../config/axiosConfig"
+import { AuthContext } from "../context/AuthContext"
+import { useEffect, useState, useContext } from "react"
+import { useNavigate } from "react-router-dom"
+
 import DeleteIcon from "@mui/icons-material/Delete"
 import ModeEditIcon from "@mui/icons-material/ModeEdit"
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
 
 import { displayDuration } from "../utils/dateTimeHandler"
 
-const RoadMapCard = ({ ride, isDriver }) => {
+const RoadMapCard = ({ ride, driverRide }) => {
   const {
     _id,
     availableSeats,
@@ -17,6 +22,11 @@ const RoadMapCard = ({ ride, isDriver }) => {
     driver,
     rideStatus,
   } = ride
+
+  const { user, authLoading, refreshUser } = useContext(AuthContext)
+
+  const navigate = useNavigate()
+
   const getTimeFromDate = (date) => {
     const formattedDate = new Date(Date.parse(date))
 
@@ -50,8 +60,38 @@ const RoadMapCard = ({ ride, isDriver }) => {
     )
   }
 
+  const handleStartStopRide = async (action) => {
+    try {
+      if (action === "start") {
+        const response = await axios.patch(`/update-ride/${_id}`, {
+          rideStatus: "ongoing",
+        })
+
+        console.log("Ride started:", response.data)
+      }
+
+      if (action === "stop") {
+        const response = await axios.patch(`/update-ride/${_id}`, {
+          rideStatus: "completed",
+        })
+
+        console.log("Ride completed:", response.data)
+      }
+
+      refreshUser()
+    } catch (error) {
+      console.error("Error starting ride:", error)
+    }
+  }
+
+  if (authLoading) return null
+
   return (
-    <article className="roadmap-card bg-white br-10 b-shadow flex-row space-between">
+    <article
+      className={`roadmap-card ${
+        rideStatus === "completed" ? "card-disabled" : "bg-white b-shadow"
+      } br-10  flex-row space-between`}
+    >
       <div className="ride-card flex-column">
         <div className="info-ride flex-row justify-left">
           <div className="hours flex-column space-between">
@@ -85,18 +125,78 @@ const RoadMapCard = ({ ride, isDriver }) => {
       </div>
       <div className="meta">
         <div className="actions">
-          <button className="icon-button">
-            <DeleteIcon sx={{ color: "#023560", fontSize: 24 }} />
-          </button>
-          <button className="icon-button">
-            <ModeEditIcon sx={{ color: "#023560", fontSize: 24 }} />
-          </button>
-          <button className="icon-button">
+          {rideStatus !== "completed" && (
+            <>
+              <button className="icon-button">
+                <DeleteIcon sx={{ color: "#023560", fontSize: 24 }} />
+              </button>
+              <button
+                onClick={() => navigate(`/modifier-trajet/${_id}`)}
+                className="icon-button"
+              >
+                <ModeEditIcon sx={{ color: "#023560", fontSize: 24 }} />
+              </button>
+            </>
+          )}
+
+          <button
+            onClick={() =>
+              navigate(`/trajet/${_id}`, { state: { driverRide: driverRide } })
+            }
+            className="icon-button"
+          >
             <ArrowForwardIosIcon sx={{ color: "#023560", fontSize: 24 }} />
           </button>
         </div>
-        {isDriver && isToday(departureDate) && (
-          <button className="btn-solid w-100">Démarrer</button>
+
+        {driverRide && isToday(departureDate) && rideStatus === "ongoing" && (
+          <button
+            onClick={() => handleStartStopRide("stop")}
+            className="btn-access w-100"
+          >
+            Clôturer
+          </button>
+        )}
+        {driverRide && rideStatus === "completed" && (
+          <p
+            className="dotted"
+            style={{
+              padding: "10px",
+              borderColor: "#d7ead6",
+              textAlign: "center",
+            }}
+          >
+            Trajet terminé
+          </p>
+        )}
+        {rideStatus === "forthcoming" &&
+          (driverRide && isToday(departureDate) ? (
+            <button
+              onClick={() => handleStartStopRide("start")}
+              className="btn-solid w-100"
+            >
+              Démarrer
+            </button>
+          ) : (
+            <p
+              className="dotted"
+              style={{
+                padding: "10px",
+                borderColor: "#42ba92",
+                textAlign: "center",
+                color: "#023560",
+              }}
+            >
+              À venir
+            </p>
+          ))}
+        {!driverRide && rideStatus === "completed" && (
+          <button
+            onClick={() => handleStartStopRide("stop")}
+            className="btn-solid w-100"
+          >
+            Noter
+          </button>
         )}
       </div>
     </article>

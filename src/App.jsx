@@ -24,6 +24,7 @@ import RidesSchedule from "./pages/RidesSchedule"
 import RidesPast from "./pages/RidesPast"
 import RidesList from "./pages/RidesList"
 import RideDetails from "./pages/RideDetails"
+import RideEdit from "./pages/RideEdit"
 import BookingSummary from "./pages/BookingSummary"
 
 import OpinionList from "./pages/OpinionList"
@@ -51,158 +52,164 @@ const App = () => {
   const { showLoginModal, closeLoginModal } = useContext(AuthContext)
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route
-            path="/publier-trajet"
-            element={
-              <PrivateRoute>
-                <PublishRide />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/profil"
-            element={
-              <PrivateRoute>
-                <Profil />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/se-connecter" element={<SignIn />} />
-          <Route path="/creer-compte" element={<SignUp />} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route
+          path="/publier-trajet"
+          element={
+            <PrivateRoute>
+              <PublishRide />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profil"
+          element={
+            <PrivateRoute>
+              <Profil />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/se-connecter" element={<SignIn />} />
+        <Route path="/creer-compte" element={<SignUp />} />
 
-          <Route path="/qui-sommes-nous" element={<About />} />
-          <Route path="/comment-fonctionne-ecoride" element={<HowItWorks />} />
-          <Route path="/mentions-legales" element={<LegalNotices />} />
+        <Route path="/qui-sommes-nous" element={<About />} />
+        <Route path="/comment-fonctionne-ecoride" element={<HowItWorks />} />
+        <Route path="/mentions-legales" element={<LegalNotices />} />
 
-          <Route
-            path="/vos-trajets"
-            element={
-              <PrivateRoute>
-                <RidesSchedule />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/vos-trajets-archive"
-            element={
-              <PrivateRoute>
-                <RidesPast />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/recherche-trajet" element={<RidesList />} />
-          <Route path="/trajet/:id" element={<RideDetails />} />
-          <Route path="/reservation/:rideId" element={<BookingSummary />} />
+        <Route
+          path="/vos-trajets"
+          element={
+            <PrivateRoute>
+              <RidesSchedule />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/modifier-trajet/:id"
+          element={
+            <PrivateRoute>
+              <RideEdit />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/vos-trajets-archive"
+          element={
+            <PrivateRoute>
+              <RidesPast />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/recherche-trajet" element={<RidesList />} />
+        <Route path="/trajet/:id" element={<RideDetails />} />
+        <Route path="/reservation/:rideId" element={<BookingSummary />} />
 
-          <Route path="/avis" element={<OpinionList />} />
-          <Route path="/vehicule/:id" element={<CarDetails />} />
+        <Route path="/avis" element={<OpinionList />} />
+        <Route path="/vehicule/:id" element={<CarDetails />} />
 
-          {/* ADMIN */}
-          <Route
-            path="/espace-admin"
-            element={
-              <PrivateRoute>
-                <AdminHome />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/staff"
-            element={
-              <PrivateRoute>
-                <StaffList />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/staff/:id"
-            element={
-              <PrivateRoute>
-                <StaffDetails />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/ajouter-staff"
-            element={
-              <PrivateRoute>
-                <StaffAdd />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/modifier-staff/:id"
-            element={
-              <PrivateRoute>
-                <StaffEdit />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/utilisateurs"
-            element={
-              <PrivateRoute>
-                <UsersList />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/utilisateur/:id"
-            element={
-              <PrivateRoute>
-                <UserDetails />
-              </PrivateRoute>
-            }
-          />
+        {/* ADMIN */}
+        <Route
+          path="/espace-admin"
+          element={
+            <PrivateRoute>
+              <AdminHome />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/staff"
+          element={
+            <PrivateRoute>
+              <StaffList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/staff/:id"
+          element={
+            <PrivateRoute>
+              <StaffDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/ajouter-staff"
+          element={
+            <PrivateRoute>
+              <StaffAdd />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/modifier-staff/:id"
+          element={
+            <PrivateRoute>
+              <StaffEdit />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/utilisateurs"
+          element={
+            <PrivateRoute>
+              <UsersList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/utilisateur/:id"
+          element={
+            <PrivateRoute>
+              <UserDetails />
+            </PrivateRoute>
+          }
+        />
 
-          {/* STAFF */}
-          <Route
-            path="/espace-staff"
-            element={
-              <PrivateRoute>
-                <StaffHome />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/litiges"
-            element={
-              <PrivateRoute>
-                <DisputesList />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/litige/:id"
-            element={
-              <PrivateRoute>
-                <DisputeDetails />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/avis-utilisateurs"
-            element={
-              <PrivateRoute>
-                <OpinionsList />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/avis/:id"
-            element={
-              <PrivateRoute>
-                <OpinionDetails />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-        <ToastContainer />
-      </Router>
+        {/* STAFF */}
+        <Route
+          path="/espace-staff"
+          element={
+            <PrivateRoute>
+              <StaffHome />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/litiges"
+          element={
+            <PrivateRoute>
+              <DisputesList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/litige/:id"
+          element={
+            <PrivateRoute>
+              <DisputeDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/avis-utilisateurs"
+          element={
+            <PrivateRoute>
+              <OpinionsList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/avis/:id"
+          element={
+            <PrivateRoute>
+              <OpinionDetails />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+      <ToastContainer />
       {showLoginModal && <LoginModal onClose={closeLoginModal} />}
     </>
   )

@@ -58,7 +58,10 @@ body {
 }
 
 section {
-  padding: 60px 100px;
+  padding: 20px 100px;
+  &:first-child {
+    padding: 60px 100px 20px;
+  }
   p {
     padding: 10px 0;
     text-align: justify;
@@ -235,23 +238,27 @@ section {
 }
 
 .bg-primary {
-  background: variables.$color-primary;
+  background-color: variables.$color-primary;
 }
 
 .bg-access {
-  background: variables.$color-accessibility;
+  background-color: variables.$color-accessibility;
 }
 
 .bg-gray {
-  background: variables.$color-dark-grey;
+  background-color: variables.$color-dark-grey;
+}
+
+.bg-disabled {
+  background-color: variables.$color-disabled;
 }
 
 .bg-secondary {
-  background: variables.$color-secondary;
+  background-color: variables.$color-secondary;
 }
 
 .bg-white {
-  background: white;
+  background-color: white;
 }
 
 .br-10 {
@@ -259,7 +266,7 @@ section {
 }
 
 .b-shadow {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 2px 4px #002340b8;
 }
 
 .color-primary {
@@ -633,6 +640,17 @@ button:disabled {
   border: 2px solid variables.$color-primary;
   &:hover {
     background-color: adjust-color(variables.$color-primary, $lightness: -10%);
+  }
+}
+
+.btn-access {
+  background-color: variables.$color-accessibility;
+  border: 2px solid variables.$color-accessibility;
+  &:hover {
+    background-color: adjust-color(
+      variables.$color-accessibility,
+      $lightness: -10%
+    );
   }
 }
 

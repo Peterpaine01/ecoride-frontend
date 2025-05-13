@@ -16,22 +16,42 @@ const RidesSchedule = () => {
   const [ridesPassenger, setRidesPassenger] = useState([])
 
   const { user, authLoading } = useContext(AuthContext)
-  console.log("authLoading", authLoading)
+  // console.log("authLoading", authLoading)
 
   useEffect(() => {
     const fetchRidesDriver = async () => {
       try {
         const response = await axios.get(`/driver-rides`)
-        setRidesDriver(response.data.rides)
+        const upcomingDriverRides = response.data.rides
+          ?.filter((ride) => {
+            const rideDate = new Date(ride.departureDate)
+            return ride.rideStatus !== "canceled" && rideDate >= new Date()
+          })
+          .sort((a, b) => new Date(a.departureDate) - new Date(b.departureDate))
+
+        setRidesDriver(upcomingDriverRides)
       } catch (error) {
         console.error("Error fetching driver rides :", error)
       }
     }
 
     const fetchRidesPassenger = async () => {
+      if (user) {
+      }
       try {
         const response = await axios.get(`/passenger-bookings`)
-        setRidesPassenger(response.data.rides)
+        const upcomingPassengerRides = response.data.bookings
+          ?.filter((booking) => {
+            const rideDate = new Date(booking.ride.departureDate)
+            return (
+              (booking.ride.rideStatus !== "reviewed" ||
+                booking.ride.rideStatus !== "canceled") &&
+              rideDate >= new Date()
+            )
+          })
+          .sort((a, b) => new Date(a.departureDate) - new Date(b.departureDate))
+
+        setRidesPassenger(upcomingPassengerRides)
       } catch (error) {
         console.error("Error fetching passenger rides :", error)
       }
@@ -39,23 +59,9 @@ const RidesSchedule = () => {
 
     fetchRidesDriver()
     fetchRidesPassenger()
-  }, [])
+  }, [user])
 
   if (authLoading) return null
-
-  const upcomingDriverRides = ridesDriver
-    ?.filter((ride) => {
-      const rideDate = new Date(ride.departureDate)
-      return ride.rideStatus === "forthcoming" && rideDate >= new Date()
-    })
-    .sort((a, b) => new Date(a.departureDate) - new Date(b.departureDate))
-
-  const upcomingPassengerRides = ridesPassenger
-    ?.filter((ride) => {
-      const rideDate = new Date(ride.departureDate)
-      return ride.rideStatus === "forthcoming" && rideDate >= new Date()
-    })
-    .sort((a, b) => new Date(a.departureDate) - new Date(b.departureDate))
 
   let previousDate = null
 
@@ -68,50 +74,67 @@ const RidesSchedule = () => {
           <section>
             <h1>Vos trajets à venir</h1>
           </section>
-          <section>
-            <h2>Conducteur</h2>
-            {upcomingDriverRides?.map((ride, index) => {
-              const currentDate = format(
-                new Date(ride.departureDate),
-                "EEE dd MMMM",
-                { locale: fr }
-              )
+          {ridesDriver &&
+            ridesPassenger &&
+            ridesDriver.length === 0 &&
+            ridesPassenger.length === 0 && (
+              <div className="dotted">
+                <p>Pas de trajets à venir.</p>
+              </div>
+            )}
+          {ridesDriver && ridesDriver.length > 0 && (
+            <section>
+              <h2>Conducteur</h2>
+              {ridesDriver?.map((ride, index) => {
+                const currentDate = format(
+                  new Date(ride.departureDate),
+                  "EEE dd MMMM",
+                  { locale: fr }
+                )
 
-              const showDate = currentDate !== previousDate
-              previousDate = currentDate
+                const showDate = currentDate !== previousDate
+                previousDate = currentDate
 
-              return (
-                <div key={ride._id}>
-                  {showDate && (
-                    <h3 className="text-white mt-20">{currentDate}</h3>
-                  )}{" "}
-                  <RoadMapCard ride={ride} isDriver={true} />
-                </div>
-              )
-            })}
-          </section>
-          <section>
-            <h2>Passager</h2>
-            {upcomingPassengerRides?.map((ride, index) => {
-              const currentDate = format(
-                new Date(ride.departureDate),
-                "EEE dd MMMM",
-                { locale: fr }
-              )
+                return (
+                  <div key={ride._id}>
+                    {showDate && (
+                      <h3 className="text-white mt-20">{currentDate}</h3>
+                    )}{" "}
+                    <RoadMapCard ride={ride} driverRide={true} />
+                  </div>
+                )
+              })}
+            </section>
+          )}
 
-              const showDate = currentDate !== previousDate
-              previousDate = currentDate
+          {ridesPassenger && ridesPassenger.length > 0 && (
+            <section>
+              <h2>Passager</h2>
+              {ridesPassenger?.map((booking, index) => {
+                const currentDate = format(
+                  new Date(booking.ride?.departureDate),
+                  "EEE dd MMMM",
+                  { locale: fr }
+                )
 
-              return (
-                <div key={ride._id}>
-                  {showDate && (
-                    <h3 className="text-white mt-20">{currentDate}</h3>
-                  )}{" "}
-                  <RoadMapCard ride={ride} isDriver={false} />
-                </div>
-              )
-            })}
-          </section>
+                const showDate = currentDate !== previousDate
+                previousDate = currentDate
+
+                return (
+                  <div key={booking.ride?._id}>
+                    {showDate && (
+                      <h3 className="text-white mt-20">{currentDate}</h3>
+                    )}{" "}
+                    <RoadMapCard
+                      ride={booking.ride}
+                      booking={booking}
+                      driverRide={false}
+                    />
+                  </div>
+                )
+              })}
+            </section>
+          )}
         </div>
       </main>
       <Footer />

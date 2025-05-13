@@ -71,7 +71,7 @@
   .meta {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     height: 100%;
     width: 40%;
@@ -81,6 +81,7 @@
   .actions {
     display: flex;
     gap: 8px;
+    align-items: center;
   }
 
   .icon-button {
@@ -97,4 +98,8 @@
       background: variables.$color-secondary;
     }
   }
+}
+
+.card-disabled {
+  background: #678eae70;
 }
