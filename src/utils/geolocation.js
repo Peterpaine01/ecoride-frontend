@@ -36,17 +36,35 @@ export const reverseGeocode = async ([lat, lon]) => {
   }
 }
 
+// export const calculateRoute = async (start, end) => {
+//   const response = await axios.post(
+//     "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
+//     {
+//       coordinates: [start.slice().reverse(), end.slice().reverse()],
+//     },
+//     {
+//       headers: {
+//         Authorization: import.meta.env.VITE_API_KEY_OPENROUTE,
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   )
+
+//   const route = response.data.features[0]
+//   const duration = route.properties.summary.duration / 60
+//   const routeCoords = route.geometry.coordinates.map(([lon, lat]) => [lat, lon])
+
+//   return {
+//     duration: duration.toFixed(1),
+//     routeCoords,
+//   }
+// }
+
 export const calculateRoute = async (start, end) => {
   const response = await axios.post(
-    "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
+    `${import.meta.env.VITE_API_URL}/directions`,
     {
       coordinates: [start.slice().reverse(), end.slice().reverse()],
-    },
-    {
-      headers: {
-        Authorization: import.meta.env.VITE_API_KEY_OPENROUTE,
-        "Content-Type": "application/json",
-      },
     }
   )
 
@@ -59,33 +77,3 @@ export const calculateRoute = async (start, end) => {
     routeCoords,
   }
 }
-
-// export const calculateRoute = async (start, end) => {
-//   const client = new Openrouteservice({
-//     apiKey: import.meta.env.VITE_API_KEY_OPENROUTE, // Assure-toi d'utiliser la bonne clé API
-//   })
-
-//   try {
-//     // Inverser les coordonnées (long, lat) pour l'API OpenRouteService
-//     const response = await client.directions({
-//       coordinates: [start.reverse(), end.reverse()], // Inverser start et end
-//       profile: "driving-car", // Tu peux changer selon le mode de transport
-//       format: "geojson",
-//     })
-
-//     const route = response.features[0]
-//     const duration = route.properties.summary.duration / 60 // Durée en minutes
-//     const routeCoords = route.geometry.coordinates.map(([lon, lat]) => [
-//       lat,
-//       lon,
-//     ])
-
-//     return {
-//       duration: duration.toFixed(1),
-//       routeCoords,
-//     }
-//   } catch (error) {
-//     console.error("Erreur lors du calcul de l'itinéraire :", error)
-//     return null
-//   }
-// }

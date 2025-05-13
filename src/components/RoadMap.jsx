@@ -50,37 +50,36 @@ const RoadMap = ({ rideDetail }) => {
       month: "long",
       year: "numeric",
     })
-
-    useEffect(() => {
-      const fetchRoute = async () => {
-        try {
-          const result = await calculateRoute(
-            rideDetail.departureAddress.coords,
-            rideDetail.destinationAddress.coords
-          )
-
-          setRouteCoords(result.routeCoords)
-        } catch (err) {
-          console.error(err)
-          console.log("Erreur lors du calcul de l’itinéraire")
-        }
-      }
-
-      fetchRoute()
-    }, [rideDetail])
-
-    useEffect(() => {
-      if (map && routeCoords.length > 0) {
-        const bounds =
-          routeCoords.length === 1
-            ? map.getBounds().extend(routeCoords[0]) // fallback pour un seul point
-            : routeCoords
-        map.fitBounds(bounds, { padding: [20, 20] })
-      }
-    }, [map, routeCoords])
-
     return formatted.charAt(0).toUpperCase() + formatted.slice(1)
   }
+
+  useEffect(() => {
+    const fetchRoute = async () => {
+      try {
+        const result = await calculateRoute(
+          rideDetail.departureAddress.coords,
+          rideDetail.destinationAddress.coords
+        )
+
+        setRouteCoords(result.routeCoords)
+      } catch (err) {
+        console.error(err)
+        console.log("Erreur lors du calcul de l’itinéraire")
+      }
+    }
+
+    fetchRoute()
+  }, [rideDetail])
+
+  useEffect(() => {
+    if (map && routeCoords.length > 0) {
+      const bounds =
+        routeCoords.length === 1
+          ? map.getBounds().extend(routeCoords[0]) // fallback pour un seul point
+          : routeCoords
+      map.fitBounds(bounds, { padding: [20, 20] })
+    }
+  }, [map, routeCoords])
 
   const formatTimeToFrench = (isoDate) => {
     if (!isoDate) return ""

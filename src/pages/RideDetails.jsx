@@ -9,7 +9,6 @@ import Header from "../components/Header"
 import Cover from "../components/Cover"
 import Footer from "../components/Footer"
 import RoadMap from "../components/RoadMap"
-import BookingModal from "../components/BookingModal"
 
 const RideDetails = () => {
   const [rideDetail, setRideDetail] = useState()
