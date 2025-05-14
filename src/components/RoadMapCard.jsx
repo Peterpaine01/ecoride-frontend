@@ -9,7 +9,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
 
 import { displayDuration } from "../utils/dateTimeHandler"
 
-const RoadMapCard = ({ ride, driverRide }) => {
+const RoadMapCard = ({ ride, booking, driverRide }) => {
   const {
     _id,
     availableSeats,
@@ -84,6 +84,28 @@ const RoadMapCard = ({ ride, driverRide }) => {
     }
   }
 
+  const handleDeleteRide = async () => {
+    try {
+      await axios.patch(`/update-ride/${_id}`, {
+        rideStatus: "canceled",
+      })
+      refreshUser()
+    } catch (error) {
+      console.error("Erreur lors de l'annulation du trajet :", error)
+    }
+  }
+
+  const handleCancelBooking = async () => {
+    try {
+      await axios.patch(`/update-booking/${booking._id}`, {
+        bookingStatus: "canceled",
+      })
+      refreshUser()
+    } catch (error) {
+      console.error("Erreur lors de l'annulation de la réservation :", error)
+    }
+  }
+
   if (authLoading) return null
 
   return (
@@ -124,10 +146,10 @@ const RoadMapCard = ({ ride, driverRide }) => {
         </div>
       </div>
       <div className="meta">
-        <div className="actions">
-          {rideStatus !== "completed" && (
+        <div className="actions flex-row justify-end align-center w-100">
+          {driverRide && rideStatus !== "completed" && (
             <>
-              <button className="icon-button">
+              <button onClick={handleDeleteRide} className="icon-button">
                 <DeleteIcon sx={{ color: "#023560", fontSize: 24 }} />
               </button>
               <button
@@ -139,10 +161,40 @@ const RoadMapCard = ({ ride, driverRide }) => {
             </>
           )}
 
+          {!driverRide &&
+            rideStatus !== "completed" &&
+            !isToday(departureDate) && (
+              <button
+                onClick={handleCancelBooking}
+                className="btn-light flex-row gap-10 justify-center color-dark"
+                style={{
+                  width: "calc(100% - 60px)",
+                  background: "#edf0f8",
+                  borderColor: "#edf0f8",
+                }}
+              >
+                <DeleteIcon sx={{ color: "#023560", fontSize: 24 }} /> Annuler
+              </button>
+            )}
+
+          {!driverRide &&
+            rideStatus !== "completed" &&
+            isToday(departureDate) && (
+              <p className="color-dark">
+                <small className="color-dark">
+                  Vous ne pouvez plus annuler
+                </small>
+              </p>
+            )}
+
           <button
-            onClick={() =>
-              navigate(`/trajet/${_id}`, { state: { driverRide: driverRide } })
-            }
+            onClick={() => {
+              console.log(booking._id)
+
+              navigate(`/recap-trajet/${_id}`, {
+                state: { driverRide: driverRide, bookingId: booking._id },
+              })
+            }}
             className="icon-button"
           >
             <ArrowForwardIosIcon sx={{ color: "#023560", fontSize: 24 }} />
@@ -169,6 +221,7 @@ const RoadMapCard = ({ ride, driverRide }) => {
             Trajet terminé
           </p>
         )}
+
         {rideStatus === "forthcoming" &&
           (driverRide && isToday(departureDate) ? (
             <button

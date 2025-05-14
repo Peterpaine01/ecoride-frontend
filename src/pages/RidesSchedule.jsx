@@ -44,13 +44,13 @@ const RidesSchedule = () => {
           ?.filter((booking) => {
             const rideDate = new Date(booking.ride.departureDate)
             return (
-              (booking.ride.rideStatus !== "reviewed" ||
-                booking.ride.rideStatus !== "canceled") &&
+              booking.bookingStatus !== "canceled" &&
+              booking.bookingStatus !== "reviewed" &&
               rideDate >= new Date()
             )
           })
           .sort((a, b) => new Date(a.departureDate) - new Date(b.departureDate))
-
+        console.log(upcomingPassengerRides)
         setRidesPassenger(upcomingPassengerRides)
       } catch (error) {
         console.error("Error fetching passenger rides :", error)

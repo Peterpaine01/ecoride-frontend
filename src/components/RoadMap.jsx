@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom"
 import { useState, useEffect, useContext, useRef } from "react"
+import axios from "../config/axiosConfig"
 
 import {
   Calendar,
@@ -37,9 +38,15 @@ import "leaflet/dist/leaflet.css"
 
 import MapMarker from "../components/MapMarker"
 
-const RoadMap = ({ rideDetail }) => {
+const RoadMap = () => {
+  const params = useParams()
+  const id = params.id
+
+  const [rideDetail, setRideDetail] = useState()
   const [routeCoords, setRouteCoords] = useState([])
+  const [destinationDate, setDestinationDate] = useState([])
   const [map, setMap] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const formatDateToFrench = (isoDate) => {
     if (!isoDate) return ""
@@ -54,11 +61,29 @@ const RoadMap = ({ rideDetail }) => {
   }
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/ride/${id}`)
+        setRideDetail(response.data)
+
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  useEffect(() => {
     const fetchRoute = async () => {
       try {
         const result = await calculateRoute(
           rideDetail.departureAddress.coords,
           rideDetail.destinationAddress.coords
+        )
+        setDestinationDate(
+          setArrivalDate(rideDetail.departureDate, rideDetail.duration)
         )
 
         setRouteCoords(result.routeCoords)
@@ -75,7 +100,7 @@ const RoadMap = ({ rideDetail }) => {
     if (map && routeCoords.length > 0) {
       const bounds =
         routeCoords.length === 1
-          ? map.getBounds().extend(routeCoords[0]) // fallback pour un seul point
+          ? map.getBounds().extend(routeCoords[0])
           : routeCoords
       map.fitBounds(bounds, { padding: [20, 20] })
     }
@@ -113,17 +138,14 @@ const RoadMap = ({ rideDetail }) => {
     return newDate
   }
 
-  const arrivalDate = setArrivalDate(
-    rideDetail.departureDate,
-    rideDetail.duration
-  )
-
-  return (
+  return isLoading ? (
+    <p>Loading</p>
+  ) : (
     <>
       <div className="container-full ride-details">
         <section className="flex-column justify-center align-center bg-secondary">
           <h1 className="flex-row justify-center align-center">
-            {formatDateToFrench(rideDetail.departureDate)}
+            {formatDateToFrench(rideDetail?.departureDate)}
           </h1>
 
           <div className="flex-row justify-center align-center gap-15">
@@ -146,14 +168,14 @@ const RoadMap = ({ rideDetail }) => {
               <div className="info-ride flex-row justify-left">
                 <div className="hours flex-column space-between">
                   <p>
-                    {rideDetail.departureDate
+                    {rideDetail?.departureDate
                       ? getTimeFromDate(rideDetail.departureDate)
                       : "--:--"}
                   </p>
                   <p>
-                    {rideDetail.departureDate &&
+                    {rideDetail?.departureDate &&
                     typeof rideDetail.duration === "number"
-                      ? getTimeFromDate(arrivalDate)
+                      ? getTimeFromDate(destinationDate)
                       : "--:--"}
                   </p>
                 </div>
@@ -165,10 +187,12 @@ const RoadMap = ({ rideDetail }) => {
                   </div>
                 </div>
                 <div className="cities flex-column space-between">
-                  <p>{rideDetail.departureAddress?.city || "Ville inconnue"}</p>
+                  <p>
+                    {rideDetail?.departureAddress?.city || "Ville inconnue"}
+                  </p>
                   <div className="timing">
                     <p>
-                      {typeof rideDetail.duration === "number"
+                      {typeof rideDetail?.duration === "number"
                         ? displayDuration(rideDetail.duration)
                         : "Durée inconnue"}
                     </p>
@@ -222,9 +246,8 @@ const RoadMap = ({ rideDetail }) => {
                     <p className="text-bold">
                       {rideDetail.driver?.username || "Conducteur inconnu"}
                     </p>
-                    {rideDetail.driver?.average_rating && (
-                      <StarRating rating={rideDetail.driver.average_rating} />
-                    )}
+
+                    <StarRating rating={rideDetail.driver.average_rating} />
                     {rideDetail.driver?.total_reviews.length > 0 ? (
                       <Link to={"/"} className="link mt-5">
                         {rideDetail.driver?.total_reviews} avis

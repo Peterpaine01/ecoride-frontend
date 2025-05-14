@@ -180,9 +180,7 @@ const RideCard = ({ ride }) => {
                 <p className="text-bold">
                   {driver?.username || "Conducteur inconnu"}
                 </p>
-                {driver?.average_rating && (
-                  <StarRating rating={driver.average_rating} />
-                )}
+                <StarRating rating={driver.average_rating} />
               </div>
             </div>
             <div className="seats flex-row space-between align-center gap-5">

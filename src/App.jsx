@@ -24,6 +24,7 @@ import RidesSchedule from "./pages/RidesSchedule"
 import RidesPast from "./pages/RidesPast"
 import RidesList from "./pages/RidesList"
 import RideDetails from "./pages/RideDetails"
+import RideBooking from "./pages/RideBooking"
 import RideEdit from "./pages/RideEdit"
 import BookingSummary from "./pages/BookingSummary"
 
@@ -103,7 +104,8 @@ const App = () => {
           }
         />
         <Route path="/recherche-trajet" element={<RidesList />} />
-        <Route path="/trajet/:id" element={<RideDetails />} />
+        <Route path="/trajet/:id" element={<RideBooking />} />
+        <Route path="/recap-trajet/:id" element={<RideDetails />} />
         <Route path="/reservation/:rideId" element={<BookingSummary />} />
 
         <Route path="/avis" element={<OpinionList />} />

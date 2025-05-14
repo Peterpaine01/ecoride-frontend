@@ -252,206 +252,247 @@ const RideDetails = () => {
       <Header />
       <Cover />
       <main>
-        <div className="container">
+        <div className="container-full">
           <section className="flex-column justify-center align-center">
-            <h1 className="mb-40">Modifier trajet</h1>
+            <h1 className="mb-20">Modifier le trajet</h1>
             <form
               onSubmit={handleSubmit}
-              className="form-full flex-column justify-center align-start gap-20"
+              className="flex-column justify-center align-center w-100 gap-20"
             >
-              <AddressForm
-                label=""
-                address={formData.departureAddress}
-                errors={geolocErrors}
-                onChange={(updatedAddress) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    departureAddress: {
-                      ...prev.departureAddress,
-                      ...updatedAddress,
-                    },
-                  }))
-                }
-                onSubmit={async () => {
-                  try {
-                    const coords = await getCoordinates(
-                      formData.departureAddress
-                    )
-                    const updatedAddress = {
-                      ...formData.departureAddress,
-                      coords,
+              <div className="flex-row two-column justify-center align-start gap-20 w-100 dotted">
+                <div className="block-left flex-column align-start">
+                  <h3 className="mt-20 text-white align-self-center">
+                    Adresse de départ
+                  </h3>
+                  <AddressForm
+                    label=""
+                    address={formData.departureAddress}
+                    errors={geolocErrors}
+                    onChange={(updatedAddress) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        departureAddress: {
+                          ...prev.departureAddress,
+                          ...updatedAddress,
+                        },
+                      }))
                     }
+                    onSubmit={async () => {
+                      try {
+                        const coords = await getCoordinates(
+                          formData.departureAddress
+                        )
+                        const updatedAddress = {
+                          ...formData.departureAddress,
+                          coords,
+                        }
 
-                    setFormData((prev) => ({
-                      ...prev,
-                      departureAddress: updatedAddress,
-                    }))
+                        setFormData((prev) => ({
+                          ...prev,
+                          departureAddress: updatedAddress,
+                        }))
 
-                    // Appel explicite avec les nouvelles coordonnées
-                    await handleCalculateDuration(
-                      formData.departureAddress.coords,
-                      coords
-                    )
+                        // Appel explicite avec les nouvelles coordonnées
+                        await handleCalculateDuration(
+                          formData.departureAddress.coords,
+                          coords
+                        )
 
-                    setGeolocErrors("")
-                  } catch {
-                    console.log("Impossible de localiser l’adresse d’arrivée.")
-                    setGeolocErrors(
-                      "Impossible de localiser l’adresse d’arrivée."
-                    )
-                  }
-                }}
-              />
-
-              <AddressForm
-                label=""
-                address={formData.destinationAddress}
-                errors={geolocErrors}
-                onChange={(updatedAddress) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    destinationAddress: {
-                      ...prev.destinationAddress,
-                      ...updatedAddress,
-                    },
-                  }))
-                }
-                onSubmit={async () => {
-                  try {
-                    const coords = await getCoordinates(
-                      formData.destinationAddress
-                    )
-                    const updatedAddress = {
-                      ...formData.destinationAddress,
-                      coords,
+                        setGeolocErrors("")
+                      } catch {
+                        console.log(
+                          "Impossible de localiser l’adresse d’arrivée."
+                        )
+                        setGeolocErrors(
+                          "Impossible de localiser l’adresse d’arrivée."
+                        )
+                      }
+                    }}
+                  />
+                  <hr className="mt-20 mb-20" />
+                  <h3 className="mt-20 text-white align-self-center">
+                    Adresse de destination
+                  </h3>
+                  <AddressForm
+                    label=""
+                    address={formData.destinationAddress}
+                    errors={geolocErrors}
+                    onChange={(updatedAddress) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        destinationAddress: {
+                          ...prev.destinationAddress,
+                          ...updatedAddress,
+                        },
+                      }))
                     }
+                    onSubmit={async () => {
+                      try {
+                        const coords = await getCoordinates(
+                          formData.destinationAddress
+                        )
+                        const updatedAddress = {
+                          ...formData.destinationAddress,
+                          coords,
+                        }
 
-                    setFormData((prev) => ({
-                      ...prev,
-                      destinationAddress: updatedAddress,
-                    }))
+                        setFormData((prev) => ({
+                          ...prev,
+                          destinationAddress: updatedAddress,
+                        }))
 
-                    // Appel explicite avec les nouvelles coordonnées
-                    await handleCalculateDuration(
-                      formData.destinationAddress.coords,
-                      coords
-                    )
+                        // Appel explicite avec les nouvelles coordonnées
+                        await handleCalculateDuration(
+                          formData.destinationAddress.coords,
+                          coords
+                        )
 
-                    setGeolocErrors("")
-                  } catch {
-                    console.log(
-                      "Impossible de localiser l’adresse de destination."
-                    )
-                    setGeolocErrors(
-                      "Impossible de localiser l’adresse de destination."
-                    )
-                  }
-                }}
-              />
-              <div>
-                <p>Durée du trajet :</p>
-                <p>{displayDuration(formData.duration)}</p>
+                        setGeolocErrors("")
+                      } catch {
+                        console.log(
+                          "Impossible de localiser l’adresse de destination."
+                        )
+                        setGeolocErrors(
+                          "Impossible de localiser l’adresse de destination."
+                        )
+                      }
+                    }}
+                  />
+                </div>
+                <div className="block-right">
+                  <div className="flex-row justify-center align-end gap-15 mb-20 mt-20">
+                    <h3 className="text-white">Durée du trajet :</h3>
+                    <p className="text-white p-0 text-emphase">
+                      {displayDuration(formData.duration)}
+                    </p>
+                  </div>
+                  <MapContainer
+                    center={
+                      formData.departureAddress.coords || [48.8566, 2.3522]
+                    }
+                    zoom={13}
+                    style={{ maxHeight: "500px", aspectRatio: 1 }}
+                    ref={setMap}
+                  >
+                    <TileLayer
+                      attribution="&copy; OpenStreetMap"
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+
+                    <MapMarker
+                      position={formData.departureAddress.coords}
+                      label="Départ"
+                    />
+                    <MapMarker
+                      position={formData.destinationAddress.coords}
+                      label="Arrivée"
+                    />
+                    {routeCoords.length > 0 && (
+                      <Polyline positions={routeCoords} color="blue" />
+                    )}
+                  </MapContainer>
+                </div>
               </div>
 
-              <MapContainer
-                center={formData.departureAddress.coords || [48.8566, 2.3522]}
-                zoom={13}
-                style={{ minHeight: "300px", aspectRatio: 1 }}
-                ref={setMap}
-              >
-                <TileLayer
-                  attribution="&copy; OpenStreetMap"
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
+              <div className="flex-row two-column justify-center align-center gap-20 w-100 dotted">
+                <div className="block-left flex-column align-start">
+                  <div className="flex-row gap-15 align-center mb-20">
+                    <label className="uppercase text-white">Date :</label>
+                    <DatePicker
+                      className="drop-btn"
+                      locale="fr"
+                      selected={formData.departureDate}
+                      onChange={handleDateChange}
+                      dateFormat="dd/MM/yyyy"
+                      minDate={new Date()}
+                    />
+                  </div>
+                  <div className="flex-row gap-15 justify-left align-center">
+                    <label className="uppercase text-white">Heure</label>
+                    <input
+                      type="time"
+                      name="departureTime"
+                      value={
+                        formData.departureDate
+                          ? formatTimeToFrench(formData.departureDate).slice(
+                              0,
+                              5
+                            )
+                          : ""
+                      }
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="block-right">
+                  <div className="flex-row gap-15 justify-left align-center mb-20">
+                    <label className="uppercase text-white">
+                      Crédits par passager
+                    </label>
+                    <input
+                      type="number"
+                      name="creditsPerPassenger"
+                      value={formData.creditsPerPassenger}
+                      onChange={handleChange}
+                      min="0"
+                    />
+                  </div>
 
-                <MapMarker
-                  position={formData.departureAddress.coords}
-                  label="Départ"
-                />
-                <MapMarker
-                  position={formData.destinationAddress.coords}
-                  label="Arrivée"
-                />
-                {routeCoords.length > 0 && (
-                  <Polyline positions={routeCoords} color="blue" />
-                )}
-              </MapContainer>
-
-              <label>Date :</label>
-              <DatePicker
-                className="drop-btn"
-                locale="fr"
-                selected={formData.departureDate}
-                onChange={handleDateChange}
-                dateFormat="dd/MM/yyyy"
-                minDate={new Date()}
-              />
-
-              <label>Heure :</label>
-              <input
-                type="time"
-                name="departureTime"
-                value={
-                  formData.departureDate
-                    ? formatTimeToFrench(formData.departureDate).slice(0, 5)
-                    : ""
-                }
-                onChange={handleChange}
-              />
-
-              <label>
-                Crédits par passager :
-                <input
-                  type="number"
-                  name="creditsPerPassenger"
-                  value={formData.creditsPerPassenger}
-                  onChange={handleChange}
-                  min="0"
-                />
-              </label>
-
-              <label>
-                Places disponibles :
-                <input
-                  type="number"
-                  name="availableSeats"
-                  value={formData.availableSeats}
-                  onChange={handleChange}
-                  min="0"
-                  required
-                />
-              </label>
-
-              <label>
-                Description :
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows="3"
-                />
-              </label>
-
-              <label>
-                Véhicule :
-                <select
-                  name="carId"
-                  value={formData.car.carId}
-                  onChange={handleChange}
-                  className="custom-select-minimal"
-                >
-                  {vehicles.map((vehicle) => (
-                    <option key={vehicle.id} value={vehicle.id}>
-                      {vehicle.model} - {vehicle.registration_number} -{" "}
-                      {vehicle.color}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <button type="submit" className="btn-solid">
-                Mettre à jour
-              </button>
+                  <div className="flex-row gap-15 justify-left align-center">
+                    <label className="uppercase text-white">
+                      Places disponibles
+                    </label>
+                    <input
+                      type="number"
+                      name="availableSeats"
+                      value={formData.availableSeats}
+                      onChange={handleChange}
+                      min="0"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex-row two-column justify-center align-start gap-20 w-100 dotted">
+                <div className="block-left flex-column align-start">
+                  <div className="flex-column gap-15 justify-left align-start mb-20 w-100">
+                    <label className="uppercase text-white">Description</label>
+                    <textarea
+                      name="description"
+                      value={formData.description}
+                      onChange={handleChange}
+                      rows="10"
+                      className="w-100"
+                    />
+                  </div>
+                </div>
+                <div className="block-right">
+                  <div className="flex-column gap-15 justify-left align-start mb-20">
+                    <label className="uppercase text-white">Véhicule</label>
+                    <select
+                      name="carId"
+                      value={formData.car.carId}
+                      onChange={handleChange}
+                      className="custom-select-minimal"
+                    >
+                      {vehicles.map((vehicle) => (
+                        <option key={vehicle.id} value={vehicle.id}>
+                          {vehicle.model} - {vehicle.registration_number} -{" "}
+                          {vehicle.color}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <section className="flex-row justify-center gap-15">
+                <button onClick={() => navigate(-1)} className="btn-light">
+                  Retour
+                </button>
+                <button type="submit" className="btn-solid">
+                  Mettre à jour
+                </button>
+              </section>
             </form>
           </section>
         </div>

@@ -8,7 +8,7 @@ const AddressForm = ({ address, onChange, label, onSubmit, errors }) => {
   }
 
   return (
-    <div className="address-form flex-column space-between gap-15 h-100">
+    <div className="address-form flex-column space-between gap-15 h-100 w-100">
       <h2>{label}</h2>
       {errors && (
         <p className="error-msg text-center" role="alert">
