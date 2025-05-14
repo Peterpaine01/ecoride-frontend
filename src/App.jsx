@@ -31,6 +31,8 @@ import BookingSummary from "./pages/BookingSummary"
 import OpinionList from "./pages/OpinionList"
 import CarDetails from "./pages/CarDetails"
 
+import ReviewForm from "./pages/ReviewForm"
+
 // Admin pages
 import AdminHome from "./pages/admin/AdminHome"
 import StaffList from "./pages/admin/StaffList"
@@ -108,6 +110,7 @@ const App = () => {
         <Route path="/recap-trajet/:id" element={<RideDetails />} />
         <Route path="/reservation/:rideId" element={<BookingSummary />} />
 
+        <Route path="/publier-avis/:bookingId" element={<ReviewForm />} />
         <Route path="/avis" element={<OpinionList />} />
         <Route path="/vehicule/:id" element={<CarDetails />} />
 

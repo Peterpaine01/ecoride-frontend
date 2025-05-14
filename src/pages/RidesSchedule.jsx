@@ -43,11 +43,7 @@ const RidesSchedule = () => {
         const upcomingPassengerRides = response.data.bookings
           ?.filter((booking) => {
             const rideDate = new Date(booking.ride.departureDate)
-            return (
-              booking.bookingStatus !== "canceled" &&
-              booking.bookingStatus !== "reviewed" &&
-              rideDate >= new Date()
-            )
+            return booking.bookingStatus !== "canceled"
           })
           .sort((a, b) => new Date(a.departureDate) - new Date(b.departureDate))
         console.log(upcomingPassengerRides)

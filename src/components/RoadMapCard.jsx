@@ -209,6 +209,20 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
             Clôturer
           </button>
         )}
+        {!driverRide && rideStatus === "ongoing" && (
+          <p
+            className="dotted"
+            style={{
+              padding: "10px",
+              borderColor: "#f7c134",
+              textAlign: "center",
+              color: "#023560",
+            }}
+          >
+            En cours
+          </p>
+        )}
+
         {driverRide && rideStatus === "completed" && (
           <p
             className="dotted"
@@ -243,13 +257,29 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
               À venir
             </p>
           ))}
-        {!driverRide && rideStatus === "completed" && (
+
+        {!driverRide && booking.bookingStatus === "completed" && (
           <button
-            onClick={() => handleStartStopRide("stop")}
+            onClick={() => navigate(`/publier-avis/${booking._id}`)}
             className="btn-solid w-100"
+            style={{ borderColor: "#d7ead6" }}
           >
             Noter
           </button>
+        )}
+
+        {!driverRide && booking.bookingStatus === "reviewed" && (
+          <p
+            className="dotted"
+            style={{
+              padding: "10px",
+              borderColor: "#d7ead6",
+              textAlign: "center",
+              color: "#fff",
+            }}
+          >
+            Avis envoyé
+          </p>
         )}
       </div>
     </article>

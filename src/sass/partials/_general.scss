@@ -40,6 +40,10 @@ body {
   display: none !important;
 }
 
+.d-none {
+  display: none;
+}
+
 .container {
   margin: 0 auto;
   max-width: 1200px;
@@ -289,6 +293,10 @@ section {
   color: #fff;
 }
 
+.color-warn {
+  color: #f75252;
+}
+
 .transition-all {
   transition: all 300ms ease;
 }
@@ -489,6 +497,12 @@ textarea {
   border: 2px solid variables.$color-primary;
   border-radius: 10px;
   color: variables.$color-dark;
+  letter-spacing: -0.5px;
+  &::placeholder {
+    color: variables.$color-dark-grey;
+    font-style: italic;
+    letter-spacing: -0.5px;
+  }
 }
 
 form.framed {
@@ -606,6 +620,10 @@ form.framed {
   background-color: variables.$color-dark-grey;
   transition: background-color 0.4s;
   border-radius: 28px;
+}
+
+.slider-red {
+  background-color: #f75252;
 }
 
 /* cercle */
