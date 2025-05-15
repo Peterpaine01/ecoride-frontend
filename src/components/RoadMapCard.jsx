@@ -1,6 +1,6 @@
 import axios from "../config/axiosConfig"
 import { AuthContext } from "../context/AuthContext"
-import { useEffect, useState, useContext } from "react"
+import { useContext } from "react"
 import { useNavigate } from "react-router-dom"
 
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -12,86 +12,65 @@ import { displayDuration } from "../utils/dateTimeHandler"
 const RoadMapCard = ({ ride, booking, driverRide }) => {
   const {
     _id,
-    availableSeats,
-    car,
-    creditsPerPassenger,
     departureAddress,
     departureDate,
     destinationAddress,
     duration,
-    driver,
     rideStatus,
   } = ride
 
-  const { user, authLoading, refreshUser } = useContext(AuthContext)
-
+  const { authLoading, refreshUser } = useContext(AuthContext)
   const navigate = useNavigate()
 
+  if (authLoading) return null
+
+  // ==== UTILS ====
   const getTimeFromDate = (date) => {
-    const formattedDate = new Date(Date.parse(date))
-
-    const hours = String(formattedDate.getHours()).padStart(2, "0")
-    const minutes = String(formattedDate.getMinutes()).padStart(2, "0")
-
-    return `${hours}:${minutes}`
+    const d = new Date(date)
+    return `${String(d.getHours()).padStart(2, "0")}:${String(
+      d.getMinutes()
+    ).padStart(2, "0")}`
   }
 
-  const setArrivalDate = (date, duration) => {
-    const formattedDate = new Date(Date.parse(date))
-
-    if (typeof duration !== "number" || isNaN(duration)) {
-      throw new Error("Duration must be a number.")
-    }
-
-    const newDate = new Date(formattedDate.getTime() + duration * 60000)
-    return newDate
+  const getArrivalDate = () => {
+    const d = new Date(departureDate)
+    return new Date(d.getTime() + (duration || 0) * 60000)
   }
-
-  const arrivalDate = setArrivalDate(departureDate, duration)
 
   const isToday = (date) => {
     const today = new Date()
-    const targetDate = new Date(date)
-
-    return (
-      today.getFullYear() === targetDate.getFullYear() &&
-      today.getMonth() === targetDate.getMonth() &&
-      today.getDate() === targetDate.getDate()
-    )
+    const target = new Date(date)
+    return today.toDateString() === target.toDateString()
   }
 
+  // ==== STATUTS SIMPLIFIÉS ====
+  const isRideToday = isToday(departureDate)
+  const isDriver = driverRide
+  const isRideCompleted = rideStatus === "completed"
+  const isRideOngoing = rideStatus === "ongoing"
+  const isRideForthcoming = rideStatus === "forthcoming"
+
+  const isBookingForthcoming = booking?.bookingStatus === "forthcoming"
+  const isBookingCompleted = booking?.bookingStatus === "completed"
+  const isBookingReviewed = booking?.bookingStatus === "reviewed"
+
+  // ==== HANDLERS ====
   const handleStartStopRide = async (action) => {
+    const newStatus = action === "start" ? "ongoing" : "completed"
     try {
-      if (action === "start") {
-        const response = await axios.patch(`/update-ride/${_id}`, {
-          rideStatus: "ongoing",
-        })
-
-        console.log("Ride started:", response.data)
-      }
-
-      if (action === "stop") {
-        const response = await axios.patch(`/update-ride/${_id}`, {
-          rideStatus: "completed",
-        })
-
-        console.log("Ride completed:", response.data)
-      }
-
+      await axios.patch(`/update-ride/${_id}`, { rideStatus: newStatus })
       refreshUser()
     } catch (error) {
-      console.error("Error starting ride:", error)
+      console.error(`Erreur ${action} du trajet :`, error)
     }
   }
 
   const handleDeleteRide = async () => {
     try {
-      await axios.patch(`/update-ride/${_id}`, {
-        rideStatus: "canceled",
-      })
+      await axios.patch(`/update-ride/${_id}`, { rideStatus: "canceled" })
       refreshUser()
     } catch (error) {
-      console.error("Erreur lors de l'annulation du trajet :", error)
+      console.error("Erreur suppression trajet :", error)
     }
   }
 
@@ -102,27 +81,34 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
       })
       refreshUser()
     } catch (error) {
-      console.error("Erreur lors de l'annulation de la réservation :", error)
+      console.error("Erreur annulation réservation :", error)
     }
   }
 
-  if (authLoading) return null
+  const handleNavigateToRecap = () => {
+    navigate(`/recap-trajet/${_id}`, {
+      state: {
+        driverRide: driverRide,
+        bookingId: booking?._id || null,
+      },
+    })
+  }
+
+  const departureTime = getTimeFromDate(departureDate)
+  const arrivalTime = getTimeFromDate(getArrivalDate())
 
   return (
     <article
       className={`roadmap-card ${
-        rideStatus === "completed" ? "card-disabled" : "bg-white b-shadow"
-      } br-10  flex-row space-between`}
+        isRideCompleted ? "card-disabled" : "bg-white b-shadow"
+      } br-10 flex-row space-between`}
     >
+      {/* === Infos de trajet === */}
       <div className="ride-card flex-column">
         <div className="info-ride flex-row justify-left">
           <div className="hours flex-column space-between">
-            <p>{departureDate ? getTimeFromDate(departureDate) : "--:--"}</p>
-            <p>
-              {departureDate && typeof duration === "number"
-                ? getTimeFromDate(arrivalDate)
-                : "--:--"}
-            </p>
+            <p>{departureTime}</p>
+            <p>{arrivalTime}</p>
           </div>
           <div className="timing flex-row">
             <div className="ride-line">
@@ -140,14 +126,15 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
                   : "Durée inconnue"}
               </p>
             </div>
-
             <p>{destinationAddress?.city || "Ville inconnue"}</p>
           </div>
         </div>
       </div>
+
+      {/* === Actions & Statuts === */}
       <div className="meta">
         <div className="actions flex-row justify-end align-center w-100">
-          {driverRide && rideStatus !== "completed" && (
+          {isDriver && !isRideCompleted && (
             <>
               <button onClick={handleDeleteRide} className="icon-button">
                 <DeleteIcon sx={{ color: "#023560", fontSize: 24 }} />
@@ -161,9 +148,10 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
             </>
           )}
 
-          {!driverRide &&
-            rideStatus !== "completed" &&
-            !isToday(departureDate) && (
+          {!isDriver &&
+            !isRideCompleted &&
+            !isRideToday &&
+            isBookingForthcoming && (
               <button
                 onClick={handleCancelBooking}
                 className="btn-light flex-row gap-10 justify-center color-dark"
@@ -173,35 +161,25 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
                   borderColor: "#edf0f8",
                 }}
               >
-                <DeleteIcon sx={{ color: "#023560", fontSize: 24 }} /> Annuler
+                <DeleteIcon sx={{ color: "#023560", fontSize: 24 }} />
+                Annuler
               </button>
             )}
 
-          {!driverRide &&
-            rideStatus !== "completed" &&
-            isToday(departureDate) && (
-              <p className="color-dark">
-                <small className="color-dark">
-                  Vous ne pouvez plus annuler
-                </small>
-              </p>
-            )}
+          {!isDriver && !isRideCompleted && isRideToday && (
+            <p className="color-dark">
+              <small>Vous ne pouvez plus annuler</small>
+            </p>
+          )}
 
-          <button
-            onClick={() => {
-              console.log(booking._id)
-
-              navigate(`/recap-trajet/${_id}`, {
-                state: { driverRide: driverRide, bookingId: booking._id },
-              })
-            }}
-            className="icon-button"
-          >
+          {/* Navigation */}
+          <button onClick={handleNavigateToRecap} className="icon-button">
             <ArrowForwardIosIcon sx={{ color: "#023560", fontSize: 24 }} />
           </button>
         </div>
 
-        {driverRide && isToday(departureDate) && rideStatus === "ongoing" && (
+        {/* === Statuts === */}
+        {isDriver && isRideToday && isRideOngoing && (
           <button
             onClick={() => handleStartStopRide("stop")}
             className="btn-access w-100"
@@ -209,7 +187,8 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
             Clôturer
           </button>
         )}
-        {!driverRide && rideStatus === "ongoing" && (
+
+        {isRideOngoing && (
           <p
             className="dotted"
             style={{
@@ -223,7 +202,7 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
           </p>
         )}
 
-        {driverRide && rideStatus === "completed" && (
+        {isRideCompleted && (
           <p
             className="dotted"
             style={{
@@ -236,29 +215,44 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
           </p>
         )}
 
-        {rideStatus === "forthcoming" &&
-          (driverRide && isToday(departureDate) ? (
-            <button
-              onClick={() => handleStartStopRide("start")}
-              className="btn-solid w-100"
-            >
-              Démarrer
-            </button>
-          ) : (
-            <p
-              className="dotted"
-              style={{
-                padding: "10px",
-                borderColor: "#42ba92",
-                textAlign: "center",
-                color: "#023560",
-              }}
-            >
-              À venir
-            </p>
-          ))}
+        {isRideForthcoming && isDriver && isRideToday && (
+          <button
+            onClick={() => handleStartStopRide("start")}
+            className="btn-solid w-100"
+          >
+            Démarrer
+          </button>
+        )}
 
-        {!driverRide && booking.bookingStatus === "completed" && (
+        {isRideForthcoming && isDriver && !isRideToday && (
+          <p
+            className="dotted"
+            style={{
+              padding: "10px",
+              borderColor: "#42ba92",
+              textAlign: "center",
+              color: "#023560",
+            }}
+          >
+            À venir
+          </p>
+        )}
+
+        {isRideForthcoming && !isDriver && (
+          <p
+            className="dotted"
+            style={{
+              padding: "10px",
+              borderColor: "#42ba92",
+              textAlign: "center",
+              color: "#023560",
+            }}
+          >
+            À venir
+          </p>
+        )}
+
+        {!isDriver && isBookingCompleted && (
           <button
             onClick={() => navigate(`/publier-avis/${booking._id}`)}
             className="btn-solid w-100"
@@ -268,7 +262,7 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
           </button>
         )}
 
-        {!driverRide && booking.bookingStatus === "reviewed" && (
+        {!isDriver && isBookingReviewed && (
           <p
             className="dotted"
             style={{

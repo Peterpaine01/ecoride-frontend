@@ -37,19 +37,23 @@ const RidesSchedule = () => {
 
     const fetchRidesPassenger = async () => {
       if (user) {
-      }
-      try {
-        const response = await axios.get(`/passenger-bookings`)
-        const upcomingPassengerRides = response.data.bookings
-          ?.filter((booking) => {
-            const rideDate = new Date(booking.ride.departureDate)
-            return booking.bookingStatus !== "canceled"
-          })
-          .sort((a, b) => new Date(a.departureDate) - new Date(b.departureDate))
-        console.log(upcomingPassengerRides)
-        setRidesPassenger(upcomingPassengerRides)
-      } catch (error) {
-        console.error("Error fetching passenger rides :", error)
+        try {
+          const response = await axios.get(`/passenger-bookings`)
+          const upcomingPassengerRides = response.data.bookings
+            ?.filter((booking) => {
+              const rideDate = new Date(booking?.ride.departureDate)
+              return (
+                booking.bookingStatus !== "canceled" && rideDate >= new Date()
+              )
+            })
+            .sort(
+              (a, b) => new Date(a.departureDate) - new Date(b.departureDate)
+            )
+          // console.log(upcomingPassengerRides)
+          setRidesPassenger(upcomingPassengerRides)
+        } catch (error) {
+          console.error("Error fetching passenger rides :", error)
+        }
       }
     }
 
@@ -59,7 +63,8 @@ const RidesSchedule = () => {
 
   if (authLoading) return null
 
-  let previousDate = null
+  let previousDateRide = null
+  let previousDateBooking = null
 
   return (
     <>
@@ -88,8 +93,8 @@ const RidesSchedule = () => {
                   { locale: fr }
                 )
 
-                const showDate = currentDate !== previousDate
-                previousDate = currentDate
+                const showDate = currentDate !== previousDateRide
+                previousDateRide = currentDate
 
                 return (
                   <div key={ride._id}>
@@ -107,14 +112,16 @@ const RidesSchedule = () => {
             <section>
               <h2>Passager</h2>
               {ridesPassenger?.map((booking, index) => {
+                // console.log("booking", booking)
+
                 const currentDate = format(
                   new Date(booking.ride?.departureDate),
                   "EEE dd MMMM",
                   { locale: fr }
                 )
 
-                const showDate = currentDate !== previousDate
-                previousDate = currentDate
+                const showDate = currentDate !== previousDateBooking
+                previousDateBooking = currentDate
 
                 return (
                   <div key={booking.ride?._id}>

@@ -58,7 +58,7 @@ const PublishRide = () => {
     departureAddress: { street: "", city: "", zip: "", coords: null },
     destinationAddress: { street: "", city: "", zip: "", coords: null },
     duration: "",
-    availableSeats: "",
+    remainingSeats: "",
     creditsPerPassenger: "",
     description: "",
     vehicleId: "",
@@ -330,10 +330,10 @@ const PublishRide = () => {
     }
 
     if (step === 5) {
-      if (!formData.availableSeats) {
+      if (!formData.remainingSeats) {
         setFormData((prev) => ({
           ...prev,
-          availableSeats: 1,
+          remainingSeats: 1,
         }))
       }
     }
@@ -639,8 +639,8 @@ const PublishRide = () => {
                 <div className="flex-column align-center w-100">
                   <h2>Combien de passagers ?</h2>
                   <Counter
-                    name={"availableSeats"}
-                    value={formData.availableSeats || 1}
+                    name={"remainingSeats"}
+                    value={formData.remainingSeats || 1}
                     onChange={handleChange}
                     minValue={1}
                     maxValue={8}

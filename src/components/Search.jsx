@@ -25,7 +25,7 @@ const SearchBlock = () => {
     departureCity: searchParams.get("departureCity"),
     destinationCity: searchParams.get("destinationCity"),
     departureDate: searchParams.get("departureDate"),
-    availableSeats: parseInt(searchParams.get("availableSeats"), 10) || 1,
+    remainingSeats: parseInt(searchParams.get("remainingSeats"), 10) || 1,
   }
 
   const [formData, setFormData] = useState({
@@ -34,7 +34,7 @@ const SearchBlock = () => {
     departureDate: searchQuery.departureDate
       ? new Date(searchQuery.departureDate)
       : new Date(),
-    availableSeats: searchQuery.availableSeats || 1,
+    remainingSeats: searchQuery.remainingSeats || 1,
   })
 
   // HANDLE FORM DATA
@@ -59,15 +59,19 @@ const SearchBlock = () => {
 
     const currentParams = new URLSearchParams(location.search)
 
-    currentParams.set("departureCity", formData.departureCity)
-    currentParams.set("destinationCity", formData.destinationCity)
+    if (formData.departureCity?.trim()) {
+      currentParams.set("departureCity", formData.departureCity)
+    }
+    if (formData.destinationCity?.trim()) {
+      currentParams.set("destinationCity", formData.destinationCity)
+    }
 
     const departureDate = new Date(formData.departureDate)
     if (!isNaN(departureDate)) {
       const formattedDate = formatDateToLocal(departureDate)
       currentParams.set("departureDate", formattedDate)
     }
-    currentParams.set("availableSeats", formData.availableSeats)
+    currentParams.set("remainingSeats", formData.remainingSeats)
 
     const encodedParams = new URLSearchParams()
     for (const [key, value] of currentParams.entries()) {
@@ -112,7 +116,7 @@ const SearchBlock = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [formData.availableSeats, isPassengersOpen, isModalOpen])
+  }, [formData.remainingSeats, isPassengersOpen, isModalOpen])
 
   // Fonction pour basculer le menu
   const toggleDropdown = () => {
@@ -253,7 +257,7 @@ const SearchBlock = () => {
               <button
                 className="drop-btn"
                 type="button"
-                name="availableSeats"
+                name="remainingSeats"
                 onClick={(e) => {
                   if (window.innerWidth < 890) {
                     toggleModal(e)
@@ -262,16 +266,16 @@ const SearchBlock = () => {
                   }
                 }}
               >
-                <Users /> {formData.availableSeats} passager
-                {formData.availableSeats > 1 && "s"}
+                <Users /> {formData.remainingSeats} passager
+                {formData.remainingSeats > 1 && "s"}
               </button>
               {isPassengersOpen && (
                 <div className="dropdown-menu counter-block flex-row align-center desktop">
                   <p>Nombre de passagers</p>
 
                   <Counter
-                    name={"availableSeats"}
-                    value={formData.availableSeats || 1}
+                    name={"remainingSeats"}
+                    value={formData.remainingSeats || 1}
                     onChange={handleChange}
                     minValue={1}
                     maxValue={8}
@@ -366,7 +370,7 @@ const SearchBlock = () => {
           </>
         )}
         {/* Modal counter passengers */}
-        {modalContent === "availableSeats" && (
+        {modalContent === "remainingSeats" && (
           <>
             <div className="icon-container">
               <Users size={34} />
@@ -375,8 +379,8 @@ const SearchBlock = () => {
             <h3>Nombre de passagers ?</h3>
             <div className=" counter-block flex-row align-center">
               <Counter
-                name={"availableSeats"}
-                value={formData.availableSeats || 1}
+                name={"remainingSeats"}
+                value={formData.remainingSeats || 1}
                 onChange={handleChange}
                 minValue={1}
                 maxValue={8}

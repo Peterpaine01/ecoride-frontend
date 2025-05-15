@@ -20,7 +20,7 @@ import StarRating from "../components/StarRating"
 const Itinerary = ({ ride }) => {
   const {
     _id,
-    availableSeats,
+    remainingSeats,
     car,
     creditsPerPassenger,
     departureAddress,
@@ -29,8 +29,6 @@ const Itinerary = ({ ride }) => {
     duration,
     driver,
   } = ride
-
-  console.log(_id)
 
   const [isMobile, setIsMobile] = useState(false)
 
@@ -123,10 +121,10 @@ const Itinerary = ({ ride }) => {
               </div>
             </div>
             <div className="seats flex-row space-between align-center gap-5">
-              <p className="text-big">{availableSeats ?? "--"}</p>
+              <p className="text-big">{remainingSeats ?? "--"}</p>
               <p className="text-tiny">
-                place{availableSeats > 1 && "s"} <br />{" "}
-                <span>disponible{availableSeats > 1 && "s"}</span>
+                place{remainingSeats > 1 && "s"} <br />{" "}
+                <span>disponible{remainingSeats > 1 && "s"}</span>
               </p>
             </div>
             <div className="flex-column align-center">
@@ -197,11 +195,17 @@ const Itinerary = ({ ride }) => {
               </div>
             </div>
             <div className="seats flex-row space-between align-center gap-5">
-              <p className="text-big">{availableSeats ?? "--"}</p>
-              <p className="text-tiny">
-                place{availableSeats > 1 && "s"} <br />{" "}
-                <span>disponible{availableSeats > 1 && "s"}</span>
-              </p>
+              {remainingSeats > 0 ? (
+                <>
+                  <p className="text-big">{remainingSeats ?? "--"}</p>
+                  <p className="text-tiny">
+                    place{remainingSeats > 1 && "s"} <br />{" "}
+                    <span>disponible{remainingSeats > 1 && "s"}</span>
+                  </p>
+                </>
+              ) : (
+                "Complet"
+              )}
             </div>
             <div className="flex-column align-center">
               {car?.energy_id === 3 ||

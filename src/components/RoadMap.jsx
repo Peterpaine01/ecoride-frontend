@@ -95,6 +95,7 @@ const RoadMap = () => {
 
     fetchRoute()
   }, [rideDetail])
+  console.log("rideDetail", rideDetail)
 
   useEffect(() => {
     if (map && routeCoords.length > 0) {
@@ -149,12 +150,12 @@ const RoadMap = () => {
           </h1>
 
           <div className="flex-row justify-center align-center gap-15">
-            {rideDetail && rideDetail.availableSeats > 0 ? (
+            {rideDetail && rideDetail.remainingSeats > 0 ? (
               <p className="flex-row justify-start align-center gap-5 color-dark">
                 <GroupIcon sx={{ color: "#023560", fontSize: 28 }} />{" "}
-                {rideDetail.availableSeats} place
-                {rideDetail.availableSeats > 1 && "s"} disponible
-                {rideDetail.availableSeats > 1 && "s"}
+                {rideDetail.remainingSeats} place
+                {rideDetail.remainingSeats > 1 && "s"} disponible
+                {rideDetail.remainingSeats > 1 && "s"}
               </p>
             ) : (
               <p className="flex-row justify-start align-center gap-5 color-dark">

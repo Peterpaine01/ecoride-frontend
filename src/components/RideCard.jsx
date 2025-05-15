@@ -13,7 +13,7 @@ const RideCard = ({ ride }) => {
 
   const {
     _id,
-    availableSeats,
+    remainingSeats,
     car,
     creditsPerPassenger,
     departureAddress,
@@ -112,10 +112,10 @@ const RideCard = ({ ride }) => {
               </div>
             </div>
             <div className="seats flex-row space-between align-center gap-5">
-              <p className="text-big">{availableSeats ?? "--"}</p>
+              <p className="text-big">{remainingSeats ?? "--"}</p>
               <p className="text-tiny">
-                place{availableSeats > 1 && "s"} <br />{" "}
-                <span>disponible{availableSeats > 1 && "s"}</span>
+                place{remainingSeats > 1 && "s"} <br />{" "}
+                <span>disponible{remainingSeats > 1 && "s"}</span>
               </p>
             </div>
             <div className="flex-column align-center">
@@ -184,10 +184,10 @@ const RideCard = ({ ride }) => {
               </div>
             </div>
             <div className="seats flex-row space-between align-center gap-5">
-              <p className="text-big">{availableSeats ?? "--"}</p>
+              <p className="text-big">{remainingSeats ?? "--"}</p>
               <p className="text-tiny">
-                place{availableSeats > 1 && "s"} <br />{" "}
-                <span>disponible{availableSeats > 1 && "s"}</span>
+                place{remainingSeats > 1 && "s"} <br />{" "}
+                <span>disponible{remainingSeats > 1 && "s"}</span>
               </p>
             </div>
             <div className="flex-column align-center">

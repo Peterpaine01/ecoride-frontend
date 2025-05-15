@@ -9,12 +9,9 @@ import axios from "../config/axiosConfig"
 
 // Components
 import Header from "../components/Header"
-import Cover from "../components/Cover"
 import Hero from "../components/Hero"
-import Search from "../components/Search"
 import Footer from "../components/Footer"
 import RideCard from "../components/RideCard"
-import { Key } from "react-feather"
 import Filters from "../components/Filters"
 import FiltersModal from "../components/FiltersModal"
 
@@ -33,7 +30,7 @@ const RidesList = () => {
       departureCity: searchParams.get("departureCity") || "",
       destinationCity: searchParams.get("destinationCity") || "",
       departureDate: searchParams.get("departureDate") || new Date(),
-      availableSeats: parseInt(searchParams.get("availableSeats"), 10) || 1,
+      remainingSeats: parseInt(searchParams.get("remainingSeats"), 10) || 1,
       maxPrice: parseFloat(searchParams.get("maxPrice")) || undefined,
       minRating: parseFloat(searchParams.get("minRating")) || undefined,
       isElectric: searchParams.get("isElectric") === "true" || undefined,
@@ -47,34 +44,36 @@ const RidesList = () => {
     const fetchData = async () => {
       const today = new Date()
       const formattedDate = today.toISOString().split("T")[0]
-      const hasSearchCriteria =
-        searchQuery.departureCity && searchQuery.destinationCity
 
       const cleanDate = (date) => date?.split?.("T")?.[0] ?? date
-      const nonFuzzyParams = hasSearchCriteria
-        ? {
-            ...searchQuery,
-            departureDate: cleanDate(searchQuery.departureDate),
-            fuzzy: false,
-          }
-        : { departureDate: formattedDate, fuzzy: false }
 
-      const fuzzyParams = hasSearchCriteria
-        ? {
-            ...searchQuery,
-            departureDate: cleanDate(searchQuery.departureDate),
-            fuzzy: true,
-          }
-        : { departureDate: formattedDate, fuzzy: true }
+      const departureDate =
+        cleanDate(searchQuery.departureDate) || formattedDate
+
+      const nonFuzzyParams = {
+        ...searchQuery,
+        departureDate,
+        fuzzy: false,
+      }
+
+      const fuzzyParams = {
+        ...searchQuery,
+        departureDate,
+        fuzzy: true,
+      }
+
       try {
         const response = await axios.get("/search-rides", {
           params: nonFuzzyParams,
         })
 
         setRidesList(response.data.rides || [])
+
         const fuzzyResponse = await axios.get("/search-rides", {
           params: fuzzyParams,
         })
+        console.log("fuzzyResponse.data.rides", fuzzyResponse.data.rides)
+
         setFuzzyRides(fuzzyResponse.data.rides || [])
         setShowFuzzy(false)
       } catch (error) {
@@ -138,6 +137,26 @@ const RidesList = () => {
     )
   })
 
+  const hasExactDateRide = () => {
+    if (!ridesList || ridesList.length === 0) return false
+
+    const searchDate = new Date(searchQuery.departureDate)
+      .toISOString()
+      .split("T")[0]
+
+    return ridesList.some((ride) => {
+      const rideDate = new Date(ride.departureDate).toISOString().split("T")[0]
+      return rideDate === searchDate
+    })
+  }
+
+  const getFirstFuzzyDate = () => {
+    if (fuzzyRides.length === 0) return null
+
+    const firstRide = fuzzyRides[0]
+    return new Date(firstRide.departureDate).toISOString().split("T")[0]
+  }
+
   return (
     <>
       <Header />
@@ -154,11 +173,13 @@ const RidesList = () => {
             {ridesList && (
               <div className="results-search">
                 <div className="flex-row space-between align-center">
-                  {searchQuery.departureDate ? (
-                    <h1>{getDate(searchQuery.departureDate)}</h1>
-                  ) : (
-                    <h1>Aujourd'hui</h1>
-                  )}
+                  <h1>
+                    {showFuzzy && !hasExactDateRide()
+                      ? getFirstFuzzyDate()
+                        ? getDate(getFirstFuzzyDate())
+                        : "Prochains jours"
+                      : getDate(searchQuery.departureDate)}
+                  </h1>
 
                   {isMobile && <FiltersModal searchQuery={searchQuery} />}
                 </div>

@@ -78,12 +78,11 @@ const BookingSummary = () => {
   const checkBookingEligibility = (seats) => {
     if (!user) return
 
-    const availableSeats = rideDetail?.availableSeats || 0
     const userCredits = user?.credits || 0
     const rideCredits = rideDetail?.creditsPerPassenger || 0
 
-    console.log("availableSeats", availableSeats)
-    console.log("userCredits", userCredits)
+    // console.log("remainingSeats", rideDetail.remainingSeats)
+    // console.log("userCredits", userCredits)
 
     if (userCredits < rideCredits * seats) {
       setErrorMessage(
@@ -92,37 +91,13 @@ const BookingSummary = () => {
       return false
     }
 
-    if (availableSeats < 1) {
+    if (rideDetail.remainingSeats < 1) {
       setErrorMessage("Il n'y a plus de place disponible pour ce trajet.")
       return false
     }
 
     setErrorMessage("")
     return true
-  }
-
-  const handleBooking = async () => {
-    if (!rideDetail || !user) return
-
-    const availableSeats = rideDetail.availableSeats
-    const rideCredits = rideDetail.creditsPerPassenger
-    const totalCost = rideCredits * seats
-
-    try {
-      setIsLoading(true)
-      const res = await axios.post(`/create-booking/${rideId}`, {
-        bookingData: { seats },
-      })
-
-      if (res.status === 201 || res.status === 200) {
-        setSuccessMessage("Réservation confirmée !")
-        setTimeout(() => navigate("/vos-trajets"), 1500)
-      }
-    } catch (error) {
-      setErrorMessage("Erreur lors de la réservation.")
-    } finally {
-      setIsLoading(false)
-    }
   }
 
   const formatDate = (isoDate) => {
@@ -176,9 +151,11 @@ const BookingSummary = () => {
                   </p>
                   <p className="mt-10">
                     {rideDetail.creditsPerPassenger} crédits / place –{" "}
-                    {rideDetail.availableSeats} place
-                    {rideDetail.availableSeats > 1 && "s"} disponible
-                    {rideDetail.availableSeats > 1 && "s"}
+                    {rideDetail.remainingSeats > 0
+                      ? `${rideDetail.remainingSeats} place${
+                          rideDetail.remainingSeats > 1 && "s"
+                        } disponible${rideDetail.remainingSeats > 1 && "s"}`
+                      : "Complet"}
                   </p>
                 </div>
                 <div></div>
@@ -213,7 +190,7 @@ const BookingSummary = () => {
                       name="seats"
                       value={seats}
                       minValue={1}
-                      maxValue={rideDetail.availableSeats}
+                      maxValue={rideDetail.remainingSeats}
                       onChange={(e) => setSeats(Number(e.target.value))}
                     />
                   </div>
