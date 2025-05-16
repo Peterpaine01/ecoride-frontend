@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Cookies from "js-cookie"
 import React, { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
@@ -31,6 +31,8 @@ const Profil = () => {
   const [userReviewsList, setUserReviewsList] = useState([])
   const [activeTab, setActiveTab] = useState("infos")
   const [isMobile, setIsMobile] = useState(false)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,7 +98,7 @@ const Profil = () => {
                     </div>
                   </div>
                   <Link
-                    to="/"
+                    to={`/modifier-profil/${user.account_id}`}
                     className="edit-profile btn-link flex-row align-center"
                   >
                     <span>Modifier le profil</span> <KeyboardArrowRightIcon />
@@ -260,8 +262,13 @@ const Profil = () => {
                   </div>
                   {isMobile && (
                     <div className="actions-profile flex-row">
-                      <button className="btn-solid w-100">
-                        Modier le profile
+                      <button
+                        onClick={() =>
+                          navigate(`/modifier-profil/${user.account_id}`)
+                        }
+                        className="btn-solid w-100"
+                      >
+                        Modifier le profil
                       </button>
                     </div>
                   )}
@@ -271,6 +278,7 @@ const Profil = () => {
                       user.driverInfos.cars.map((car) => {
                         return (
                           <Link
+                            to={`/vehicule/${car.id}`}
                             key={car.id}
                             className="vehicle flex-row mb-10 align-center space-between gap-15"
                           >
@@ -297,7 +305,10 @@ const Profil = () => {
                         )
                       })}
 
-                    <button className="btn-link mt-20 flex-row align-center gap-5">
+                    <button
+                      onClick={() => navigate(`/ajouter-vehicule`)}
+                      className="btn-link mt-20 flex-row align-center gap-5"
+                    >
                       <AddCircleOutlineIcon /> Ajouter un véhicule
                     </button>
                   </div>

@@ -25,11 +25,10 @@ const Header = () => {
   const { user, login, logout, isAuthenticated } = useContext(AuthContext)
   const [isProfilOpen, setIsProfilOpen] = useState(false)
 
-  // For testing
-  const [isToken, setIsToken] = useState(true)
-
   // REF
   const profilRef = useRef(null)
+
+  console.log("user >", user)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -95,14 +94,14 @@ const Header = () => {
               <ul className="nav-list">
                 {user &&
                   user.account_type === "webmaster" &&
-                  user.role_label === "administrator" && (
+                  user.role === "administrator" && (
                     <li className="nav-item">
                       <Link to={`/espace-admin`}>Espace admin</Link>
                     </li>
                   )}
                 {user &&
                   user.account_type === "webmaster" &&
-                  user.role_label === "moderator" && (
+                  user.role === "moderator" && (
                     <li className="nav-item">
                       <Link to={`/espace-admin`}>Espace webmaster</Link>
                     </li>

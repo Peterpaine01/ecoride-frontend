@@ -27,7 +27,7 @@ import "leaflet/dist/leaflet.css"
 
 import MapMarker from "../components/MapMarker"
 
-const RideDetails = () => {
+const RideEdit = () => {
   const { id } = useParams()
 
   const [loading, setLoading] = useState(true)
@@ -502,4 +502,4 @@ const RideDetails = () => {
   )
 }
 
-export default RideDetails
+export default RideEdit

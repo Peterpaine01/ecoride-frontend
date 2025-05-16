@@ -9,7 +9,7 @@ import Header from "../components/Header"
 import Footer from "../components/Footer"
 import Cover from "../components/Cover"
 
-const AddCar = () => {
+const EditCar = () => {
   const { user, login, logout, isAuthenticated } = useContext(AuthContext)
   console.log(user)
   const [userReviewsList, setUserReviewsList] = useState(false)
@@ -25,4 +25,4 @@ const AddCar = () => {
   )
 }
 
-export default AddCar
+export default EditCar

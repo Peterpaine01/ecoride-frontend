@@ -9,10 +9,13 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
 // Pages
+import TestImageCropped from "./pages/TestImageCropped"
+
 import Home from "./pages/Home"
 import Contact from "./pages/Contact"
 import PublishRide from "./pages/PublishRide"
 import Profil from "./pages/Profil"
+import EditProfil from "./pages/EditProfil"
 import SignIn from "./pages/SignIn"
 import SignUp from "./pages/SignUp"
 
@@ -30,6 +33,8 @@ import BookingSummary from "./pages/BookingSummary"
 
 import OpinionList from "./pages/OpinionList"
 import CarDetails from "./pages/CarDetails"
+import AddCar from "./pages/AddCar"
+import EditCar from "./pages/EditCar"
 
 import ReviewForm from "./pages/ReviewForm"
 
@@ -56,6 +61,7 @@ const App = () => {
   return (
     <>
       <Routes>
+        <Route path="/test-image" element={<TestImageCropped />} />
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
         <Route
@@ -71,6 +77,14 @@ const App = () => {
           element={
             <PrivateRoute>
               <Profil />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/modifier-profil/:id"
+          element={
+            <PrivateRoute>
+              <EditProfil />
             </PrivateRoute>
           }
         />
@@ -113,6 +127,15 @@ const App = () => {
         <Route path="/publier-avis/:bookingId" element={<ReviewForm />} />
         <Route path="/avis" element={<OpinionList />} />
         <Route path="/vehicule/:id" element={<CarDetails />} />
+
+        <Route
+          path="/ajouter-vehicule"
+          element={
+            <PrivateRoute allowedRoles={["user"]}>
+              <AddCar />
+            </PrivateRoute>
+          }
+        />
 
         {/* ADMIN */}
         <Route

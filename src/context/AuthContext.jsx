@@ -38,9 +38,14 @@ export const AuthProvider = ({ children }) => {
     try {
       const decoded = jwtDecode(Cookies.get("token"))
       const userId = userIdFromParam || decoded.id
+      const accountType = decoded.account_type
 
-      if (!userId) return
-      const response = await axios.get(`/user/${userId}`)
+      if (!userId || !accountType) return
+
+      const endpoint =
+        accountType === "user" ? `/user/${userId}` : `/staff-member/${userId}`
+
+      const response = await axios.get(endpoint)
       setUser(response.data)
     } catch (error) {
       console.error("Error fetching user", error)

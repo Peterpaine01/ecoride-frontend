@@ -164,6 +164,52 @@ select::-ms-expand {
   outline: none;
 }
 
+.checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+  gap: 8px;
+}
+
+/* Masquer l'input natif */
+.checkbox-input {
+  display: none;
+}
+
+/* Apparence personnalisée */
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #555;
+  border-radius: 4px;
+  background-color: white;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Coche visible quand checked */
+.checkbox-input:checked + .checkbox-custom::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 6px;
+  height: 12px;
+  border: solid #2196f3;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Hover/focus states */
+.checkbox-wrapper:hover .checkbox-custom {
+  border-color: #2196f3;
+}
+.checkbox-input:focus + .checkbox-custom {
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+}
+
 @supports (-webkit-appearance: none) or (-moz-appearance: none) {
   .checkbox-wrapper-13 input[type="checkbox"] {
     --active: #f7c134;
