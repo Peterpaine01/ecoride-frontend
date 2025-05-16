@@ -57,8 +57,8 @@ const RideCard = ({ ride }) => {
       {isMobile ? (
         <article className="ride-card br-10 b-shadow bg-white flex-column">
           <div className="top-ride-card ">
-            <div className="info-ride flex-row justify-left">
-              <div className="flex-column space-between">
+            <div className="info-ride flex-row justify-start">
+              <div className="flex-column space-between gap-5">
                 <p>
                   {departureDate ? getTimeFromDate(departureDate) : "--:--"}
                 </p>
@@ -94,7 +94,11 @@ const RideCard = ({ ride }) => {
             </div>
           </div>
           <div className="bottom-ride-card flex-row align-center space-between">
-            <div className="driver-infos flex-row space-between align-center gap-15">
+            <div
+              className={`driver-infos flex-row space-between align-center ${
+                isMobile ? "gap-5" : "gap-15"
+              } `}
+            >
               <div className="profil-icon">
                 {driver?.photo ? (
                   <img src={driver.photo} alt="photo profil par défaut" />
@@ -103,12 +107,10 @@ const RideCard = ({ ride }) => {
                 )}
               </div>
               <div className="flex-column gap-5">
-                <p className="text-bold">
+                <p className="text-bold driver-name">
                   {driver?.username || "Conducteur inconnu"}
                 </p>
-                {driver?.average_rating && (
-                  <StarRating rating={driver.average_rating} />
-                )}
+                <StarRating rating={driver.average_rating} />
               </div>
             </div>
             <div className="seats flex-row space-between align-center gap-5">
@@ -123,7 +125,10 @@ const RideCard = ({ ride }) => {
                 (car?.energy === "Électricité" && (
                   <>
                     <EnergySavingsLeafOutlinedIcon
-                      sx={{ color: "#42ba92", fontSize: 38 }}
+                      sx={{
+                        color: "#42ba92",
+                        fontSize: isMobile ? "24px" : "38px",
+                      }}
                     />
                     <small className="text-center">écolo</small>
                   </>
@@ -177,7 +182,7 @@ const RideCard = ({ ride }) => {
                 )}
               </div>
               <div className="flex-column gap-5">
-                <p className="text-bold">
+                <p className="text-bold driver-name">
                   {driver?.username || "Conducteur inconnu"}
                 </p>
                 <StarRating rating={driver.average_rating} />

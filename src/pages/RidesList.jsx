@@ -17,10 +17,12 @@ import FiltersModal from "../components/FiltersModal"
 
 const RidesList = () => {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [ridesList, setRidesList] = useState()
+  const [ridesList, setRidesList] = useState([])
   const [fuzzyRides, setFuzzyRides] = useState([])
   const [showFuzzy, setShowFuzzy] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [visibleRidesCount, setVisibleRidesCount] = useState(6)
+  const [visibleFuzzyCount, setVisibleFuzzyCount] = useState(6)
 
   const navigate = useNavigate()
 
@@ -103,7 +105,6 @@ const RidesList = () => {
       weekday: "short",
       day: "numeric",
       month: "long",
-      year: "numeric",
     }
 
     return formattedDate
@@ -111,10 +112,12 @@ const RidesList = () => {
       .replace(/^./, (c) => c.toUpperCase())
   }
 
+  //  MODE FUZZY
+
   let previousDate = null
   let isFirstDate = true
 
-  const fuzzyRidesList = fuzzyRides.map((ride) => {
+  const fuzzyRidesList = fuzzyRides.slice(0, visibleFuzzyCount).map((ride) => {
     const rideDate = new Date(ride.departureDate).toLocaleDateString("fr-FR", {
       weekday: "long",
       year: "numeric",
@@ -157,6 +160,31 @@ const RidesList = () => {
     return new Date(firstRide.departureDate).toISOString().split("T")[0]
   }
 
+  //  PAGINATION INFINIE
+
+  useEffect(() => {
+    setVisibleRidesCount(6)
+    setVisibleFuzzyCount(6)
+  }, [ridesList, fuzzyRides])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.innerHeight + window.scrollY
+      const bottomPosition = document.documentElement.offsetHeight - 100
+
+      if (scrollPosition >= bottomPosition) {
+        if (showFuzzy) {
+          setVisibleFuzzyCount((prev) => Math.min(prev + 6, fuzzyRides.length))
+        } else {
+          setVisibleRidesCount((prev) => Math.min(prev + 6, ridesList.length))
+        }
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [showFuzzy, ridesList?.length, fuzzyRides?.length])
+
   return (
     <>
       <Header />
@@ -188,7 +216,7 @@ const RidesList = () => {
                   <>
                     <div className="results-list flex-column gap-15">
                       {ridesList.length > 0 ? (
-                        ridesList.map((ride) => {
+                        ridesList.slice(0, visibleRidesCount).map((ride) => {
                           return <RideCard key={ride._id} ride={ride} />
                         })
                       ) : (

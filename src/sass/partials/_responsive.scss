@@ -296,7 +296,7 @@
     margin-top: 0;
   }
   .filters-layout {
-    margin: 20px 0;
+    margin: 0;
     h1 {
       margin-bottom: 0;
     }
@@ -306,6 +306,10 @@
   }
   .ride-schedule h3 {
     margin-top: 20px;
+  }
+
+  section:first-child {
+    padding: 20px 20px 20px;
   }
 }
 
@@ -353,11 +357,14 @@
   }
 
   .ride-card {
+    p.driver-name {
+      font-size: 16px;
+    }
     .top-ride-card {
       height: fit-content;
     }
     .info-ride {
-      width: fit-content;
+      width: calc(100% - 70px);
     }
     .ride-line {
       width: fit-content;
@@ -374,6 +381,14 @@
     .timing p {
       margin: 0;
     }
+  }
+
+  .star-rating {
+    gap: 2px;
+  }
+
+  .star {
+    font-size: 14px;
   }
 
   .ride-details {

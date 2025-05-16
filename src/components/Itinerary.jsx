@@ -66,7 +66,7 @@ const Itinerary = ({ ride }) => {
       {isMobile ? (
         <article className="ride-card br-10 bg-white flex-column">
           <div className="top-ride-card ">
-            <div className="info-ride flex-row justify-left">
+            <div className="info-ride flex-row justify-start">
               <div className="flex-column space-between">
                 <p>
                   {departureDate ? getTimeFromDate(departureDate) : "--:--"}
@@ -112,7 +112,7 @@ const Itinerary = ({ ride }) => {
                 )}
               </div>
               <div className="flex-column gap-5">
-                <p className="text-bold">
+                <p className="text-bold driver-name">
                   {driver?.username || "Conducteur inconnu"}
                 </p>
                 {driver?.average_rating && (
@@ -186,7 +186,7 @@ const Itinerary = ({ ride }) => {
                 )}
               </div>
               <div className="flex-column gap-5">
-                <p className="text-bold">
+                <p className="text-bold driver-name">
                   {driver?.username || "Conducteur inconnu"}
                 </p>
                 {driver?.average_rating && (

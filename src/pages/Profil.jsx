@@ -9,6 +9,7 @@ import Header from "../components/Header"
 import Footer from "../components/Footer"
 import Cover from "../components/Cover"
 import StarRating from "../components/StarRating"
+import ReviewsCard from "../components/ReviewsCard"
 
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import ArrowRightAltOutlinedIcon from "@mui/icons-material/ArrowRightAltOutlined"
@@ -24,24 +25,39 @@ import GroupIcon from "@mui/icons-material/Group"
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
 
 const Profil = () => {
-  const { user, login, logout, isAuthenticated } = useContext(AuthContext)
+  const { user, login, logout, isAuthenticated, token } =
+    useContext(AuthContext)
   console.log(user)
-  const [userReviewsList, setUserReviewsList] = useState(false)
+  const [userReviewsList, setUserReviewsList] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/reviews-driver/${user.account_id}`
+            `${import.meta.env.VITE_API_URL}/reviews-driver/${user.account_id}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
           )
+
           if (!response.ok) {
             throw new Error("Network response was not ok")
           }
           const data = await response.json()
-          console.log("Reviews data:", data.reviews)
 
-          setUserReviewsList(data.reviews || [])
+          console.log("Reviews data:", data)
+
+          // Filtrer les reviews publiées ici
+          const publishedReviews = (data || []).filter(
+            (review) => review.isPublished
+          )
+
+          setUserReviewsList(publishedReviews)
         } catch (error) {
           console.error("Error fetching reviews:", error)
         }
@@ -49,7 +65,7 @@ const Profil = () => {
     }
 
     fetchData()
-  }, [])
+  }, [token, user])
 
   const renderStars = (note) => {
     const fullStar = "⭐" // Icône étoile pleine
@@ -57,7 +73,6 @@ const Profil = () => {
     return fullStar.repeat(note) + emptyStar.repeat(5 - note)
   }
 
-  console.log("userReviewsList", userReviewsList)
   const reviewsDataTest = [
     {
       title: "Bien !",
@@ -89,12 +104,7 @@ const Profil = () => {
     },
   ]
 
-  // if (!user) {
-  //   return <p>Loading</p>;
-  // }
-
-  // console.log("token", Cookies.get("token"));
-  console.log("user >", user)
+  // console.log("user >", user)
 
   return (
     <>
@@ -111,9 +121,7 @@ const Profil = () => {
                   </div>
                   <div className="profile">
                     <h1>{user.username}</h1>
-                    {user?.driverInfos.average_rating && (
-                      <StarRating rating={user.driverInfos.average_rating} />
-                    )}
+                    <StarRating rating={user.driverInfos.average_rating} />
                   </div>
                 </div>
                 <Link
@@ -194,14 +202,14 @@ const Profil = () => {
                     </p>
                   </div>
                   <div className="ecoride">
-                    <h3>SUR ECORIDE</h3>
+                    <h3 className="mb-20">SUR ECORIDE</h3>
                     {user.is_driver && <p> Je suis chauffeur</p>}
                     <p> Je suis passager</p>
                   </div>
                 </div>
                 <div className="row">
                   <div className="preferences">
-                    <h3>VOS PRÉFÉRENCES</h3>
+                    <h3 className="mb-20">VOS PRÉFÉRENCES</h3>
 
                     {user && user.driverInfos?.accept_smoking === 0 ? (
                       <p className="flex-row justify-start align-center gap-5">
@@ -236,7 +244,7 @@ const Profil = () => {
                     )}
                   </div>
                   <div className="vehicles flex-column">
-                    <h3>VOS VÉHICULES</h3>
+                    <h3 className="mb-40">VOS VÉHICULES</h3>
                     {user &&
                       user.driverInfos.cars.map((car) => {
                         return (
@@ -272,31 +280,27 @@ const Profil = () => {
                     </button>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="reviews">
-                    <h3>AVIS</h3>
-                    <div className="last-reviews">
-                      {reviewsDataTest
-                        .filter((review) => review.isPublished)
-                        .slice(0, 2)
-                        .map((review, index) => (
-                          <article
-                            className="review"
-                            key={index}
-                            style={{
-                              borderBottom: "1px solid #ddd",
-                              padding: "10px 0",
-                            }}
-                          >
-                            <h4>{review.title}</h4>
-                            <p>{renderStars(review.note)}</p>
-                            <p>{review.comment}</p>
-                          </article>
-                        ))}
+                {userReviewsList.length > 0 && (
+                  <div className="row">
+                    <div className="reviews">
+                      <h3 className="mb-40">AVIS</h3>
+                      <div className="last-reviews">
+                        {userReviewsList
+                          .filter((review) => review.isPublished)
+                          .slice(0, 2)
+                          .map((review, index) => (
+                            <ReviewsCard key={review._id} reviewData={review} />
+                          ))}
+                      </div>
+                      <Link
+                        to="/"
+                        className="edit-profile btn-link flex-row align-center mt-40"
+                      >
+                        <span>Tous les avis</span> <KeyboardArrowRightIcon />
+                      </Link>
                     </div>
                   </div>
-                </div>
-                <Link>Tous les avis </Link>
+                )}
               </div>
             </section>
           </div>
