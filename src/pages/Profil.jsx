@@ -29,6 +29,8 @@ const Profil = () => {
     useContext(AuthContext)
   console.log(user)
   const [userReviewsList, setUserReviewsList] = useState([])
+  const [activeTab, setActiveTab] = useState("infos")
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,44 +69,12 @@ const Profil = () => {
     fetchData()
   }, [token, user])
 
-  const renderStars = (note) => {
-    const fullStar = "⭐" // Icône étoile pleine
-    const emptyStar = "☆" // Icône étoile vide
-    return fullStar.repeat(note) + emptyStar.repeat(5 - note)
-  }
-
-  const reviewsDataTest = [
-    {
-      title: "Bien !",
-      note: 4,
-      comment: "J'ai adoré",
-      wasRideOk: true,
-      isPublished: true,
-    },
-    {
-      title: "Excellent !",
-      note: 5,
-      comment: "J'ai adoré",
-      wasRideOk: true,
-      isPublished: true,
-    },
-    {
-      title: "Voyage sympa",
-      note: 3,
-      comment: "J'ai adoré",
-      wasRideOk: true,
-      isPublished: true,
-    },
-    {
-      title: "Voyage sympa",
-      note: 3,
-      comment: "J'ai adoré",
-      wasRideOk: true,
-      isPublished: false,
-    },
-  ]
-
-  // console.log("user >", user)
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
 
   return (
     <>
@@ -113,29 +83,54 @@ const Profil = () => {
       {user ? (
         <main>
           <div className="container profile">
-            <section>
-              <div className="profile-header">
-                <div className="flex-row gap-15">
-                  <div className="profil-icon user-logged">
-                    <img src={user.photo} alt={`Photo de ${user.username}`} />
+            {!isMobile && (
+              <section>
+                <div className="profile-header">
+                  <div className="flex-row gap-15">
+                    <div className="profil-icon user-logged">
+                      <img src={user.photo} alt={`Photo de ${user.username}`} />
+                    </div>
+                    <div className="profile">
+                      <h1 className="capitalize">{user.username}</h1>
+                      <StarRating rating={user.driverInfos.average_rating} />
+                    </div>
                   </div>
-                  <div className="profile">
-                    <h1>{user.username}</h1>
-                    <StarRating rating={user.driverInfos.average_rating} />
-                  </div>
+                  <Link
+                    to="/"
+                    className="edit-profile btn-link flex-row align-center"
+                  >
+                    <span>Modifier le profil</span> <KeyboardArrowRightIcon />
+                  </Link>
                 </div>
-                <Link
-                  to="/"
-                  className="edit-profile btn-link flex-row align-center"
+              </section>
+            )}
+
+            {isMobile && (
+              <section className="mobile-tabs">
+                <button
+                  className={activeTab === "infos" ? "active" : ""}
+                  onClick={() => setActiveTab("infos")}
                 >
-                  <span>Modifier le profil</span> <KeyboardArrowRightIcon />
-                </Link>
-              </div>
-            </section>
+                  Infos
+                </button>
+                <button
+                  className={activeTab === "account" ? "active" : ""}
+                  onClick={() => setActiveTab("account")}
+                >
+                  Compte
+                </button>
+              </section>
+            )}
+
             <section className="filters-layout flex-row">
-              <aside className="one-third-column">
+              <aside
+                className={`one-third-column ${
+                  isMobile && activeTab !== "account" ? "hidden-mobile" : ""
+                }`}
+              >
                 <div className="sidebar flex-column gap-15">
-                  <h2>Compte</h2>
+                  {!isMobile && <h2>Compte</h2>}
+
                   <nav className="menu">
                     <ul>
                       <li className="mb-10">
@@ -182,7 +177,27 @@ const Profil = () => {
                   </button>
                 </div>
               </aside>
-              <div className="user-infos">
+              <div
+                className={`user-infos ${
+                  isMobile && activeTab !== "infos" ? "hidden-mobile" : ""
+                }`}
+              >
+                {isMobile && (
+                  <div className="profile-header-mobile">
+                    <div className="flex-row gap-15">
+                      <div className="profil-icon user-logged">
+                        <img
+                          src={user.photo}
+                          alt={`Photo de ${user.username}`}
+                        />
+                      </div>
+                      <div className="profile">
+                        <h1 className="capitalize">{user.username}</h1>
+                        <StarRating rating={user.driverInfos.average_rating} />
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <h2 className="mt-20">Présentez-vous</h2>
                 <div className="row">
                   <div className="profile-info">
@@ -243,6 +258,13 @@ const Profil = () => {
                       </p>
                     )}
                   </div>
+                  {isMobile && (
+                    <div className="actions-profile flex-row">
+                      <button className="btn-solid w-100">
+                        Modier le profile
+                      </button>
+                    </div>
+                  )}
                   <div className="vehicles flex-column">
                     <h3 className="mb-40">VOS VÉHICULES</h3>
                     {user &&

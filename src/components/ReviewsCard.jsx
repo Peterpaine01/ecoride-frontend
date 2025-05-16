@@ -41,19 +41,19 @@ const ReviewsCard = ({ reviewData }) => {
 
   return (
     <div className="review-card">
-      <div className="flex-column justify-center align-start mb-20">
+      <div className="flex-column justify-center align-start">
         <h4 className="color-primary mb-10">{title}</h4>
         <StarRating rating={note} />
       </div>
 
-      <p className="mb-10 mt-20">{comment}</p>
+      <p className="mb-10">{comment}</p>
       <hr />
       <div className="driver-infos flex-row justify-start align-center gap-15 mt-20">
         <div className="profil-icon">
           <img src={passenger?.photo} alt="photo profil par défaut" />
         </div>
         <div className="flex-column gap-5">
-          <p className="text-bold driver-name">
+          <p className="text-bold capitalize driver-name">
             {passenger?.username || "Conducteur inconnu"}
           </p>
           <p>{getDate(departureDate)}</p>

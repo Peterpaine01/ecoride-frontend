@@ -36,6 +36,12 @@
     padding-bottom: 40px;
     margin-bottom: 40px;
 
+    &:last-child {
+      padding-bottom: 20px;
+      margin-bottom: 0px;
+      border-bottom: 0;
+    }
+
     .profile-info,
     .preferences,
     .vehicles {
@@ -109,4 +115,30 @@
   background-color: variables.$color-bg-dark;
   padding: 20px;
   border-radius: 10px;
+}
+
+.mobile-tabs {
+  display: none;
+  margin-top: 40px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.mobile-tabs button {
+  padding: 10px 20px;
+  border: none;
+  background-color: variables.$color-dark;
+  border-radius: 0px;
+  color: variables.$color-dark-grey;
+  width: 50%;
+  border-bottom: 2px solid variables.$color-bg-dark;
+}
+
+.mobile-tabs button.active {
+  border-bottom: 4px solid variables.$color-accessibility;
+  color: #fff;
+}
+
+.hidden-mobile {
+  display: none;
 }

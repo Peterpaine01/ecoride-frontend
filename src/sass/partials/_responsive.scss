@@ -334,6 +334,74 @@
     width: calc(100vw - 50px);
     height: calc(100vh - 40px);
   }
+
+  .filters-layout {
+    flex-direction: column;
+  }
+
+  .one-third-column,
+  .user-infos {
+    width: 100%;
+  }
+
+  .mobile-tabs {
+    display: flex;
+  }
+
+  .hidden-mobile {
+    display: none !important;
+  }
+
+  .profile {
+    .row {
+      flex-direction: column;
+      .profile-info,
+      .preferences,
+      .vehicles,
+      .ecoride {
+        width: 100%;
+      }
+
+      .preferences {
+        padding-bottom: 20px;
+        border-bottom: 1px solid white;
+      }
+      .vehicles {
+        h3 {
+          margin-bottom: 20px;
+        }
+      }
+      .last-reviews {
+        flex-direction: column;
+        gap: 40px;
+      }
+      .actions-profile {
+        padding-bottom: 20px;
+        border-bottom: 1px solid white;
+        margin-bottom: 10px;
+      }
+    }
+    nav {
+      li {
+        margin-bottom: 30px;
+        .btn-link {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  .profile-header-mobile {
+    border-bottom: 1px solid #fff;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+
+  .sidebar {
+    background: none;
+    padding: 0px;
+    border-radius: 0px;
+  }
 }
 
 @media screen and (max-width: 500px) {
