@@ -156,6 +156,7 @@ const SearchBlock = () => {
 
   const toggleModal = (e) => {
     if (window.innerWidth < 890) {
+      e.target.blur()
       const { name } = e.target
       setIsModalOpen(!isModalOpen)
       setModalContent(name)
