@@ -387,7 +387,9 @@ const PublishRide = () => {
         <div className="container" id="publishRide">
           <section>
             <h1>Nouveau trajet</h1>
-            <StepIndicator currentStep={step} totalSteps={10} />
+            <div className="mb-20">
+              <StepIndicator currentStep={step} totalSteps={10} />
+            </div>
           </section>
 
           <section className="new-ride flex-row two-column framed">
