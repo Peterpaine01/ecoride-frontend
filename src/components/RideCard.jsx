@@ -120,19 +120,18 @@ const RideCard = ({ ride }) => {
                 <span>disponible{remainingSeats > 1 && "s"}</span>
               </p>
             </div>
-            <div className="flex-column align-center">
-              {car?.energy_id === 3 ||
-                (car?.energy === "Électricité" && (
-                  <>
-                    <EnergySavingsLeafOutlinedIcon
-                      sx={{
-                        color: "#42ba92",
-                        fontSize: isMobile ? "24px" : "38px",
-                      }}
-                    />
-                    <small className="text-center">écolo</small>
-                  </>
-                ))}
+            <div className="flex-column justify-self-end align-center">
+              {car?.energy_id === 3 && (
+                <>
+                  <EnergySavingsLeafOutlinedIcon
+                    sx={{
+                      color: "#42ba92",
+                      fontSize: isMobile ? "24px" : "38px",
+                    }}
+                  />
+                  <small className="text-center">écolo</small>
+                </>
+              )}
             </div>
           </div>
         </article>
@@ -188,23 +187,24 @@ const RideCard = ({ ride }) => {
                 <StarRating rating={driver.average_rating} />
               </div>
             </div>
-            <div className="seats flex-row space-between align-center gap-5">
-              <p className="text-big">{remainingSeats ?? "--"}</p>
-              <p className="text-tiny">
-                place{remainingSeats > 1 && "s"} <br />{" "}
-                <span>disponible{remainingSeats > 1 && "s"}</span>
-              </p>
-            </div>
-            <div className="flex-column align-center">
-              {car?.energy_id === 3 ||
-                (car?.energy === "Électricité" && (
+            <div className="ride-specs flex-row justify-left align-center gap-15">
+              <div className="seats flex-row space-between align-center gap-5">
+                <p className="text-big">{remainingSeats ?? "--"}</p>
+                <p className="text-tiny">
+                  place{remainingSeats > 1 && "s"} <br />{" "}
+                  <span>disponible{remainingSeats > 1 && "s"}</span>
+                </p>
+              </div>
+              <div className="flex-column justify-self-end align-center">
+                {car?.energy_id === 3 && (
                   <>
                     <EnergySavingsLeafOutlinedIcon
                       sx={{ color: "#42ba92", fontSize: 38 }}
                     />
                     <small className="text-center">écolo</small>
                   </>
-                ))}
+                )}
+              </div>
             </div>
           </div>
         </article>

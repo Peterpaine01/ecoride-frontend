@@ -7,6 +7,9 @@ import {
 import React, { useEffect, useState, useMemo, useRef } from "react"
 import axios from "../config/axiosConfig"
 
+// Icones
+import TuneOutlinedIcon from "@mui/icons-material/TuneOutlined"
+
 // Components
 import Header from "../components/Header"
 import Hero from "../components/Hero"
@@ -23,6 +26,7 @@ const RidesList = () => {
   const [isMobile, setIsMobile] = useState(false)
   const [visibleRidesCount, setVisibleRidesCount] = useState(6)
   const [visibleFuzzyCount, setVisibleFuzzyCount] = useState(6)
+  const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false)
 
   const navigate = useNavigate()
 
@@ -92,7 +96,7 @@ const RidesList = () => {
   }, [ridesList, searchQuery])
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
+    const checkMobile = () => setIsMobile(window.innerWidth <= 1000)
     checkMobile()
     window.addEventListener("resize", checkMobile)
     return () => window.removeEventListener("resize", checkMobile)
@@ -192,11 +196,21 @@ const RidesList = () => {
       <main>
         <div className="container">
           <section className="filters-layout flex-row">
-            {!isMobile && (
-              <aside className="filters one-third-column">
-                <Filters searchQuery={searchQuery} />
-              </aside>
-            )}
+            <div
+              className={
+                isMobile
+                  ? `modal-overlay-filters filters ${
+                      isFiltersModalOpen ? "visible" : "hidden"
+                    }`
+                  : "filters one-third-column"
+              }
+            >
+              <Filters
+                searchQuery={searchQuery}
+                isFiltersModalOpen={isFiltersModalOpen}
+                setIsFiltersModalOpen={setIsFiltersModalOpen}
+              />
+            </div>
 
             {ridesList && (
               <div className="results-search">
@@ -209,7 +223,18 @@ const RidesList = () => {
                       : getDate(searchQuery.departureDate)}
                   </h1>
 
-                  {isMobile && <FiltersModal searchQuery={searchQuery} />}
+                  {/* {isMobile && <FiltersModal searchQuery={searchQuery} />} */}
+                  {isMobile && (
+                    <button
+                      className="btn-round flex-column align-center justify-center"
+                      onClick={() => setIsFiltersModalOpen(true)}
+                    >
+                      <TuneOutlinedIcon
+                        sx={{ color: "#023560", fontSize: 22 }}
+                      />
+                      <small>Filtrer</small>
+                    </button>
+                  )}
                 </div>
 
                 {!showFuzzy ? (
@@ -232,7 +257,7 @@ const RidesList = () => {
                             className="btn-link"
                             onClick={() => setShowFuzzy(true)}
                           >
-                            Voir les jours suivants
+                            <span>Voir les jours suivants</span>
                           </button>
                         </div>
                       )}

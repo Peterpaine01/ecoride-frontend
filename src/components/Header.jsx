@@ -115,9 +115,11 @@ const Header = () => {
                 )}
 
                 <li className="nav-item" ref={profilRef}>
-                  <Link
+                  <button
                     className={`dropdown-btn ${
-                      user && user.accountStatus === "active" && "user-logged"
+                      user && user.accountStatus === "active"
+                        ? "user-logged"
+                        : ""
                     }`}
                     onClick={toggleDropdown}
                   >
@@ -126,7 +128,7 @@ const Header = () => {
                     ) : (
                       <User />
                     )}
-                  </Link>
+                  </button>
 
                   {isProfilOpen && (
                     <>

@@ -39,6 +39,21 @@
       width: auto !important;
     }
   }
+  .filters {
+    margin-top: 0;
+    .filter-header {
+      padding: 20px;
+      position: fixed;
+      background: variables.$color-dark;
+    }
+    .filter-header-layout {
+      width: calc(100% / 3);
+    }
+    form {
+      margin-top: 60px;
+      padding: 20px 20px;
+    }
+  }
 }
 
 @media screen and (max-width: 890px) {
@@ -314,22 +329,6 @@
 }
 
 @media screen and (max-width: 768px) {
-  .filters {
-    margin-top: 0;
-    .filter-header {
-      padding: 20px;
-      position: fixed;
-      background: variables.$color-dark;
-      width: calc(100% - 15px);
-    }
-    .filter-header-layout {
-      width: calc(100% / 3);
-    }
-    form {
-      margin-top: 60px;
-      padding: 20px 20px;
-    }
-  }
   .modal {
     width: calc(100vw - 50px);
     height: calc(100vh - 40px);
@@ -442,12 +441,16 @@
       margin: 6px 0;
     }
 
+    .timing {
+      width: fit-content;
+      p {
+        margin: 0;
+      }
+    }
+
     .timeline {
       height: 100px;
       width: 3px;
-    }
-    .timing p {
-      margin: 0;
     }
   }
 

@@ -13,7 +13,7 @@ h3.next-day {
     position: fixed;
     inset: 0;
     background-color: variables.$color-dark;
-    display: flex;
+
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -22,13 +22,20 @@ h3.next-day {
 
     gap: 20px;
     overflow: scroll;
+    &.visible {
+      display: flex;
+    }
+    &.hidden {
+      display: none;
+    }
   }
 
   .modal-content-filters {
     position: relative;
     width: 100%;
   }
-  .back-btn {
+
+  .modal-overlay .back-btn {
     align-self: flex-start;
   }
 }

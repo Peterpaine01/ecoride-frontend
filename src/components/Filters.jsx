@@ -14,7 +14,11 @@ import TollOutlinedIcon from "@mui/icons-material/TollOutlined"
 import PetsOutlinedIcon from "@mui/icons-material/PetsOutlined"
 import { ChevronLeft } from "react-feather"
 
-const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
+const Filters = ({
+  searchQuery,
+  isFiltersModalOpen,
+  setIsFiltersModalOpen,
+}) => {
   const location = useLocation()
   const [isMobile, setIsMobile] = useState(false)
   const navigate = useNavigate()
@@ -74,18 +78,27 @@ const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
   }
 
   return (
-    <>
-      <div className="filter-header flex-row">
-        {isOpen && (
-          <div className="filter-header-layout">
+    <div
+      className={`${isFiltersModalOpen ? "modal-overlay-filters" : ""}`}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div
+        className={`filter-header flex-row  ${
+          isFiltersModalOpen ? "modal-content-filters" : ""
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {isFiltersModalOpen && (
+          <div className="filter-header-layout flex-row">
             <button
               className="back-btn flex-row align-end"
-              onClick={() => setIsOpen(false)}
+              onClick={() => setIsFiltersModalOpen(false)}
             >
               <ChevronLeft size={28} />
             </button>
           </div>
         )}
+
         <div className="filter-header-layout flex-row justify-center">
           <h2>Filtrer</h2>
         </div>
@@ -93,7 +106,7 @@ const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
         <div className="filter-header-layout flex-row justify-end">
           <button
             type="button"
-            className="reset btn-light btn-link"
+            className="reset btn-text btn-link"
             onClick={() => {
               setMaxPrice(2)
               setMinRating(0)
@@ -115,7 +128,7 @@ const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
               navigate(`?${updatedParams.toString()}`)
             }}
           >
-            Tout effacer
+            <span>Tout effacer</span>
           </button>
         </div>
       </div>
@@ -240,12 +253,16 @@ const Filters = ({ searchQuery, isOpen, setIsOpen }) => {
           </div>
         </div>
         <div className="flex-row justify-center align-center gap-5 ">
-          <button type="submit" className="btn-solid mt-20">
+          <button
+            onClick={() => setIsFiltersModalOpen(false)}
+            type="submit"
+            className="btn-solid mt-20"
+          >
             Voir les trajets
           </button>
         </div>
       </form>
-    </>
+    </div>
   )
 }
 

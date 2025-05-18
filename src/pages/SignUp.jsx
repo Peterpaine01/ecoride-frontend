@@ -364,6 +364,13 @@ const SignUp = () => {
                 <button type="submit" className="btn-solid">
                   S'inscrire
                 </button>
+
+                <Link
+                  to="/se-connecter"
+                  className="btn-link mt-40 align-self-center"
+                >
+                  Déjà un compte ? <span>Connectez-vous !</span>
+                </Link>
               </form>
             </section>
           )}

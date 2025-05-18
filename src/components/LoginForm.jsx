@@ -93,6 +93,7 @@ const LoginForm = () => {
             value={formData.password}
             onChange={handleChange}
           />
+
           <button
             type="button"
             className="password-toggle"
@@ -109,16 +110,19 @@ const LoginForm = () => {
         </p>
       )}
 
+      <Link to="/nouveau-password" className="btn-link">
+        <span>Mot de passe oublié ?</span>
+      </Link>
+
       <button
         type="submit"
-        className="btn-solid"
+        className="btn-solid mt-40"
         disabled={!validationEmail || loading}
       >
         {loading ? "Connexion..." : "Se connecter"}
       </button>
-
-      <Link to="/nouveau-password" className="btn-link mt-20 align-self">
-        Mot de passe oublié ?
+      <Link to="/creer-compte" className="btn-link mt-40 align-self-center">
+        Pas encore de compte ? <span>Inscrivez-vous !</span>
       </Link>
     </form>
   )

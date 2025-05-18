@@ -44,7 +44,7 @@ const RoadMap = () => {
 
   const [rideDetail, setRideDetail] = useState()
   const [routeCoords, setRouteCoords] = useState([])
-  const [destinationDate, setDestinationDate] = useState([])
+  const [destinationDate, setDestinationDate] = useState(null)
   const [map, setMap] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -82,10 +82,6 @@ const RoadMap = () => {
           rideDetail.departureAddress.coords,
           rideDetail.destinationAddress.coords
         )
-        setDestinationDate(
-          setArrivalDate(rideDetail.departureDate, rideDetail.duration)
-        )
-
         setRouteCoords(result.routeCoords)
       } catch (err) {
         console.error(err)
@@ -93,8 +89,42 @@ const RoadMap = () => {
       }
     }
 
-    fetchRoute()
+    if (
+      rideDetail &&
+      rideDetail.departureAddress?.coords &&
+      rideDetail.destinationAddress?.coords
+    ) {
+      fetchRoute()
+    }
   }, [rideDetail])
+
+  useEffect(() => {
+    const fetchDestinationDate = async () => {
+      try {
+        if (rideDetail.departureDate && rideDetail.duration) {
+          const arrival = setArrivalDate(
+            rideDetail.departureDate,
+            rideDetail.duration
+          )
+          setDestinationDate(arrival)
+          console.log(destinationDate)
+        }
+      } catch (err) {
+        console.error(err)
+        console.log("Erreur lors du calcul de l’itinéraire")
+      }
+    }
+
+    if (
+      rideDetail &&
+      rideDetail.departureAddress?.coords &&
+      rideDetail.destinationAddress?.coords &&
+      typeof rideDetail.duration === "number"
+    ) {
+      fetchDestinationDate()
+    }
+  }, [rideDetail])
+
   console.log("rideDetail", rideDetail)
 
   useEffect(() => {
@@ -173,12 +203,9 @@ const RoadMap = () => {
                       ? getTimeFromDate(rideDetail.departureDate)
                       : "--:--"}
                   </p>
-                  <p>
-                    {rideDetail?.departureDate &&
-                    typeof rideDetail.duration === "number"
-                      ? getTimeFromDate(destinationDate)
-                      : "--:--"}
-                  </p>
+                  {destinationDate instanceof Date && !isNaN(destinationDate)
+                    ? getTimeFromDate(destinationDate)
+                    : "--:--"}
                 </div>
                 <div className="timing flex-row">
                   <div className="ride-line">

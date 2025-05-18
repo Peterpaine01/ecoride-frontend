@@ -36,7 +36,8 @@ header {
     justify-content: space-between;
     width: 40%;
   }
-  a {
+  a,
+  button {
     color: #fff;
     text-decoration: none;
   }
@@ -96,6 +97,7 @@ header {
   height: 40px;
   border: 3px solid variables.$color-secondary;
   overflow: hidden;
+  padding: 0;
   &.user-logged {
     border-color: variables.$color-accessibility;
   }
