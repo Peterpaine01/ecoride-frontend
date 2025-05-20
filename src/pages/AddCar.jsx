@@ -8,6 +8,7 @@ import axios from "../config/axiosConfig"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import Cover from "../components/Cover"
+import AddCarForm from "../components/AddCarForm"
 
 const AddCar = () => {
   const { user, login, logout, isAuthenticated } = useContext(AuthContext)
@@ -18,7 +19,12 @@ const AddCar = () => {
     <>
       <Header />
       <Cover />
-      <h1>Ajouter un véhicule</h1>
+      <main className="container">
+        <section className="flex-column align-center">
+          <h1 className="mb-20">Ajouter un véhicule</h1>
+          <AddCarForm />
+        </section>
+      </main>
 
       <Footer />
     </>

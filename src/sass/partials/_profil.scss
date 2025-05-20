@@ -142,3 +142,39 @@
 .hidden-mobile {
   display: none;
 }
+
+.image-crop-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+.crop-image {
+  max-height: 70vh;
+  display: block;
+}
+
+.avatar-to-upload {
+  width: 150px;
+  height: 150px;
+  img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 8px solid variables.$color-primary;
+  }
+  button {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 4px;
+    right: 4px;
+    border: 4px solid variables.$color-primary;
+  }
+}

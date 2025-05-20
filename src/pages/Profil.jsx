@@ -25,7 +25,7 @@ import GroupIcon from "@mui/icons-material/Group"
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
 
 const Profil = () => {
-  const { user, login, logout, isAuthenticated, token } =
+  const { user, login, logout, isAuthenticated, token, fetchUser } =
     useContext(AuthContext)
   console.log(user)
   const [userReviewsList, setUserReviewsList] = useState([])
@@ -33,6 +33,10 @@ const Profil = () => {
   const [isMobile, setIsMobile] = useState(false)
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    fetchUser()
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,9 +58,6 @@ const Profil = () => {
           }
           const data = await response.json()
 
-          console.log("Reviews data:", data)
-
-          // Filtrer les reviews publiées ici
           const publishedReviews = (data || []).filter(
             (review) => review.isPublished
           )
@@ -92,9 +93,11 @@ const Profil = () => {
                     <div className="profil-icon user-logged">
                       <img src={user.photo} alt={`Photo de ${user.username}`} />
                     </div>
-                    <div className="profile">
+                    <div className="profile flex-column justify-center align-start">
                       <h1 className="capitalize">{user.username}</h1>
-                      <StarRating rating={user.driverInfos.average_rating} />
+                      {user.is_driver && (
+                        <StarRating rating={user.driverInfos?.average_rating} />
+                      )}
                     </div>
                   </div>
                   <Link
@@ -195,7 +198,11 @@ const Profil = () => {
                       </div>
                       <div className="profile">
                         <h1 className="capitalize">{user.username}</h1>
-                        <StarRating rating={user.driverInfos.average_rating} />
+                        {user.is_driver && (
+                          <StarRating
+                            rating={user.driverInfos?.average_rating}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -224,42 +231,46 @@ const Profil = () => {
                     <p> Je suis passager</p>
                   </div>
                 </div>
+
                 <div className="row">
-                  <div className="preferences">
-                    <h3 className="mb-20">VOS PRÉFÉRENCES</h3>
+                  {user.is_driver && (
+                    <div className="preferences">
+                      <h3 className="mb-20">VOS PRÉFÉRENCES</h3>
 
-                    {user && user.driverInfos?.accept_smoking === 0 ? (
-                      <p className="flex-row justify-start align-center gap-5">
-                        <SmokeFreeOutlinedIcon
-                          sx={{ color: "#f7c134", fontSize: 28 }}
-                        />{" "}
-                        Véhicule non fumeur
-                      </p>
-                    ) : (
-                      <p className="flex-row justify-start align-center gap-5">
-                        <SmokingRoomsOutlinedIcon
-                          sx={{ color: "#f7c134", fontSize: 28 }}
-                        />{" "}
-                        Véhicule fumeur
-                      </p>
-                    )}
+                      {user && user.driverInfos?.accept_smoking === 0 ? (
+                        <p className="flex-row justify-start align-center gap-5">
+                          <SmokeFreeOutlinedIcon
+                            sx={{ color: "#f7c134", fontSize: 28 }}
+                          />{" "}
+                          Véhicule non fumeur
+                        </p>
+                      ) : (
+                        <p className="flex-row justify-start align-center gap-5">
+                          <SmokingRoomsOutlinedIcon
+                            sx={{ color: "#f7c134", fontSize: 28 }}
+                          />{" "}
+                          Véhicule fumeur
+                        </p>
+                      )}
 
-                    {user && user.driverInfos?.accept_animals === 0 ? (
-                      <p className="flex-row justify-start align-center gap-5">
-                        <BlockOutlinedIcon
-                          sx={{ color: "#f7c134", fontSize: 28 }}
-                        />
-                        Animaux non admis
-                      </p>
-                    ) : (
-                      <p className="flex-row justify-start align-center gap-5">
-                        <PetsOutlinedIcon
-                          sx={{ color: "#f7c134", fontSize: 28 }}
-                        />{" "}
-                        Animaux bienvenus !
-                      </p>
-                    )}
-                  </div>
+                      {user && user.driverInfos?.accept_animals === 0 ? (
+                        <p className="flex-row justify-start align-center gap-5">
+                          <BlockOutlinedIcon
+                            sx={{ color: "#f7c134", fontSize: 28 }}
+                          />
+                          Animaux non admis
+                        </p>
+                      ) : (
+                        <p className="flex-row justify-start align-center gap-5">
+                          <PetsOutlinedIcon
+                            sx={{ color: "#f7c134", fontSize: 28 }}
+                          />{" "}
+                          Animaux bienvenus !
+                        </p>
+                      )}
+                    </div>
+                  )}
+
                   {isMobile && (
                     <div className="actions-profile flex-row">
                       <button
@@ -272,48 +283,52 @@ const Profil = () => {
                       </button>
                     </div>
                   )}
-                  <div className="vehicles flex-column">
-                    <h3 className="mb-40">VOS VÉHICULES</h3>
-                    {user &&
-                      user.driverInfos.cars.map((car) => {
-                        return (
-                          <Link
-                            to={`/vehicule/${car.id}`}
-                            key={car.id}
-                            className="vehicle flex-row mb-10 align-center space-between gap-15"
-                          >
-                            <div className="flex-row align-center justify-start gap-15">
-                              <p className="flex-row align-center justify-start gap-5">
-                                <DirectionsCarFilledOutlinedIcon
-                                  sx={{ color: "#002340", fontSize: 24 }}
-                                />
-                              </p>
-                              <div className="flex-column justify-left">
-                                <p className="flex-row align-center justify-start">
-                                  {car
-                                    ? `${car.model} - ${car.registration_number}`
-                                    : "Non renseigné"}
+                  {user.is_driver && (
+                    <div className="vehicles flex-column">
+                      <h3 className="mb-40">VOS VÉHICULES</h3>
+                      {user &&
+                        user.driverInfos?.cars.map((car) => {
+                          return (
+                            <Link
+                              to={`/vehicule/${car.id}`}
+                              key={car.id}
+                              className="vehicle flex-row mb-10 align-center space-between gap-15"
+                            >
+                              <div className="flex-row align-center justify-start gap-15">
+                                <p className="flex-row align-center justify-start gap-5">
+                                  <DirectionsCarFilledOutlinedIcon
+                                    sx={{ color: "#002340", fontSize: 24 }}
+                                  />
                                 </p>
-                                <p className="text-tiny">{car && car.color}</p>
+                                <div className="flex-column justify-left">
+                                  <p className="flex-row align-center justify-start">
+                                    {car
+                                      ? `${car.model} - ${car.registration_number}`
+                                      : "Non renseigné"}
+                                  </p>
+                                  <p className="text-tiny">
+                                    {car && car.color}
+                                  </p>
+                                </div>
                               </div>
-                            </div>
 
-                            <KeyboardArrowRightIcon
-                              sx={{ color: "#002340", fontSize: 24 }}
-                            />
-                          </Link>
-                        )
-                      })}
+                              <KeyboardArrowRightIcon
+                                sx={{ color: "#002340", fontSize: 24 }}
+                              />
+                            </Link>
+                          )
+                        })}
 
-                    <button
-                      onClick={() => navigate(`/ajouter-vehicule`)}
-                      className="btn-link mt-20 flex-row align-center gap-5"
-                    >
-                      <AddCircleOutlineIcon /> Ajouter un véhicule
-                    </button>
-                  </div>
+                      <button
+                        onClick={() => navigate(`/ajouter-vehicule`)}
+                        className="btn-link mt-20 flex-row align-center gap-5"
+                      >
+                        <AddCircleOutlineIcon /> Ajouter un véhicule
+                      </button>
+                    </div>
+                  )}
                 </div>
-                {userReviewsList.length > 0 && (
+                {user.is_driver && userReviewsList.length > 0 && (
                   <div className="row">
                     <div className="reviews">
                       <h3 className="mb-40">AVIS</h3>

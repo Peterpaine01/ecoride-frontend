@@ -69,11 +69,12 @@ export const calculateRoute = async (start, end) => {
   )
 
   const route = response.data.features[0]
-  const duration = route.properties.summary.duration / 60
+  let duration = route.properties.summary.duration / 60
+  duration = isNaN(duration) ? 0 : parseFloat(duration.toFixed(1))
   const routeCoords = route.geometry.coordinates.map(([lon, lat]) => [lat, lon])
 
   return {
-    duration: duration.toFixed(1),
+    duration,
     routeCoords,
   }
 }

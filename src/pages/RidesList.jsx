@@ -223,7 +223,6 @@ const RidesList = () => {
                       : getDate(searchQuery.departureDate)}
                   </h1>
 
-                  {/* {isMobile && <FiltersModal searchQuery={searchQuery} />} */}
                   {isMobile && (
                     <button
                       className="btn-round flex-column align-center justify-center"

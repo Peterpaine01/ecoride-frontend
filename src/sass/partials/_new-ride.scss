@@ -62,3 +62,43 @@
     padding-bottom: 10px;
   }
 }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: variables.$color-dark;
+
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  z-index: 1000;
+  padding-bottom: 20px;
+
+  gap: 20px;
+  overflow: scroll;
+  &.visible {
+    display: flex;
+  }
+  &.hidden {
+    display: none;
+  }
+}
+
+.modal-content {
+  position: relative;
+  width: 100%;
+  padding: 40px 20px 20px;
+  position: relative;
+  display: flex;
+  h2 {
+    &.visible {
+      display: block;
+    }
+    &.hidden {
+      display: none;
+    }
+  }
+  p {
+    color: variables.$color-dark;
+  }
+}

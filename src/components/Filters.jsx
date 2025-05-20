@@ -86,7 +86,6 @@ const Filters = ({
         className={`filter-header flex-row  ${
           isFiltersModalOpen ? "modal-content-filters" : ""
         }`}
-        onClick={(e) => e.stopPropagation()}
       >
         {isFiltersModalOpen && (
           <div className="filter-header-layout flex-row">

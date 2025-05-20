@@ -310,6 +310,7 @@ const SignUp = () => {
                       id="gender"
                       value={formData.gender}
                       onChange={handleChange}
+                      className="custom-select-minimal"
                     >
                       <option value="male">homme</option>
                       <option value="female">femme</option>

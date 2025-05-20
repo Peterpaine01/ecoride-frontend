@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react"
+import { useContext, useEffect, useState, useCallback } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import { AuthContext } from "../context/AuthContext"
 import axios from "../config/axiosConfig"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -7,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import Cover from "../components/Cover"
+import PhotoProfil from "../components/PhotoProfil"
 
 // Icones
 import EnergySavingsLeafOutlinedIcon from "@mui/icons-material/EnergySavingsLeafOutlined"
@@ -22,6 +24,8 @@ const EditProfil = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
+  const { user } = useContext(AuthContext)
+
   const [formData, setFormData] = useState({
     username: "",
     gender: "",
@@ -30,24 +34,33 @@ const EditProfil = () => {
     password: "",
     accept_smoking: 0,
     accept_animals: 0,
+    photo: "",
   })
-
-  const [imageSrc, setImageSrc] = useState(null)
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
-  const [photoPreview, setPhotoPreview] = useState(null)
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const { data } = await axios.get(`/user/${id}`)
-        console.log(data)
+        console.log("data", data)
 
         const driver =
           data.is_driver === true ||
           data.is_driver === "true" ||
           data.is_driver === 1
+            ? 1
+            : 0
+
+        const smoking =
+          data.driverInfos.accept_smoking === true ||
+          data.driverInfos.accept_smoking === "true" ||
+          data.driverInfos.accept_smoking === 1
+            ? 1
+            : 0
+
+        const animals =
+          data.accept_animals === true ||
+          data.accept_animals === "true" ||
+          data.accept_animals === 1
             ? 1
             : 0
 
@@ -57,12 +70,13 @@ const EditProfil = () => {
           is_driver: driver,
           email: data.email,
           password: "",
-          accept_smoking: data?.accept_smoking,
-          accept_animals: data?.accept_animals,
+          accept_smoking: smoking,
+          accept_animals: animals,
+          photo: data?.photo,
         })
-        setPhotoPreview(data.photo)
-      } catch (err) {
+      } catch (error) {
         toast.error("Erreur lors du chargement du profil utilisateur.")
+        console.log(error)
       }
     }
 
@@ -76,32 +90,13 @@ const EditProfil = () => {
       [name]: type === "checkbox" ? checked : value,
     }))
   }
-
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0]
-    if (!file) return
-    const reader = new FileReader()
-    reader.addEventListener("load", () => setImageSrc(reader.result))
-    reader.readAsDataURL(file)
-  }
-
-  const onCropComplete = useCallback((_, croppedPixels) => {
-    setCroppedAreaPixels(croppedPixels)
-  }, [])
+  console.log("formData", formData)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    let croppedImage = null
-    if (imageSrc && croppedAreaPixels) {
-      croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels)
-    }
-
     const form = new FormData()
     Object.entries(formData).forEach(([key, value]) => form.append(key, value))
-    if (croppedImage) {
-      form.append("photoToUpdate", croppedImage)
-    }
 
     if (formData.password) {
       form.append("password", formData.password)
@@ -114,7 +109,8 @@ const EditProfil = () => {
         headers: { "Content-Type": "multipart/form-data" },
       })
       toast.success("Profil mis à jour avec succès !")
-      // setTimeout(() => navigate("/profil"), 1500)
+
+      setTimeout(() => navigate("/profil"), 1500)
     } catch (err) {
       toast.error("Erreur lors de la mise à jour du profil.")
     }
@@ -127,6 +123,8 @@ const EditProfil = () => {
       <main className="container">
         <section className="flex-column align-center">
           <h1 className="mb-20">Modifier mon profil</h1>
+
+          <PhotoProfil photo={formData.photo} setFormData={setFormData} />
 
           <form
             onSubmit={handleSubmit}
@@ -207,93 +205,72 @@ const EditProfil = () => {
                 </div>
               </div>
 
-              <div className="dotted">
-                <h3 className="color-white mb-20">
-                  Vos préférences en voiture
-                </h3>
+              {(user.is_driver || formData.is_driver === 1) && (
+                <div className="dotted">
+                  <h3 className="color-white mb-20">
+                    Vos préférences en voiture
+                  </h3>
 
-                <div className="criteria toggle  flex-row space-between align-center gap-5 mb-20">
-                  <div className="flex-row space-between align-center gap-5">
-                    <SmokingRoomsOutlinedIcon
-                      sx={{ color: "#f7c134", fontSize: 28 }}
-                    />
-                    <label htmlFor="acceptSmoking">Véhicule fumeur</label>
+                  <div className="criteria toggle  flex-row space-between align-center gap-5 mb-20">
+                    <div className="flex-row space-between align-center gap-5">
+                      <SmokingRoomsOutlinedIcon
+                        sx={{ color: "#f7c134", fontSize: 28 }}
+                      />
+                      <label htmlFor="acceptSmoking">Véhicule fumeur</label>
+                    </div>
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        name="accept_smoking"
+                        id="accept_smoking"
+                        checked={formData.accept_smoking === 1}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            accept_smoking: e.target.checked ? 1 : 0,
+                          }))
+                        }
+                      />
+                      <span className="slider"></span>
+                    </label>
                   </div>
-                  <label className="switch">
-                    <input
-                      type="checkbox"
-                      name="accept_smoking"
-                      id="accept_smoking"
-                      checked={formData.accept_smoking === 1}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          accept_smoking: e.target.checked ? 1 : 0,
-                        }))
-                      }
-                    />
-                    <span className="slider"></span>
-                  </label>
-                </div>
-                <div className="criteria toggle  flex-row space-between align-center gap-5 ">
-                  <div className="flex-row space-between align-center gap-5">
-                    <PetsOutlinedIcon sx={{ color: "#f7c134", fontSize: 28 }} />
-                    <label htmlFor="acceptAnimals">Animaux acceptés</label>
+                  <div className="criteria toggle  flex-row space-between align-center gap-5 ">
+                    <div className="flex-row space-between align-center gap-5">
+                      <PetsOutlinedIcon
+                        sx={{ color: "#f7c134", fontSize: 28 }}
+                      />
+                      <label htmlFor="acceptAnimals">Animaux acceptés</label>
+                    </div>
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        name="accept_animals"
+                        id="accept_animals"
+                        checked={formData.accept_animals === 1}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            accept_animals: e.target.checked ? 1 : 0,
+                          }))
+                        }
+                      />
+                      <span className="slider"></span>
+                    </label>
                   </div>
-                  <label className="switch">
-                    <input
-                      type="checkbox"
-                      name="accept_animals"
-                      id="accept_animals"
-                      checked={formData.accept_animals === 1}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          accept_animals: e.target.checked ? 1 : 0,
-                        }))
-                      }
-                    />
-                    <span className="slider"></span>
-                  </label>
                 </div>
-              </div>
+              )}
             </div>
-
-            {/* <div className="dotted flex-column gap-20">
-              <label>Photo de profil</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
-
-              {imageSrc && (
-                <div className="crop-container">
-                  <Cropper
-                    image={imageSrc}
-                    crop={crop}
-                    zoom={zoom}
-                    aspect={1}
-                    onCropChange={setCrop}
-                    onCropComplete={onCropComplete}
-                    onZoomChange={setZoom}
-                  />
-                </div>
-              )}
-
-              {photoPreview && !imageSrc && (
-                <img
-                  src={photoPreview}
-                  alt="Photo actuelle"
-                  className="photo-preview"
-                  width={150}
-                />
-              )}
-            </div> */}
-
-            <button className="btn-solid mt-20 align-self-center" type="submit">
-              Mettre à jour
-            </button>
+            <div className="flex-row align-center justify-center gap-15">
+              <button onClick={() => navigate(-1)} className="btn-light mt-20">
+                ← Retour
+              </button>
+              <button
+                className="btn-solid mt-20 align-self-center"
+                type="submit"
+              >
+                Mettre à jour
+              </button>
+            </div>
           </form>
         </section>
       </main>

@@ -22,6 +22,9 @@ import { displayDuration } from "../utils/dateTimeHandler"
 import axios from "../config/axiosConfig"
 import { toast } from "react-toastify"
 
+// Icones
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
+
 // Components
 import Header from "../components/Header"
 import Cover from "../components/Cover"
@@ -31,6 +34,7 @@ import RideSummary from "../components/RideSummary"
 import StepIndicator from "../components/StepIndicator"
 import MapMarker from "../components/MapMarker"
 import AddressForm from "../components/AddressForm"
+import AddCarForm from "../components/AddCarForm"
 
 const PublishRide = () => {
   const navigate = useNavigate()
@@ -58,7 +62,7 @@ const PublishRide = () => {
     departureAddress: { street: "", city: "", zip: "", coords: null },
     destinationAddress: { street: "", city: "", zip: "", coords: null },
     duration: "",
-    remainingSeats: "",
+    availableSeats: "",
     creditsPerPassenger: "",
     description: "",
     vehicleId: "",
@@ -67,12 +71,28 @@ const PublishRide = () => {
   const [map, setMap] = useState(null)
   const [geolocFailed, setGeolocFailed] = useState(false)
   const [errors, setErrors] = useState("")
+  const [isVehiclesModalOpen, setIsVehiclesModalOpen] = useState(false)
 
   const nextStep = () => {
     hydrateFormStepData()
     setStep(step + 1)
   }
   const prevStep = () => setStep(step - 1)
+
+  const isButtonDisabled = () => {
+    if (step === 1) {
+      return !formData.departureAddress.coords
+    }
+    if (step === 2) {
+      return !formData.destinationAddress.coords
+    }
+    if (step === 6) {
+      console.log("formData.vehicleId", formData)
+
+      return !formData.vehicleId
+    }
+    return false
+  }
 
   useEffect(() => {
     if (
@@ -256,22 +276,26 @@ const PublishRide = () => {
     }
   }
 
+  const fetchVehicles = async () => {
+    try {
+      const response = await axios.get(`/user-cars/${user.account_id}`)
+      console.log("data cars : ", response.data)
+
+      setVehicles(response.data)
+      setFormData((prev) => ({
+        ...prev,
+        vehicleId: response.data[0].id,
+      }))
+    } catch (error) {
+      console.error("Error fetching cars :", error)
+    }
+  }
+
   useEffect(() => {
     if (step === 6 || step === 10) {
       if (!user || !user.account_id) {
         console.error("Utilisateur non authentifié ou account_id manquant.")
         return
-      }
-
-      const fetchVehicles = async () => {
-        try {
-          const response = await axios.get(`/user-cars/${user.account_id}`)
-          console.log("data cars : ", response.data[0])
-
-          setVehicles(response.data)
-        } catch (error) {
-          console.error("Error fetching cars :", error)
-        }
       }
 
       fetchVehicles()
@@ -317,6 +341,7 @@ const PublishRide = () => {
 
     return price
   }
+  console.log("formData", formData)
 
   const hydrateFormStepData = () => {
     if (step === 4) {
@@ -330,10 +355,10 @@ const PublishRide = () => {
     }
 
     if (step === 5) {
-      if (!formData.remainingSeats) {
+      if (!formData.availableSeats) {
         setFormData((prev) => ({
           ...prev,
-          remainingSeats: 1,
+          availableSeats: 1,
         }))
       }
     }
@@ -365,9 +390,6 @@ const PublishRide = () => {
       }
     }
   }
-
-  // console.log(formData)
-  // console.log(vehicles[0])
 
   useEffect(() => {
     if (map && routeCoords.length > 0) {
@@ -490,7 +512,7 @@ const PublishRide = () => {
                       <h2 className="text-lg font-semibold">
                         Temps de trajet estimé
                       </h2>
-                      {formData.duration ? (
+                      {formData.duration || formData.duration === 0 ? (
                         <p className="emphase mt-20">
                           {displayDuration(formData.duration)}
                         </p>
@@ -601,35 +623,51 @@ const PublishRide = () => {
               <>
                 <div className="flex-column align-center w-100">
                   <h2>Avec quel véhicule ?</h2>
-
-                  <div className="custom-select mt-20">
-                    <div className="select" tabIndex="1">
-                      {vehicles.map((vehicle, index) => {
-                        const inputId = `vehicle-${vehicle.id}`
-                        console.log(formData.vehicleId)
-
-                        return (
-                          <div className="wrapper-select" key={vehicle.id}>
-                            <input
-                              className="selectopt"
-                              name="vehicleId"
-                              type="radio"
-                              id={inputId}
-                              value={vehicle.id}
-                              checked={
-                                formData.vehicleId
-                                  ? formData.vehicleId === String(vehicle.id)
-                                  : index === 0 // coche le premier par défaut
-                              }
-                              onChange={handleChange}
-                            />
-                            <label htmlFor={inputId} className="option">
+                  {vehicles.length > 0 ? (
+                    <div>
+                      <select
+                        name="vehicleId"
+                        id="vehicleId"
+                        value={formData.vehicleId}
+                        onChange={handleChange}
+                        className="custom-select-minimal"
+                      >
+                        {vehicles.map((vehicle, index) => {
+                          return (
+                            <option key={vehicle.id} value={vehicle.id}>
                               {vehicle.model} - {vehicle.registration_number}
-                            </label>
-                          </div>
-                        )
-                      })}
+                            </option>
+                          )
+                        })}
+                      </select>
                     </div>
+                  ) : (
+                    <div className="dotted">
+                      <p className="text-center">
+                        Vous n'avez pas encore associé de véhicule à votre
+                        compte.
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="mt-20 mb-20">
+                    <button
+                      onClick={() => setIsVehiclesModalOpen(true)}
+                      className="btn-link mt-20 flex-row align-center gap-5"
+                    >
+                      <AddCircleOutlineIcon /> Ajouter un véhicule
+                    </button>
+                  </div>
+                  <div
+                    className={`${
+                      isVehiclesModalOpen ? "modal-active" : "modal-inactive"
+                    }`}
+                  >
+                    <AddCarForm
+                      isVehiclesModalOpen={isVehiclesModalOpen}
+                      setIsVehiclesModalOpen={setIsVehiclesModalOpen}
+                      fetchVehicles={fetchVehicles}
+                    />
                   </div>
                 </div>
               </>
@@ -641,8 +679,8 @@ const PublishRide = () => {
                 <div className="flex-column align-center w-100">
                   <h2>Combien de passagers ?</h2>
                   <Counter
-                    name={"remainingSeats"}
-                    value={formData.remainingSeats || 1}
+                    name={"availableSeats"}
+                    value={formData.availableSeats || 1}
                     onChange={handleChange}
                     minValue={1}
                     maxValue={8}
@@ -729,15 +767,7 @@ const PublishRide = () => {
               <button
                 onClick={nextStep}
                 className="btn-solid"
-                disabled={
-                  step === 1
-                    ? !formData.departureAddress.street ||
-                      !formData.departureAddress.zip ||
-                      !formData.departureAddress.city
-                    : step === 2
-                    ? !formData.destinationAddress.coords
-                    : ""
-                }
+                disabled={isButtonDisabled()}
               >
                 Continuer
               </button>

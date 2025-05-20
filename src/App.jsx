@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { useContext } from "react"
 import "./App.scss"
+import "react-image-crop/dist/ReactCrop.css"
 
 import { AuthContext } from "./context/AuthContext"
 
