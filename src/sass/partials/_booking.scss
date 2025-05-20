@@ -1,3 +1,5 @@
+@use "variables";
+
 .booking-summary {
   h3 {
     color: white;
@@ -11,4 +13,48 @@
       text-align: left;
     }
   }
+}
+
+.webmaster {
+  h2 {
+    margin: 0;
+  }
+  .btn-arrow {
+    &:hover {
+      background: variables.$color-secondary;
+    }
+  }
+  .driver-infos {
+    .profil-icon {
+      width: 60px;
+      height: 60px;
+    }
+  }
+}
+
+.count-list {
+  padding: 5px 10px;
+  min-width: 40px;
+  border-radius: 5px;
+  color: variables.$color-dark;
+  background: variables.$color-secondary;
+  text-align: center;
+  font-weight: bold;
+}
+
+.bottom-card-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-in-out;
+  button {
+    width: fit-content;
+  }
+}
+
+.bottom-card-wrapper.expanded {
+  max-height: 500px;
+}
+
+.bottom-card-inner {
+  padding-top: 20px;
 }

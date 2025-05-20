@@ -12,6 +12,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 
 const AdminHome = () => {
   const [data, setData] = useState()
+
   useEffect(() => {
     fetchData()
   }, [])

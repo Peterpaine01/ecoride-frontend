@@ -26,19 +26,16 @@ const ProfilMenu = () => {
     <div className="profil-menu-container">
       {user ? (
         <>
-          {/* <Link className="profil-icon user-logged visible" to={"/profil"}>
-            {user.photo && (
-              <img src={user.photo} alt="photo profil par défaut" />
-            )}
-          </Link> */}
           <div
             className={`profil-icon user-logged ${
               isOpen ? "open" : ""
             } visible`}
             onClick={toggleMenu}
           >
-            {user.photo && (
+            {user && user.photo ? (
               <img src={user.photo} alt="photo profil par défaut" />
+            ) : (
+              <User />
             )}
           </div>
           {/* Menu overlay */}
@@ -79,6 +76,28 @@ const ProfilMenu = () => {
                     Se déconnecter
                   </Link>
                 </li>
+                {user &&
+                  user.account_type === "webmaster" &&
+                  user.role === "moderator" && (
+                    <>
+                      <li>
+                        <Link onClick={logout} to={"/espace-admin"}>
+                          Espace webmaster
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                {user &&
+                  user.account_type === "webmaster" &&
+                  user.role === "administrator" && (
+                    <>
+                      <li>
+                        <Link onClick={logout} to={"/espace-admin"}>
+                          Espace admin
+                        </Link>
+                      </li>
+                    </>
+                  )}
               </ul>
             </nav>
           </div>

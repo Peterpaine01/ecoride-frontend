@@ -103,7 +103,7 @@ const Header = () => {
                   user.account_type === "webmaster" &&
                   user.role === "moderator" && (
                     <li className="nav-item">
-                      <Link to={`/espace-admin`}>Espace webmaster</Link>
+                      <Link to={`/espace-webmaster`}>Espace webmaster</Link>
                     </li>
                   )}
                 {user && user.accountStatus === "active" && user.is_driver && (
@@ -123,8 +123,8 @@ const Header = () => {
                     }`}
                     onClick={toggleDropdown}
                   >
-                    {user ? (
-                      <img src={user.photo} alt="photo profil par défaut" />
+                    {user && user.photo ? (
+                      <img src={user.photo} alt="photo profil" />
                     ) : (
                       <User />
                     )}

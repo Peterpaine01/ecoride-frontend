@@ -91,11 +91,6 @@ const RidesList = () => {
   }, [searchQuery, searchParams])
 
   useEffect(() => {
-    // console.log("ridesList has been updated ✅", ridesList)
-    console.log("searchQuery", searchQuery)
-  }, [ridesList, searchQuery])
-
-  useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 1000)
     checkMobile()
     window.addEventListener("resize", checkMobile)
