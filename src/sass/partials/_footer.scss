@@ -13,6 +13,8 @@ footer {
     position: relative;
     &.mobile {
       display: none;
+      flex-direction: row;
+      justify-content: center;
     }
   }
 

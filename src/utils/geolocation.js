@@ -36,30 +36,6 @@ export const reverseGeocode = async ([lat, lon]) => {
   }
 }
 
-// export const calculateRoute = async (start, end) => {
-//   const response = await axios.post(
-//     "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
-//     {
-//       coordinates: [start.slice().reverse(), end.slice().reverse()],
-//     },
-//     {
-//       headers: {
-//         Authorization: import.meta.env.VITE_API_KEY_OPENROUTE,
-//         "Content-Type": "application/json",
-//       },
-//     }
-//   )
-
-//   const route = response.data.features[0]
-//   const duration = route.properties.summary.duration / 60
-//   const routeCoords = route.geometry.coordinates.map(([lon, lat]) => [lat, lon])
-
-//   return {
-//     duration: duration.toFixed(1),
-//     routeCoords,
-//   }
-// }
-
 export const calculateRoute = async (start, end) => {
   const response = await axios.post(
     `${import.meta.env.VITE_API_URL}/directions`,

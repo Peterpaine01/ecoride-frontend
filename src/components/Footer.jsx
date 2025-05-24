@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
-import React, { useState } from "react"
+import { useState, useContext } from "react"
+import { AuthContext } from "../context/AuthContext"
 
 // Images
 import LogoHD from "../assets/logo-EcoRide-secondary.svg"
@@ -17,6 +18,8 @@ const Footer = () => {
   // For testing
   const [isToken, setIsToken] = useState(true)
 
+  const { user } = useContext(AuthContext)
+
   return (
     <>
       <footer>
@@ -32,17 +35,20 @@ const Footer = () => {
             <Search size={22} />
             <span>Rechercher</span>
           </Link>
-          <Link
-            to="/publier-trajet"
-            className={`btn-footer flex-column align-center ${
-              isToken && "user-logged"
-            }`}
-            type="button"
-          >
-            <PlusCircle size={22} />
-            <span>Publier un trajet</span>
-          </Link>
-          {isToken && (
+          {user && user.accountStatus === "active" && user.is_driver && (
+            <Link
+              to="/publier-trajet"
+              className={`btn-footer flex-column align-center ${
+                isToken && "user-logged"
+              }`}
+              type="button"
+            >
+              <PlusCircle size={22} />
+              <span>Publier un trajet</span>
+            </Link>
+          )}
+
+          {user && (
             <Link
               to="/vos-trajets"
               className="btn-footer flex-column align-center user-logged"

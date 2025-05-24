@@ -38,7 +38,6 @@ const CarDetails = () => {
       <Cover />
       <main>
         <div className="container">
-          {loading && <p>Chargement en cours...</p>}
           {error && <p className="text-red-500">{error}</p>}
 
           {car && (

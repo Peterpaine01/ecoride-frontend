@@ -51,16 +51,16 @@ const EditProfil = () => {
             : 0
 
         const smoking =
-          data.driverInfos.accept_smoking === true ||
-          data.driverInfos.accept_smoking === "true" ||
-          data.driverInfos.accept_smoking === 1
+          data.driverInfos?.accept_smoking === true ||
+          data.driverInfos?.accept_smoking === "true" ||
+          data.driverInfos?.accept_smoking === 1
             ? 1
             : 0
 
         const animals =
-          data.accept_animals === true ||
-          data.accept_animals === "true" ||
-          data.accept_animals === 1
+          data.driverInfos?.accept_animals === true ||
+          data.driverInfos?.accept_animals === "true" ||
+          data.driverInfos?.accept_animals === 1
             ? 1
             : 0
 

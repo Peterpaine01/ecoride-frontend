@@ -76,8 +76,13 @@ const PublishRide = () => {
   const nextStep = () => {
     hydrateFormStepData()
     setStep(step + 1)
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
-  const prevStep = () => setStep(step - 1)
+
+  const prevStep = () => {
+    setStep(step - 1)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   const isButtonDisabled = () => {
     if (step === 1) {
@@ -341,7 +346,7 @@ const PublishRide = () => {
 
     return price
   }
-  console.log("formData", formData)
+  // console.log("formData", formData)
 
   const hydrateFormStepData = () => {
     if (step === 4) {

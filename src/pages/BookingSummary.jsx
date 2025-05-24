@@ -139,7 +139,7 @@ const BookingSummary = () => {
               <h3 className="mb-20">Trajet</h3>
               <div className="flex-row sjustify-start gap-30 align-end">
                 <div>
-                  <p className="text-big mb-10">
+                  <p className="text-big mb-10 flex-row align-center ">
                     {rideDetail.departureAddress.city}{" "}
                     <ArrowRightAltOutlinedIcon
                       sx={{ color: "#42ba92", fontSize: 32 }}
@@ -149,8 +149,10 @@ const BookingSummary = () => {
                   <p className="text-bold mb-10">
                     {formatDate(rideDetail.departureDate)}
                   </p>
+                  <p className="mt-20">
+                    {rideDetail.creditsPerPassenger} crédits / passager
+                  </p>
                   <p className="mt-10">
-                    {rideDetail.creditsPerPassenger} crédits / place –{" "}
                     {rideDetail.remainingSeats > 0
                       ? `${rideDetail.remainingSeats} place${
                           rideDetail.remainingSeats > 1 && "s"

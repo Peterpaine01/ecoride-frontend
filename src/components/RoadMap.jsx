@@ -37,6 +37,7 @@ import { MapContainer, TileLayer, Polyline } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
 
 import MapMarker from "../components/MapMarker"
+import CarCard from "../components/CarCard"
 
 const RoadMap = () => {
   const params = useParams()
@@ -252,14 +253,14 @@ const RoadMap = () => {
         <section>
           <div className="flex-row two-column align-start w-100">
             <div className="block-left flex-column align-start">
-              <div className="flex-column mb-10 dotted justify-left">
+              <div className="flex-column mb-20 dotted justify-left">
                 <h3 className="flex-row align-center gap-5 color-secondary mb-20">
                   {rideDetail.driver?.gender === "male" ||
                   rideDetail.driver?.gender === "other"
                     ? "Conducteur"
                     : "Conductrice"}
                 </h3>
-                <div className="driver-infos flex-row justify-left align-center gap-15 ">
+                <div className="driver-infos flex-row justify-left align-center gap-15">
                   <div className="profil-icon">
                     {rideDetail.driver?.photo ? (
                       <img
@@ -286,7 +287,8 @@ const RoadMap = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex-column mb-10 dotted">
+              <CarCard car={rideDetail.car} />
+              <div className="flex-column mt-10 mb-10 dotted">
                 <h3 className="flex-row align-center gap-5 color-secondary">
                   <strong className="color-yellow">
                     <Edit size={20} />
@@ -333,23 +335,6 @@ const RoadMap = () => {
                     Voyage écologique
                   </p>
                 )}
-              </div>
-              <div className="flex-row mb-10 dotted align-center justify-start gap-15">
-                <p className="flex-row align-center justify-start gap-5">
-                  <DirectionsCarFilledOutlinedIcon
-                    sx={{ color: "#f7c134", fontSize: 24 }}
-                  />
-                </p>
-                <div className="flex-column justify-left">
-                  <p className="flex-row align-center justify-start">
-                    {rideDetail.car
-                      ? `${rideDetail.car.model} - ${rideDetail.car.registration_number}`
-                      : "Non renseigné"}
-                  </p>
-                  <p className="text-tiny">
-                    {rideDetail.car && rideDetail.car.color}
-                  </p>
-                </div>
               </div>
             </div>
             <div className="block-right">

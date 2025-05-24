@@ -62,14 +62,13 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/test-image" element={<TestImageCropped />} />
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
         <Route
           path="/publier-trajet"
           element={
             <PrivateRoute>
-              <PublishRide />
+              <PublishRide allowedRoles={["user"]} />
             </PrivateRoute>
           }
         />

@@ -11,21 +11,28 @@ import RoadMapCard from "../components/RoadMapCard"
 import { format } from "date-fns"
 import { fr } from "date-fns/locale"
 
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
+
 const RidesSchedule = () => {
   const [ridesDriver, setRidesDriver] = useState([])
   const [ridesPassenger, setRidesPassenger] = useState([])
 
   const { user, authLoading } = useContext(AuthContext)
-  // console.log("authLoading", authLoading)
 
   useEffect(() => {
     const fetchRidesDriver = async () => {
       try {
         const response = await axios.get(`/driver-rides`)
+
+        const now = new Date()
+        const minDate = new Date(now)
+        minDate.setHours(0, 0, 0, 0) // minuit aujourd'hui
+        minDate.setDate(minDate.getDate() - 2) // -2 jours
+
         const upcomingDriverRides = response.data.rides
           ?.filter((ride) => {
             const rideDate = new Date(ride.departureDate)
-            return ride.rideStatus !== "canceled" && rideDate >= new Date()
+            return ride.rideStatus !== "canceled" && rideDate >= minDate
           })
           .sort((a, b) => new Date(a.departureDate) - new Date(b.departureDate))
 
@@ -39,17 +46,22 @@ const RidesSchedule = () => {
       if (user) {
         try {
           const response = await axios.get(`/passenger-bookings`)
+
+          const now = new Date()
+          const minDate = new Date(now)
+          minDate.setHours(0, 0, 0, 0)
+          minDate.setDate(minDate.getDate() - 2)
+
           const upcomingPassengerRides = response.data.bookings
             ?.filter((booking) => {
-              const rideDate = new Date(booking?.ride.departureDate)
-              return (
-                booking.bookingStatus !== "canceled" && rideDate >= new Date()
-              )
+              const rideDate = new Date(booking?.ride?.departureDate)
+              return booking.bookingStatus !== "canceled" && rideDate >= minDate
             })
             .sort(
-              (a, b) => new Date(a.departureDate) - new Date(b.departureDate)
+              (a, b) =>
+                new Date(a.ride.departureDate) - new Date(b.ride.departureDate)
             )
-          // console.log(upcomingPassengerRides)
+
           setRidesPassenger(upcomingPassengerRides)
         } catch (error) {
           console.error("Error fetching passenger rides :", error)
@@ -60,6 +72,8 @@ const RidesSchedule = () => {
     fetchRidesDriver()
     fetchRidesPassenger()
   }, [user])
+
+  console.log("new Date", new Date())
 
   if (authLoading) return null
 
@@ -75,6 +89,7 @@ const RidesSchedule = () => {
           <section>
             <h1>Vos trajets à venir</h1>
           </section>
+
           {ridesDriver &&
             ridesPassenger &&
             ridesDriver.length === 0 &&
@@ -138,6 +153,14 @@ const RidesSchedule = () => {
               })}
             </section>
           )}
+          <section>
+            <Link
+              to={`/trajets-archive/${user.account_id}`}
+              className="edit-profile btn-link flex-row align-center"
+            >
+              <span>Trajets passés</span> <KeyboardArrowRightIcon />
+            </Link>
+          </section>
         </div>
       </main>
       <Footer />
