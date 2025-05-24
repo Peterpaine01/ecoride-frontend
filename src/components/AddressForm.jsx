@@ -1,4 +1,5 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { toast } from "react-toastify"
 
 const AddressForm = ({ address, onChange, label, onSubmit, errors }) => {
   const handleChange = (field, value) => {
@@ -7,14 +8,15 @@ const AddressForm = ({ address, onChange, label, onSubmit, errors }) => {
     })
   }
 
+  useEffect(() => {
+    if (errors) {
+      toast.error(errors)
+    }
+  }, [errors])
+
   return (
     <div className="address-form flex-column space-between gap-15 h-100 w-100">
       <h2>{label}</h2>
-      {errors && (
-        <p className="error-msg text-center" role="alert">
-          {errors}
-        </p>
-      )}
       <div className="flex-row align-start">
         <input
           type="text"

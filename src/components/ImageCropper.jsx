@@ -75,7 +75,6 @@ const ImageCropper = ({ closeModal, updateAvatar, setFormData }) => {
           <button
             className="btn-solid mb-20"
             onClick={() => {
-              // 1. Génère l’aperçu sur le canvas
               setCanvasPreview(
                 imgRef.current,
                 previewCanvasRef.current,
@@ -88,12 +87,8 @@ const ImageCropper = ({ closeModal, updateAvatar, setFormData }) => {
 
               const canvas = previewCanvasRef.current
 
-              // 2. Récupère l’aperçu immédiat pour affichage
               const dataUrl = canvas.toDataURL()
-              // Si tu veux une preview ou une mise à jour rapide dans le state :
-              // updateAvatarPreview(dataUrl) — si tu as ce genre de logique
 
-              // 3. Crée le fichier à envoyer côté serveur
               canvas.toBlob(
                 (blob) => {
                   if (!blob) {
@@ -105,7 +100,6 @@ const ImageCropper = ({ closeModal, updateAvatar, setFormData }) => {
                     type: "image/jpeg",
                   })
 
-                  // 4. Envoie vers le frontend (ou vers ton handler plus haut)
                   updateAvatar(dataUrl)
 
                   setFormData((prev) => {
@@ -115,7 +109,6 @@ const ImageCropper = ({ closeModal, updateAvatar, setFormData }) => {
                     }
                   })
 
-                  // 5. Ferme la modale (optionnel ici si tu veux attendre la réponse)
                   closeModal()
                 },
                 "image/jpeg",

@@ -12,10 +12,13 @@ import { format } from "date-fns"
 import { fr } from "date-fns/locale"
 
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
 
 const RidesSchedule = () => {
   const [ridesDriver, setRidesDriver] = useState([])
   const [ridesPassenger, setRidesPassenger] = useState([])
+  const [showDriverRides, setShowDriverRides] = useState(false)
+  const [showPassengerRides, setShowPassengerRides] = useState(false)
 
   const { user, authLoading } = useContext(AuthContext)
 
@@ -73,8 +76,6 @@ const RidesSchedule = () => {
     fetchRidesPassenger()
   }, [user])
 
-  console.log("new Date", new Date())
-
   if (authLoading) return null
 
   let previousDateRide = null
@@ -100,57 +101,97 @@ const RidesSchedule = () => {
             )}
           {ridesDriver && ridesDriver.length > 0 && (
             <section>
-              <h2>Conducteur</h2>
-              {ridesDriver?.map((ride, index) => {
-                const currentDate = format(
-                  new Date(ride.departureDate),
-                  "EEE dd MMMM",
-                  { locale: fr }
-                )
+              <div
+                className="toggle-title flex-row align-center space-between"
+                onClick={() => setShowDriverRides(!showDriverRides)}
+                style={{ cursor: "pointer" }}
+              >
+                <h2>Conducteur</h2>
+                <ArrowForwardIosIcon
+                  sx={{
+                    color: "#fff",
+                    fontSize: 18,
+                    transform: showDriverRides
+                      ? "rotate(90deg)"
+                      : "rotate(0deg)",
+                    transition: "transform 0.2s ease",
+                  }}
+                />
+              </div>
 
-                const showDate = currentDate !== previousDateRide
-                previousDateRide = currentDate
+              <div
+                className={`toggle-content ${showDriverRides ? "" : "closed"}`}
+              >
+                {ridesDriver?.map((ride, index) => {
+                  const currentDate = format(
+                    new Date(ride.departureDate),
+                    "EEE dd MMMM",
+                    { locale: fr }
+                  )
+                  const showDate = currentDate !== previousDateRide
+                  previousDateRide = currentDate
 
-                return (
-                  <div key={ride._id}>
-                    {showDate && (
-                      <h3 className="text-white mt-20">{currentDate}</h3>
-                    )}{" "}
-                    <RoadMapCard ride={ride} driverRide={true} />
-                  </div>
-                )
-              })}
+                  return (
+                    <div key={ride._id}>
+                      {showDate && (
+                        <h3 className="text-white mt-20">{currentDate}</h3>
+                      )}
+                      <RoadMapCard ride={ride} driverRide={true} />
+                    </div>
+                  )
+                })}
+              </div>
             </section>
           )}
 
           {ridesPassenger && ridesPassenger.length > 0 && (
             <section>
-              <h2>Passager</h2>
-              {ridesPassenger?.map((booking, index) => {
-                // console.log("booking", booking)
+              <div
+                className="toggle-title flex-row align-center space-between"
+                onClick={() => setShowPassengerRides(!showPassengerRides)}
+                style={{ cursor: "pointer" }}
+              >
+                <h2>Passager</h2>
+                <ArrowForwardIosIcon
+                  sx={{
+                    color: "#fff",
+                    fontSize: 18,
+                    transform: showPassengerRides
+                      ? "rotate(90deg)"
+                      : "rotate(0deg)",
+                    transition: "transform 0.2s ease",
+                  }}
+                />
+              </div>
 
-                const currentDate = format(
-                  new Date(booking.ride?.departureDate),
-                  "EEE dd MMMM",
-                  { locale: fr }
-                )
+              <div
+                className={`toggle-content ${
+                  showPassengerRides ? "" : "closed"
+                }`}
+              >
+                {ridesPassenger?.map((booking, index) => {
+                  const currentDate = format(
+                    new Date(booking.ride?.departureDate),
+                    "EEE dd MMMM",
+                    { locale: fr }
+                  )
+                  const showDate = currentDate !== previousDateBooking
+                  previousDateBooking = currentDate
 
-                const showDate = currentDate !== previousDateBooking
-                previousDateBooking = currentDate
-
-                return (
-                  <div key={booking.ride?._id}>
-                    {showDate && (
-                      <h3 className="text-white mt-20">{currentDate}</h3>
-                    )}{" "}
-                    <RoadMapCard
-                      ride={booking.ride}
-                      booking={booking}
-                      driverRide={false}
-                    />
-                  </div>
-                )
-              })}
+                  return (
+                    <div key={booking.ride?._id}>
+                      {showDate && (
+                        <h3 className="text-white mt-20">{currentDate}</h3>
+                      )}
+                      <RoadMapCard
+                        ride={booking.ride}
+                        booking={booking}
+                        driverRide={false}
+                      />
+                    </div>
+                  )
+                })}
+              </div>
             </section>
           )}
           <section>

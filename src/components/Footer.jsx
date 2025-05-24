@@ -35,7 +35,7 @@ const Footer = () => {
             <Search size={22} />
             <span>Rechercher</span>
           </Link>
-          {user && user.accountStatus === "active" && user.is_driver && (
+          {user && user.accountStatus === "active" && (
             <Link
               to="/publier-trajet"
               className={`btn-footer flex-column align-center ${

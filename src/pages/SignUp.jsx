@@ -227,6 +227,7 @@ const SignUp = () => {
                       type="button"
                       className="password-toggle"
                       onClick={() => setShowPassword(!showPassword)}
+                      aria-label="Montrer ou masquer le mot de passe"
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>

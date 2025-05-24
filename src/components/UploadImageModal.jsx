@@ -17,6 +17,7 @@ const UploadImageModal = ({ updateAvatar, closeModal, setFormData }) => {
             <button
               className="back-btn flex-row align-end"
               onClick={closeModal}
+              aria-label="Fermer"
             >
               <CloseIcon sx={{ fontSize: 38 }} />
             </button>

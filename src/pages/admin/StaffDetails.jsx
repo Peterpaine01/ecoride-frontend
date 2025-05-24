@@ -81,12 +81,14 @@ const StaffDetails = () => {
                   <button
                     onClick={() => deleteStaff(id)}
                     className="btn-icon flex-row justify-center align-center color-dark"
+                    aria-label="Supprimer"
                   >
                     <DeleteForeverIcon />
                   </button>
                   <button
                     onClick={() => navigate(`/modifier-staff/${id}`)}
                     className="btn-icon flex-row justify-center align-center color-dark"
+                    aria-label="Modifier"
                   >
                     <ModeEditIcon />
                   </button>

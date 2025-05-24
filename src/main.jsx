@@ -9,14 +9,14 @@ import { PreviousLocationProvider } from "./context/PreviousLocationContext"
 import ScrollToTop from "./components/ScrollToTop"
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <PreviousLocationProvider>
-        <AuthProvider>
-          <ScrollToTop />
-          <App />
-        </AuthProvider>
-      </PreviousLocationProvider>
-    </BrowserRouter>
-  </StrictMode>
+  // <StrictMode>
+  <BrowserRouter>
+    <PreviousLocationProvider>
+      <AuthProvider>
+        <ScrollToTop />
+        <App />
+      </AuthProvider>
+    </PreviousLocationProvider>
+  </BrowserRouter>
+  // </StrictMode>
 )

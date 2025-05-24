@@ -12,3 +12,16 @@ export const displayDuration = (duration) => {
     return `${roundDuration} min`
   }
 }
+
+export const handleDateChange = (date) => {
+  const selectedDate = new Date(date)
+  selectedDate.setHours(0, 0, 0, 0)
+  setFormData({ ...formData, departureDate: selectedDate.toISOString() })
+}
+
+export const formatTimeToFrench = (isoDate) => {
+  const date = new Date(isoDate)
+
+  const options = { hour: "2-digit", minute: "2-digit" }
+  return date.toLocaleTimeString("fr-FR", options)
+}

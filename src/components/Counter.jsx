@@ -19,6 +19,7 @@ const Counter = ({ name, onChange, value, minValue, maxValue }) => {
         type="button"
         onClick={decrementCounter}
         disabled={value <= minValue}
+        aria-label="Moins"
       >
         <Minus color="red" />
       </button>
@@ -28,6 +29,7 @@ const Counter = ({ name, onChange, value, minValue, maxValue }) => {
         type="button"
         onClick={incrementCounter}
         disabled={value >= maxValue}
+        aria-label="Plus"
       >
         <Plus />
       </button>

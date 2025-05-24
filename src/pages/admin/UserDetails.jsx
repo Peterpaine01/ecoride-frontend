@@ -10,14 +10,8 @@ import Footer from "../../components/Footer"
 import Cover from "../../components/Cover"
 
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft"
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
-import ModeEditIcon from "@mui/icons-material/ModeEdit"
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
-import CheckCircleIcon from "@mui/icons-material/CheckCircle"
-import CancelIcon from "@mui/icons-material/Cancel"
-import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb"
-import PendingIcon from "@mui/icons-material/Pending"
 
 const UserDetails = () => {
   const { id } = useParams()
@@ -156,14 +150,16 @@ const UserDetails = () => {
                   <button
                     onClick={() => softDeleteUser(id)}
                     className="btn-icon flex-row justify-center align-center color-dark"
+                    aria-label="Anonymiser le compte"
                   >
-                    <VisibilityOffIcon />
+                    <VisibilityOffIcon /> Anonymiser
                   </button>
                   <button
                     onClick={() => hardDeleteUser(id)}
                     className="btn-icon flex-row justify-center align-center color-dark"
+                    aria-label="Supprimer"
                   >
-                    <DeleteForeverIcon />
+                    <DeleteForeverIcon /> Supprimer définitivement
                   </button>
                 </div>
               </>

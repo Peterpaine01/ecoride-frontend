@@ -106,6 +106,7 @@ const UserList = () => {
                       <button
                         onClick={() => navigate(`/utilisateur/${user.id}`)}
                         className="btn-icon flex-row justify-center align-center color-dark"
+                        aria-label="Voir les détails"
                       >
                         <KeyboardArrowRightIcon />
                       </button>

@@ -44,7 +44,11 @@ const ProfilMenu = () => {
               isOpen ? "visible" : ""
             }`}
           >
-            <button className="back-btn" onClick={toggleMenu}>
+            <button
+              className="back-btn"
+              onClick={toggleMenu}
+              aria-label="Retour"
+            >
               <ChevronLeft size={28} />
             </button>
 
@@ -116,7 +120,11 @@ const ProfilMenu = () => {
               isOpen ? "visible" : ""
             }`}
           >
-            <button className="back-btn" onClick={toggleMenu}>
+            <button
+              className="back-btn"
+              onClick={toggleMenu}
+              aria-label="Retour"
+            >
               <ChevronLeft size={28} />
             </button>
 

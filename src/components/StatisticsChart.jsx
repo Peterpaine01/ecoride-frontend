@@ -117,7 +117,11 @@ function StatisticsChart() {
       <div className="dotted" style={{ paddingRight: "40px" }}>
         {/* Navigation */}
         <div className="flex-row justify-center align-center mb-20 gap-15">
-          <button onClick={handlePrev} className="btn-text ">
+          <button
+            onClick={handlePrev}
+            className="btn-text"
+            aria-label="Précédent"
+          >
             <KeyboardArrowLeftIcon />
           </button>
 
@@ -137,7 +141,11 @@ function StatisticsChart() {
               : selectedValue}
           </p>
 
-          <button onClick={handleNext} className="btn-text">
+          <button
+            onClick={handleNext}
+            className="btn-text"
+            aria-label="Suivant"
+          >
             <KeyboardArrowRightIcon />
           </button>
         </div>

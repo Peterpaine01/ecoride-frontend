@@ -106,7 +106,7 @@ const Header = () => {
                       <Link to={`/espace-webmaster`}>Espace webmaster</Link>
                     </li>
                   )}
-                {user && user.accountStatus === "active" && user.is_driver && (
+                {user && user.accountStatus === "active" && (
                   <li className="nav-item">
                     <Link className="add-btn" to={`/publier-trajet`}>
                       <PlusCircle size={31} /> Publier un trajet
@@ -122,6 +122,7 @@ const Header = () => {
                         : ""
                     }`}
                     onClick={toggleDropdown}
+                    aria-label="Menu Profil"
                   >
                     {user && user.photo ? (
                       <img src={user.photo} alt="photo profil" />

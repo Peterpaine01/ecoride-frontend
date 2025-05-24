@@ -71,8 +71,10 @@ const AddCarForm = ({
     e.preventDefault()
 
     const formattedDate = formData.first_registration_date
-      ? formData.first_registration_date.toString().split("T")[0]
-      : null
+      ? formData.first_registration_date.toISOString().split("T")[0]
+      : ""
+
+    console.log("formattedDate", formattedDate)
 
     const payload = {
       ...formData,
@@ -96,6 +98,9 @@ const AddCarForm = ({
         brand_id: 0,
         available_seats: 0,
       })
+      if (isVehiclesModalOpen) {
+        setIsVehiclesModalOpen(false)
+      }
     } catch (error) {
       setSuccess(false)
       toast.error(
@@ -106,6 +111,8 @@ const AddCarForm = ({
 
   const handleDateChange = (date) => {
     const dateObj = new Date(date)
+    console.log("dateObj", dateObj)
+
     if (!isNaN(dateObj)) {
       setFormData({ ...formData, first_registration_date: dateObj })
     }
@@ -127,6 +134,7 @@ const AddCarForm = ({
               <button
                 className="back-btn flex-row align-end"
                 onClick={() => setIsVehiclesModalOpen(false)}
+                aria-label="Fermer"
               >
                 <ChevronLeft size={28} />
               </button>
@@ -169,6 +177,7 @@ const AddCarForm = ({
               dateFormat="dd/MM/yyyy"
               placeholderText="jj/mm/aaaa"
               name="first_registration_date"
+              autoComplete="off"
             />
           </div>
           <div className="dotted flex-column gap-20">
@@ -206,7 +215,7 @@ const AddCarForm = ({
               name="color"
               id="color"
               placeholder="vert"
-              value={formData.model}
+              value={formData.color}
               onChange={handleChange}
               required
             />
@@ -246,13 +255,13 @@ const AddCarForm = ({
             type="submit"
             className="btn-solid mt-20"
             disabled={
-              !formData.registration_number ||
-              !formData.first_registration_date ||
-              !formData.model ||
-              !formData.color ||
-              !formData.energy_id ||
-              !formData.brand_id ||
-              !formData.available_seats
+              (!formData.registration_number ||
+                !formData.first_registration_date ||
+                !formData.model ||
+                !formData.color ||
+                !formData.energy_id ||
+                !formData.brand_id ||
+                !formData.available_seats) === false
                 ? false
                 : true
             }

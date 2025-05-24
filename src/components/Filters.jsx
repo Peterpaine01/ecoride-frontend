@@ -92,6 +92,7 @@ const Filters = ({
             <button
               className="back-btn flex-row align-end"
               onClick={() => setIsFiltersModalOpen(false)}
+              aria-label="Retour"
             >
               <ChevronLeft size={28} />
             </button>

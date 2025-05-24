@@ -136,12 +136,17 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
         <div className="actions flex-row justify-end align-center w-100">
           {isDriver && !isRideCompleted && (
             <>
-              <button onClick={handleDeleteRide} className="icon-button">
+              <button
+                onClick={handleDeleteRide}
+                className="icon-button"
+                aria-label="Annuler le trajet"
+              >
                 <DeleteIcon sx={{ color: "#023560", fontSize: 24 }} />
               </button>
               <button
                 onClick={() => navigate(`/modifier-trajet/${_id}`)}
                 className="icon-button"
+                aria-label="Modifier le trajet"
               >
                 <ModeEditIcon sx={{ color: "#023560", fontSize: 24 }} />
               </button>
@@ -160,6 +165,7 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
                   background: "#edf0f8",
                   borderColor: "#edf0f8",
                 }}
+                aria-label="Annuler"
               >
                 <DeleteIcon sx={{ color: "#023560", fontSize: 24 }} />
                 Annuler
@@ -173,7 +179,11 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
           )}
 
           {/* Navigation */}
-          <button onClick={handleNavigateToRecap} className="icon-button">
+          <button
+            onClick={handleNavigateToRecap}
+            className="icon-button"
+            aria-label="Voir les détails"
+          >
             <ArrowForwardIosIcon sx={{ color: "#023560", fontSize: 24 }} />
           </button>
         </div>
@@ -182,15 +192,16 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
         {isDriver && isRideToday && isRideOngoing && (
           <button
             onClick={() => handleStartStopRide("stop")}
-            className="btn-access w-100"
+            className="btn-access w-100 btn-action-ride"
+            aria-label="Clôturer le trajet"
           >
             Clôturer
           </button>
         )}
 
-        {isRideOngoing && (
+        {isRideOngoing && !isDriver && (
           <p
-            className="dotted"
+            className="dotted btn-action-ride"
             style={{
               padding: "10px",
               borderColor: "#f7c134",
@@ -204,7 +215,7 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
 
         {isRideCompleted && (
           <p
-            className="dotted"
+            className="dotted btn-action-ride"
             style={{
               padding: "10px",
               borderColor: "#d7ead6",
@@ -218,7 +229,8 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
         {isRideForthcoming && isDriver && isRideToday && (
           <button
             onClick={() => handleStartStopRide("start")}
-            className="btn-solid w-100"
+            className="btn-solid w-100 btn-action-ride"
+            aria-label="Démarrer le trajet"
           >
             Démarrer
           </button>
@@ -226,7 +238,7 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
 
         {isRideForthcoming && isDriver && !isRideToday && (
           <p
-            className="dotted"
+            className="dotted btn-action-ride"
             style={{
               padding: "10px",
               borderColor: "#42ba92",
@@ -240,7 +252,7 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
 
         {isRideForthcoming && !isDriver && (
           <p
-            className="dotted"
+            className="dotted btn-action-ride"
             style={{
               padding: "10px",
               borderColor: "#42ba92",
@@ -255,8 +267,9 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
         {!isDriver && isBookingCompleted && (
           <button
             onClick={() => navigate(`/publier-avis/${booking._id}`)}
-            className="btn-solid w-100"
+            className="btn-solid w-100 btn-action-ride"
             style={{ borderColor: "#d7ead6" }}
+            aria-label="Laisser un avis sur votre trajet"
           >
             Noter
           </button>
@@ -264,7 +277,7 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
 
         {!isDriver && isBookingReviewed && (
           <p
-            className="dotted"
+            className="dotted btn-action-ride"
             style={{
               padding: "10px",
               borderColor: "#d7ead6",

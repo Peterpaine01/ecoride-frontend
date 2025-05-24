@@ -18,6 +18,7 @@ import {
   calculateRoute,
 } from "../utils/geolocation"
 import { displayDuration } from "../utils/dateTimeHandler"
+import { sanitizeText } from "../utils/sanitizeInput"
 
 import axios from "../config/axiosConfig"
 import { toast } from "react-toastify"
@@ -38,6 +39,7 @@ import AddCarForm from "../components/AddCarForm"
 
 const PublishRide = () => {
   const navigate = useNavigate()
+  registerLocale("fr", fr)
   const { user } = useContext(AuthContext)
 
   // Redirection
@@ -45,15 +47,12 @@ const PublishRide = () => {
     if (!user) {
       navigate("/se-connecter")
     } else if (!user.is_driver) {
-      if (!sessionStorage.getItem("hasShownDriverToast")) {
-        toast.info(
-          "Pour accéder à cette fonctionnalité, merci de modifier votre profil en vous définissant comme conducteur."
-        )
-        sessionStorage.setItem("hasShownDriverToast", "true")
-      }
-      navigate("/profil")
+      toast.info(
+        "Pour accéder à cette fonctionnalité, merci de modifier votre profil en vous définissant comme conducteur."
+      )
+      navigate(`/modifier-profil/${user.account_id}`)
     }
-  }, [user, navigate])
+  }, [user])
 
   const [step, setStep] = useState(1)
   const [vehicles, setVehicles] = useState([])
@@ -84,12 +83,22 @@ const PublishRide = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  const isButtonDisabled = () => {
+  const isFormValide = () => {
     if (step === 1) {
-      return !formData.departureAddress.coords
+      if (
+        !formData.departureAddress?.coords ||
+        formData.departureAddress?.coords?.length === 0
+      ) {
+        return true
+      }
     }
     if (step === 2) {
-      return !formData.destinationAddress.coords
+      if (
+        !formData.destinationAddress?.coords ||
+        formData.destinationAddress?.coords?.length === 0
+      ) {
+        return true
+      }
     }
     if (step === 6) {
       console.log("formData.vehicleId", formData)
@@ -226,28 +235,61 @@ const PublishRide = () => {
     formData.destinationAddress.coords,
   ])
 
+  // HANDLE DATE
+  const handleDateChange = (date) => {
+    const selectedDate = new Date(date)
+    selectedDate.setHours(0, 0, 0, 0)
+    setFormData({ ...formData, departureDate: selectedDate.toISOString() })
+  }
+
+  const formatTimeToFrench = (isoDate) => {
+    const date = new Date(isoDate)
+
+    const options = { hour: "2-digit", minute: "2-digit" }
+    return date.toLocaleTimeString("fr-FR", options)
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target
 
     setFormData((prev) => {
       if (name === "departureTime") {
         const [hour, minute] = value.split(":")
-        let currentDate = prev.departureDate
+        const currentDate = prev.departureDate
 
         if (!currentDate) {
-          const today = new Date().toISOString().split("T")[0]
-          currentDate = `${today}T00:00`
+          // On attend que la date soit d'abord remplie
+          return prev
         }
 
-        if (!(typeof currentDate === "string")) {
-          currentDate = new Date(currentDate).toISOString()
-        }
+        const date = new Date(currentDate)
+        date.setHours(Number(hour), Number(minute), 0, 0)
 
-        const datePart = currentDate.split("T")[0]
-        const updatedDate = `${datePart}T${hour}:${minute}`
         return {
           ...prev,
-          departureDate: updatedDate,
+          departureDate: date.toISOString(), // correct en UTC
+        }
+      }
+
+      if (name === "description") {
+        return {
+          ...prev,
+          description: sanitizeText(value),
+        }
+      }
+
+      const addressFields = ["street", "city", "zip"]
+      for (const addressType of ["departureAddress", "destinationAddress"]) {
+        for (const field of addressFields) {
+          if (name === `${addressType}.${field}`) {
+            return {
+              ...prev,
+              [addressType]: {
+                ...prev[addressType],
+                [field]: sanitizeText(value),
+              },
+            }
+          }
         }
       }
 
@@ -258,13 +300,6 @@ const PublishRide = () => {
     })
   }
 
-  const formatTimeToFrench = (isoDate) => {
-    const date = new Date(isoDate)
-
-    const options = { hour: "2-digit", minute: "2-digit" }
-    return date.toLocaleTimeString("fr-FR", options)
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -273,11 +308,12 @@ const PublishRide = () => {
 
       if (response.status === 201 || response.status === 200) {
         console.log("Le ride a bien été créé")
+        toast.success("Le trajet a bien été créé")
         navigate("/vos-trajets")
       }
     } catch (error) {
       console.error("Error creating ride :", error)
-      alert("Une erreur est survenue. Veuillez réessayer.")
+      toast.error("Une erreur est survenue. Veuillez réessayer.")
     }
   }
 
@@ -287,10 +323,12 @@ const PublishRide = () => {
       console.log("data cars : ", response.data)
 
       setVehicles(response.data)
-      setFormData((prev) => ({
-        ...prev,
-        vehicleId: response.data[0].id,
-      }))
+      if (response.data.length > 0) {
+        setFormData((prev) => ({
+          ...prev,
+          vehicleId: response.data[0].id,
+        }))
+      }
     } catch (error) {
       console.error("Error fetching cars :", error)
     }
@@ -306,13 +344,6 @@ const PublishRide = () => {
       fetchVehicles()
     }
   }, [step, user])
-
-  // HANDLE DATE
-  registerLocale("fr", fr)
-
-  const handleDateChange = (date) => {
-    setFormData({ ...formData, departureDate: date })
-  }
 
   const calculateDistanceAndPrice = (startCoords, endCoords) => {
     const formatCoords = (coords) => {
@@ -346,7 +377,6 @@ const PublishRide = () => {
 
     return price
   }
-  // console.log("formData", formData)
 
   const hydrateFormStepData = () => {
     if (step === 4) {
@@ -406,6 +436,8 @@ const PublishRide = () => {
     }
   }, [map, routeCoords])
 
+  console.log("formData", formData)
+
   return (
     <>
       <Header />
@@ -444,6 +476,18 @@ const PublishRide = () => {
                             const coords = await getCoordinates(
                               formData.departureAddress
                             )
+
+                            if (!coords) {
+                              setFormData((prev) => ({
+                                ...prev,
+                                departureAddress: {
+                                  ...prev.departureAddress,
+                                  coords: [],
+                                },
+                              }))
+                              return
+                            }
+
                             setFormData((prev) => ({
                               ...prev,
                               departureAddress: {
@@ -452,10 +496,15 @@ const PublishRide = () => {
                               },
                             }))
                             setErrors("")
-                          } catch {
-                            console.log(
-                              "Impossible de localiser l’adresse de départ."
-                            )
+                          } catch (error) {
+                            console.error("Erreur de géocodage :", error)
+                            setFormData((prev) => ({
+                              ...prev,
+                              departureAddress: {
+                                ...prev.departureAddress,
+                                coords: [],
+                              },
+                            }))
                             setErrors(
                               "Impossible de localiser l’adresse de départ."
                             )
@@ -491,6 +540,18 @@ const PublishRide = () => {
                             const coords = await getCoordinates(
                               formData.destinationAddress
                             )
+
+                            if (!coords) {
+                              setFormData((prev) => ({
+                                ...prev,
+                                destinationAddress: {
+                                  ...prev.destinationAddress,
+                                  coords: [],
+                                },
+                              }))
+                              return
+                            }
+
                             setFormData((prev) => ({
                               ...prev,
                               destinationAddress: {
@@ -499,12 +560,17 @@ const PublishRide = () => {
                               },
                             }))
                             setErrors("")
-                          } catch {
-                            console.log(
-                              "Impossible de localiser l’adresse de destination."
-                            )
+                          } catch (error) {
+                            console.error("Erreur de géocodage :", error)
+                            setFormData((prev) => ({
+                              ...prev,
+                              destinationAddress: {
+                                ...prev.destinationAddress,
+                                coords: [],
+                              },
+                            }))
                             setErrors(
-                              "Impossible de localiser l’adresse de destination."
+                              "Impossible de localiser l’adresse de départ."
                             )
                           }
                         }}
@@ -628,7 +694,7 @@ const PublishRide = () => {
               <>
                 <div className="flex-column align-center w-100">
                   <h2>Avec quel véhicule ?</h2>
-                  {vehicles.length > 0 ? (
+                  {vehicles && vehicles.length > 0 ? (
                     <div>
                       <select
                         name="vehicleId"
@@ -772,7 +838,7 @@ const PublishRide = () => {
               <button
                 onClick={nextStep}
                 className="btn-solid"
-                disabled={isButtonDisabled()}
+                disabled={isFormValide()}
               >
                 Continuer
               </button>

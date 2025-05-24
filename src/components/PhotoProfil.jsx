@@ -1,20 +1,26 @@
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import ModeEditIcon from "@mui/icons-material/ModeEdit"
 import UploadImageModal from "./UploadImageModal"
+import { AuthContext } from "../context/AuthContext"
 
-const PhotoProfil = ({ photo, setFormData }) => {
+const PhotoProfil = ({ setFormData }) => {
   const avatarUrl = useRef()
   const [modalOpen, setModalOpen] = useState(false)
+  const { user } = useContext(AuthContext)
+
+  const [photo, setPhoto] = useState("")
 
   const updateAvatar = (imgSrc) => {
     avatarUrl.current = imgSrc
   }
 
   useEffect(() => {
-    if (photo) {
-      updateAvatar(photo)
+    if (user) {
+      updateAvatar(user.photo)
     }
-  }, [photo])
+  }, [user])
+
+  console.log("avatarUrl.current", avatarUrl.current)
 
   return (
     <div className="flex-column align-center mb-40">
@@ -25,6 +31,7 @@ const PhotoProfil = ({ photo, setFormData }) => {
             className="icon-button absolute rounded"
             title="Changer photo"
             onClick={() => setModalOpen(true)}
+            aria-label="Modifier la photo"
           >
             <ModeEditIcon sx={{ color: "#023560", fontSize: 24 }} />
           </button>

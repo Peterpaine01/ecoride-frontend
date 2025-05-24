@@ -23,7 +23,11 @@ const LoginModal = ({ isOpen, onClose }) => {
       className="modal"
       overlayClassName="overlay"
     >
-      <button onClick={onClose} className="close-btn btn-round color-dark">
+      <button
+        onClick={onClose}
+        className="close-btn btn-round color-dark"
+        aria-label="Fermer"
+      >
         ✕
       </button>
 

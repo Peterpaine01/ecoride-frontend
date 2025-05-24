@@ -222,6 +222,7 @@ const RidesList = () => {
                     <button
                       className="btn-round flex-column align-center justify-center"
                       onClick={() => setIsFiltersModalOpen(true)}
+                      aria-label="Filtrer"
                     >
                       <TuneOutlinedIcon
                         sx={{ color: "#023560", fontSize: 22 }}

@@ -110,6 +110,7 @@ const StaffList = () => {
                       <button
                         onClick={() => deleteStaff(webmaster.account_id)}
                         className="btn-icon flex-row justify-center align-center color-dark"
+                        aria-label="Supprimer"
                       >
                         <DeleteForeverIcon />
                       </button>
@@ -118,6 +119,7 @@ const StaffList = () => {
                           navigate(`/modifier-staff/${webmaster.account_id}`)
                         }
                         className="btn-icon flex-row justify-center align-center color-dark"
+                        aria-label="Modifier"
                       >
                         <ModeEditIcon />
                       </button>
@@ -126,6 +128,7 @@ const StaffList = () => {
                           navigate(`/staff/${webmaster.account_id}`)
                         }
                         className="btn-icon flex-row justify-center align-center color-dark"
+                        aria-label="Voir les détails"
                       >
                         <KeyboardArrowRightIcon />
                       </button>
