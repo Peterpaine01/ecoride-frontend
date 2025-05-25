@@ -16,7 +16,7 @@ import Hero from "../components/Hero"
 import Footer from "../components/Footer"
 import RideCard from "../components/RideCard"
 import Filters from "../components/Filters"
-import FiltersModal from "../components/FiltersModal"
+import LeafLoader from "../components/LeafLoader"
 
 const RidesList = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -27,6 +27,7 @@ const RidesList = () => {
   const [visibleRidesCount, setVisibleRidesCount] = useState(6)
   const [visibleFuzzyCount, setVisibleFuzzyCount] = useState(6)
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const navigate = useNavigate()
 
@@ -82,6 +83,7 @@ const RidesList = () => {
 
         setFuzzyRides(fuzzyResponse.data.rides || [])
         setShowFuzzy(false)
+        setIsLoading(false)
       } catch (error) {
         console.error("Error fetching rides:", error)
       }
@@ -188,6 +190,7 @@ const RidesList = () => {
     <>
       <Header />
       <Hero searchParams={searchQuery} />
+
       <main>
         <div className="container">
           <section className="filters-layout flex-row">
@@ -207,7 +210,13 @@ const RidesList = () => {
               />
             </div>
 
-            {ridesList && (
+            {isLoading && (
+              <div className="flex-column justify-start align-center w-100 mt-40">
+                <div class="loader"></div>
+              </div>
+            )}
+
+            {ridesList && !isLoading && (
               <div className="results-search">
                 <div className="flex-row space-between align-center">
                   <h1>
