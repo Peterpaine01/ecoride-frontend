@@ -89,7 +89,7 @@ const PublishRide = () => {
         !formData.departureAddress?.coords ||
         formData.departureAddress?.coords?.length === 0
       ) {
-        return true
+        return false
       }
     }
     if (step === 2) {
@@ -97,15 +97,15 @@ const PublishRide = () => {
         !formData.destinationAddress?.coords ||
         formData.destinationAddress?.coords?.length === 0
       ) {
-        return true
+        return false
       }
     }
     if (step === 6) {
       console.log("formData.vehicleId", formData)
 
-      return !formData.vehicleId
+      return !!formData.vehicleId
     }
-    return false
+    return true
   }
 
   useEffect(() => {
@@ -838,7 +838,7 @@ const PublishRide = () => {
               <button
                 onClick={nextStep}
                 className="btn-solid"
-                disabled={isFormValide()}
+                disabled={!isFormValide()}
               >
                 Continuer
               </button>
