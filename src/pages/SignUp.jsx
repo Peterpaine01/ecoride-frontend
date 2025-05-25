@@ -21,7 +21,7 @@ import Footer from "../components/Footer"
 
 const SignUp = () => {
   const { user, login, logout, isAuthenticated } = useContext(AuthContext)
-
+  const [emailTouched, setEmailTouched] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -201,10 +201,11 @@ const SignUp = () => {
                       placeholder="Adresse email"
                       value={formData.email}
                       onChange={handleChange}
+                      onFocus={() => setEmailTouched(true)}
                     />
                   </div>
                 </div>
-                {!validationEmail && (
+                {!validationEmail && emailTouched && (
                   <span className="error-msg">Email invalide.</span>
                 )}
                 <div className="input-group password-container">
