@@ -151,10 +151,14 @@ const SignUp = () => {
             <section className="flex-column align-center">
               <h1>Compte créé !</h1>
               <p>Merci pour votre inscription sur Ecoride.</p>
-              <p>
+              {/* <p>
                 Un email vous a été envoyé. Veuillez vous rendre sur votre boite
                 mail afin d'activer votre compte et commencer à utiliser les
                 services Ecoride.
+              </p> */}
+              <p>
+                Un email vous a été envoyé. Vous pouvez dès à présent commencer
+                à utiliser les services Ecoride.
               </p>
             </section>
           ) : (
