@@ -332,6 +332,9 @@
   .modal {
     width: calc(100vw - 50px);
     height: calc(100vh - 40px);
+    h2 {
+      text-align: center;
+    }
   }
 
   .filters-layout {

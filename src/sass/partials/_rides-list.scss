@@ -124,7 +124,7 @@ h3.next-day {
 }
 
 .modal {
-  background: white;
+  background: variables.$color-dark;
   width: 70vw;
   height: 70vh;
   border-radius: 5px;
@@ -134,9 +134,10 @@ h3.next-day {
   display: flex;
   h2 {
     color: variables.$color-primary;
+    line-height: 24px;
   }
   p {
-    color: variables.$color-dark;
+    color: white;
   }
 }
 

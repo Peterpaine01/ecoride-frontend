@@ -25,6 +25,10 @@ body {
   min-height: 100vh;
 }
 
+a {
+  font-family: variables.$main-font;
+}
+
 #root {
   font-family: variables.$main-font;
   min-height: 100vh;
@@ -729,7 +733,7 @@ button:disabled {
   font-size: 16px;
   padding: 0;
   padding-bottom: 2px;
-
+  font-family: variables.$main-font;
   border-radius: 0;
   text-decoration: none;
 

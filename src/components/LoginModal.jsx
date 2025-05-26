@@ -25,8 +25,9 @@ const LoginModal = ({ isOpen, onClose }) => {
     >
       <button
         onClick={onClose}
-        className="close-btn btn-round color-dark"
+        className="close-btn btn-round"
         aria-label="Fermer"
+        style={{ color: "#fff" }}
       >
         ✕
       </button>
