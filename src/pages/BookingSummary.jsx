@@ -137,8 +137,8 @@ const BookingSummary = () => {
           {rideDetail ? (
             <div className="dotted p-20 mb-20">
               <h3 className="mb-20">Trajet</h3>
-              <div className="flex-row sjustify-start gap-30 align-end">
-                <div>
+              <div className="flex-row justify-start gap-30 align-end">
+                <div className="w-100">
                   <p className="text-big mb-10 flex-row align-center ">
                     {rideDetail.departureAddress.city}{" "}
                     <ArrowRightAltOutlinedIcon
@@ -146,33 +146,36 @@ const BookingSummary = () => {
                     />{" "}
                     {rideDetail.destinationAddress.city}
                   </p>
-                  <p className="text-bold mb-10">
-                    {formatDate(rideDetail.departureDate)}
-                  </p>
-                  <p className="mt-20">
-                    {rideDetail.creditsPerPassenger} crédits / passager
-                  </p>
-                  <p className="mt-10">
-                    {rideDetail.remainingSeats > 0
-                      ? `${rideDetail.remainingSeats} place${
-                          rideDetail.remainingSeats > 1 && "s"
-                        } disponible${rideDetail.remainingSeats > 1 && "s"}`
-                      : "Complet"}
-                  </p>
-                </div>
-                <div></div>
-                <div className="w-fit flex-column justify-center align-start">
-                  <AccessTimeOutlinedIcon
-                    sx={{ color: "#f7c134", fontSize: 24 }}
-                    className="mb-10"
-                  />
-                  <p className="mb-10">DÉPART</p>
-                  <p
-                    className="flex-row justify-center align-center"
-                    style={{ fontSize: 32 }}
-                  >
-                    {formatTimeToFrench(rideDetail.departureDate)}
-                  </p>
+                  <div className="flex-row space-between align-start gap-15 w-100">
+                    <div>
+                      <p className="text-bold mb-10">
+                        {formatDate(rideDetail.departureDate)}
+                      </p>
+                      <p className="mt-20">
+                        {rideDetail.creditsPerPassenger} crédits / passager
+                      </p>
+                      <p className="mt-10">
+                        {rideDetail.remainingSeats > 0
+                          ? `${rideDetail.remainingSeats} place${
+                              rideDetail.remainingSeats > 1 && "s"
+                            } disponible${rideDetail.remainingSeats > 1 && "s"}`
+                          : "Complet"}
+                      </p>
+                    </div>
+                    <div className="w-fit flex-column justify-center align-start">
+                      <AccessTimeOutlinedIcon
+                        sx={{ color: "#f7c134", fontSize: 24 }}
+                        className="mb-10"
+                      />
+                      <p className="mb-5">DÉPART</p>
+                      <p
+                        className="flex-row justify-center align-center"
+                        style={{ fontSize: 32 }}
+                      >
+                        {formatTimeToFrench(rideDetail.departureDate)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
