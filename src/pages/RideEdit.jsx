@@ -490,14 +490,14 @@ const RideEdit = () => {
                   </div>
                 </div>
               </div>
-              <section className="flex-row justify-center gap-15">
-                <button onClick={() => navigate(-1)} className="btn-light">
+              <div className="container flex-row justify-center gap-15">
+                {/* <button onClick={() => navigate(-1)} className="btn-light">
                   Retour
-                </button>
+                </button> */}
                 <button type="submit" className="btn-solid">
                   Mettre à jour
                 </button>
-              </section>
+              </div>
             </form>
           </section>
         </div>
