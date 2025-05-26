@@ -137,10 +137,10 @@ const RideDetails = () => {
               </div>
             )}
 
-            <section className="flex-row justify-center gap-15">
-              <button onClick={() => navigate(-1)} className="btn-light">
+            <div className="container flex-row justify-center gap-15">
+              {/* <button onClick={() => navigate(-1)} className="btn-light">
                 Retour
-              </button>
+              </button> */}
 
               {isDriverRide && (
                 <button
@@ -160,7 +160,7 @@ const RideDetails = () => {
                   Annuler la réservation
                 </button>
               )}
-            </section>
+            </div>
           </>
         )}
       </main>
