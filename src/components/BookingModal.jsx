@@ -103,7 +103,10 @@ const BookingModal = ({ rideDetail, seats }) => {
                     </p>
                     <div className="dotted mt-20 mb-20">
                       <p>
-                        <strong className="text-emphase">
+                        <strong
+                          className="text-emphase"
+                          style={{ color: "#fff" }}
+                        >
                           {rideDetail?.creditsPerPassenger * seats} crédits
                         </strong>{" "}
                         vont être débités de votre compte.
