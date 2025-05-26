@@ -45,7 +45,7 @@ const Filters = ({
     const newParams = {}
 
     formData.forEach((value, key) => {
-      if (value && value !== "--:--" && value !== "Indifférent") {
+      if (value && value !== "--:--" && value !== "all") {
         if (key === "maxDuration") {
           const [hours, minutes] = value.split(":").map(Number)
           newParams[key] = hours * 60 + minutes

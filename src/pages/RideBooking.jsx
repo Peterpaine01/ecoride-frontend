@@ -52,7 +52,7 @@ const RideDetails = () => {
             onClick={() => navigate(`/reservation/${rideDetail._id}`)}
             className="btn-solid"
           >
-            Participer au trajet
+            Réserver
           </button>
         </section>
       </main>

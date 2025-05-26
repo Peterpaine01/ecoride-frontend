@@ -43,6 +43,7 @@ const RidesList = () => {
       isElectric: searchParams.get("isElectric") === "true" || undefined,
       acceptSmoking: searchParams.get("acceptSmoking") === "true" || undefined,
       acceptAnimals: searchParams.get("acceptAnimals") === "true" || undefined,
+      gender: searchParams.get("gender") || undefined,
     }),
     [searchParams]
   )
