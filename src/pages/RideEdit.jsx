@@ -245,7 +245,12 @@ const RideEdit = () => {
     }
   }
 
-  if (loading) return <p>Chargement...</p>
+  if (loading)
+    return (
+      <div className="flex-column justify-start align-center w-100 mt-40">
+        <div class="loader"></div>
+      </div>
+    )
 
   return (
     <>

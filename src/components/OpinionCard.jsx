@@ -84,7 +84,12 @@ const OpinionCard = ({ opinionData }) => {
       .replace(/^./, (c) => c.toUpperCase())
   }
 
-  if (!opinionData && !rideDetails) return <p>Chargement</p>
+  if (!opinionData && !rideDetails)
+    return (
+      <div className="flex-column justify-start align-center w-100 mt-40">
+        <div class="loader"></div>
+      </div>
+    )
   if (isModerated) return null
 
   return (

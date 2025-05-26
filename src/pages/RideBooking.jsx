@@ -44,7 +44,7 @@ const RideDetails = () => {
       <Cover />
       <main>
         <RoadMap />
-        <section className="flex-row justify-center gap-15">
+        <div className="container flex-row justify-center gap-15">
           <button onClick={() => navigate(-1)} className="btn-light">
             Retour
           </button>
@@ -54,7 +54,7 @@ const RideDetails = () => {
           >
             Réserver
           </button>
-        </section>
+        </div>
       </main>
       <Footer />
     </>

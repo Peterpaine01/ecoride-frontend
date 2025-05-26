@@ -41,7 +41,12 @@ const LitigeCard = ({ litigeData }) => {
       .replace(/^./, (c) => c.toUpperCase())
   }
 
-  if (!litigeData && !rideDetails) return <p>Chargement</p>
+  if (!litigeData && !rideDetails)
+    return (
+      <div className="flex-column justify-start align-center w-100 mt-40">
+        <div class="loader"></div>
+      </div>
+    )
 
   return (
     <Link

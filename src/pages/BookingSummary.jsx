@@ -180,7 +180,9 @@ const BookingSummary = () => {
               </div>
             </div>
           ) : (
-            <p>Chargement...</p>
+            <div className="flex-column justify-start align-center w-100 mt-40">
+              <div class="loader"></div>
+            </div>
           )}
 
           {isAuthenticated && rideDetail ? (
@@ -233,7 +235,9 @@ const BookingSummary = () => {
               </div>
             </>
           ) : (
-            <p>Chargement</p>
+            <div className="flex-column justify-start align-center w-100 mt-40">
+              <div class="loader"></div>
+            </div>
           )}
           {!isAuthenticated && showLoginModal && (
             <LoginModal isOpen={showLoginModal} onClose={closeLoginModal} />

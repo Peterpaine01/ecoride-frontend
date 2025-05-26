@@ -16,7 +16,6 @@ import Hero from "../components/Hero"
 import Footer from "../components/Footer"
 import RideCard from "../components/RideCard"
 import Filters from "../components/Filters"
-import LeafLoader from "../components/LeafLoader"
 
 const RidesList = () => {
   const [searchParams, setSearchParams] = useSearchParams()

@@ -70,6 +70,7 @@ const BookingModal = ({ rideDetail, seats }) => {
           onClick={closeModal}
           className="close-btn btn-round color-dark"
           aria-label="Fermer"
+          style={{ color: "#fff" }}
         >
           ✕
         </button>
@@ -79,7 +80,7 @@ const BookingModal = ({ rideDetail, seats }) => {
             <div className="flex-column align-center flex-1 w-100">
               <h2 className="mb-20 mt-20">Confirmer la réservation</h2>
               <div className="flex-column align-center">
-                <h3>Trajet réservé</h3>
+                <h3 className="color-white">Trajet réservé</h3>
                 <p className="text-big flex-row align-center">
                   {rideDetail?.departureAddress.city}{" "}
                   <ArrowRightAltOutlinedIcon

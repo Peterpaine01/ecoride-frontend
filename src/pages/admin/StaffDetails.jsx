@@ -59,7 +59,9 @@ const StaffDetails = () => {
             <h1 className="mb-20">Webmaster Infos</h1>
 
             {loading ? (
-              <p>Chargement...</p>
+              <div className="flex-column justify-start align-center w-100 mt-40">
+                <div class="loader"></div>
+              </div>
             ) : staff ? (
               <>
                 <div className="mb-20 dotted">
