@@ -478,6 +478,9 @@ const PublishRide = () => {
                             )
 
                             if (!coords) {
+                              setErrors(
+                                "Impossible de localiser l’adresse de départ."
+                              )
                               setFormData((prev) => ({
                                 ...prev,
                                 departureAddress: {
@@ -542,6 +545,9 @@ const PublishRide = () => {
                             )
 
                             if (!coords) {
+                              setErrors(
+                                "Impossible de localiser l’adresse de destination."
+                              )
                               setFormData((prev) => ({
                                 ...prev,
                                 destinationAddress: {
@@ -570,7 +576,7 @@ const PublishRide = () => {
                               },
                             }))
                             setErrors(
-                              "Impossible de localiser l’adresse de départ."
+                              "Impossible de localiser l’adresse de destination."
                             )
                           }
                         }}
