@@ -174,80 +174,82 @@ const RoadMap = () => {
     <p>Loading</p>
   ) : (
     <>
-      <div className="container-full ride-details">
-        <section className="flex-column justify-center align-center bg-secondary">
-          <h1 className="flex-row justify-center align-center">
-            {formatDateToFrench(rideDetail?.departureDate)}
-          </h1>
+      <div className="container-full ride-details bg-secondary">
+        <div className="container p-0">
+          <section className="flex-column justify-center align-center">
+            <h1 className="flex-row justify-center align-center">
+              {formatDateToFrench(rideDetail?.departureDate)}
+            </h1>
 
-          <div className="flex-row justify-center align-center gap-15">
-            {rideDetail && rideDetail.remainingSeats > 0 ? (
-              <p className="flex-row justify-start align-center gap-5 color-dark">
-                <GroupIcon sx={{ color: "#023560", fontSize: 28 }} />{" "}
-                {rideDetail.remainingSeats} place
-                {rideDetail.remainingSeats > 1 && "s"} disponible
-                {rideDetail.remainingSeats > 1 && "s"}
-              </p>
-            ) : (
-              <p className="flex-row justify-start align-center gap-5 color-dark">
-                <GroupIcon sx={{ color: "#023560", fontSize: 28 }} /> Complet
-              </p>
-            )}
-          </div>
+            <div className="flex-row justify-center align-center gap-15">
+              {rideDetail && rideDetail.remainingSeats > 0 ? (
+                <p className="flex-row justify-start align-center gap-5 color-dark">
+                  <GroupIcon sx={{ color: "#023560", fontSize: 28 }} />{" "}
+                  {rideDetail.remainingSeats} place
+                  {rideDetail.remainingSeats > 1 && "s"} disponible
+                  {rideDetail.remainingSeats > 1 && "s"}
+                </p>
+              ) : (
+                <p className="flex-row justify-start align-center gap-5 color-dark">
+                  <GroupIcon sx={{ color: "#023560", fontSize: 28 }} /> Complet
+                </p>
+              )}
+            </div>
 
-          <div className="roadmap-card flex-row space-between">
-            <div className="ride-card flex-column">
-              <div className="info-ride flex-row justify-left">
-                <div className="hours flex-column space-between">
-                  <p>
-                    {rideDetail?.departureDate
-                      ? getTimeFromDate(rideDetail.departureDate)
-                      : "--:--"}
-                  </p>
-                  {destinationDate instanceof Date && !isNaN(destinationDate)
-                    ? getTimeFromDate(destinationDate)
-                    : "--:--"}
-                </div>
-                <div className="timing flex-row">
-                  <div className="ride-line">
-                    <span className="round"></span>
-                    <span className="timeline"></span>
-                    <span className="round"></span>
-                  </div>
-                </div>
-                <div className="cities flex-column space-between">
-                  <p>
-                    {rideDetail?.departureAddress?.city || "Ville inconnue"}
-                  </p>
-                  <div className="timing">
+            <div className="roadmap-card flex-row space-between">
+              <div className="ride-card flex-column">
+                <div className="info-ride flex-row justify-left">
+                  <div className="hours flex-column space-between">
                     <p>
-                      {typeof rideDetail?.duration === "number"
-                        ? displayDuration(rideDetail.duration)
-                        : "Durée inconnue"}
+                      {rideDetail?.departureDate
+                        ? getTimeFromDate(rideDetail.departureDate)
+                        : "--:--"}
+                    </p>
+                    {destinationDate instanceof Date && !isNaN(destinationDate)
+                      ? getTimeFromDate(destinationDate)
+                      : "--:--"}
+                  </div>
+                  <div className="timing flex-row">
+                    <div className="ride-line">
+                      <span className="round"></span>
+                      <span className="timeline"></span>
+                      <span className="round"></span>
+                    </div>
+                  </div>
+                  <div className="cities flex-column space-between">
+                    <p>
+                      {rideDetail?.departureAddress?.city || "Ville inconnue"}
+                    </p>
+                    <div className="timing">
+                      <p>
+                        {typeof rideDetail?.duration === "number"
+                          ? displayDuration(rideDetail.duration)
+                          : "Durée inconnue"}
+                      </p>
+                    </div>
+
+                    <p>
+                      {rideDetail.destinationAddress?.city || "Ville inconnue"}
                     </p>
                   </div>
-
-                  <p>
-                    {rideDetail.destinationAddress?.city || "Ville inconnue"}
-                  </p>
                 </div>
               </div>
+              <div className="dotted w-fit flex-column justify-center align-start">
+                <TollOutlinedIcon sx={{ color: "#42ba92", fontSize: 24 }} />
+                <small className="color-dark">
+                  CRÉDITS <br />
+                  par passager
+                </small>
+                <p
+                  className="flex-row justify-center align-center color-dark"
+                  style={{ fontSize: 24 }}
+                >
+                  <strong>{rideDetail.creditsPerPassenger}</strong>
+                </p>
+              </div>
             </div>
-            <div className="dotted w-fit flex-column justify-center align-start">
-              <TollOutlinedIcon sx={{ color: "#42ba92", fontSize: 24 }} />
-              <small className="color-dark">
-                CRÉDITS <br />
-                par passager
-              </small>
-              <p
-                className="flex-row justify-center align-center color-dark"
-                style={{ fontSize: 24 }}
-              >
-                <strong>{rideDetail.creditsPerPassenger}</strong>
-              </p>
-            </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
       <div className="container ride-details">
         <section>
