@@ -159,16 +159,10 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
             isBookingForthcoming && (
               <button
                 onClick={handleCancelBooking}
-                className="btn-light flex-row gap-10 justify-center color-dark"
-                style={{
-                  width: "calc(100% - 60px)",
-                  background: "#edf0f8",
-                  borderColor: "#edf0f8",
-                }}
-                aria-label="Annuler"
+                className="icon-button flex-row gap-10 justify-center color-dark"
+                aria-label="Annuler cette réservation"
               >
                 <DeleteIcon sx={{ color: "#023560", fontSize: 24 }} />
-                Annuler
               </button>
             )}
 
