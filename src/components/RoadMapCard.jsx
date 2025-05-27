@@ -166,12 +166,6 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
               </button>
             )}
 
-          {!isDriver && !isRideCompleted && isRideToday && (
-            <p className="color-dark">
-              <small>Vous ne pouvez plus annuler</small>
-            </p>
-          )}
-
           {/* Navigation */}
           <button
             onClick={handleNavigateToRecap}
@@ -219,6 +213,9 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
             Trajet terminé
           </p>
         )}
+        {/* {!isDriver && !isRideCompleted && isRideToday && (
+          <small className="color-dark">Vous ne pouvez plus annuler</small>
+        )} */}
 
         {isRideForthcoming && isDriver && isRideToday && (
           <button
