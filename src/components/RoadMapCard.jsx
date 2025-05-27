@@ -201,7 +201,7 @@ const RoadMapCard = ({ ride, booking, driverRide }) => {
           </p>
         )}
 
-        {isRideCompleted && (
+        {isRideCompleted && isDriver && (
           <p
             className="dotted btn-action-ride"
             style={{
