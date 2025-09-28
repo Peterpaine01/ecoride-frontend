@@ -44,9 +44,7 @@ const PublishRide = () => {
 
   // Redirection
   useEffect(() => {
-    if (!user) {
-      navigate("/se-connecter")
-    } else if (!user.is_driver) {
+    if (!user.is_driver) {
       toast.info(
         "Pour accéder à cette fonctionnalité, merci de modifier votre profil en vous définissant comme conducteur."
       )
@@ -258,7 +256,6 @@ const PublishRide = () => {
         const currentDate = prev.departureDate
 
         if (!currentDate) {
-          // On attend que la date soit d'abord remplie
           return prev
         }
 
@@ -267,7 +264,7 @@ const PublishRide = () => {
 
         return {
           ...prev,
-          departureDate: date.toISOString(), // correct en UTC
+          departureDate: date.toISOString(),
         }
       }
 

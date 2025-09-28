@@ -81,9 +81,6 @@ const BookingSummary = () => {
     const userCredits = user?.credits || 0
     const rideCredits = rideDetail?.creditsPerPassenger || 0
 
-    // console.log("remainingSeats", rideDetail.remainingSeats)
-    // console.log("userCredits", userCredits)
-
     if (userCredits < rideCredits * seats) {
       setErrorMessage(
         "Vous n'avez pas assez de crédits pour réserver ce trajet."

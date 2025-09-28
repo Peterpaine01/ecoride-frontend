@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react"
+import { Link, useLocation } from "react-router-dom"
 import {
   User,
   ChevronRight,
@@ -7,48 +7,48 @@ import {
   Compass,
   UserPlus,
   PlusCircle,
-} from "react-feather";
+} from "react-feather"
 
 // Images
-import LogoHD from "../assets/logo-EcoRide-white-vert.png";
+import LogoHD from "../assets/logo-EcoRide-white-vert.png"
 
 // Component
-import SearchBlock from "./Search";
-import BurgerMenu from "./BurgerMenu";
-import ProfilMenu from "./ProfilMenu";
+import SearchBlock from "./Search"
+import BurgerMenu from "./BurgerMenu"
+import ProfilMenu from "./ProfilMenu"
 
 // Je récupère les props
 const Hero = () => {
-  const [isProfilOpen, setIsProfilOpen] = useState(false);
+  const [isProfilOpen, setIsProfilOpen] = useState(false)
 
   // REF
-  const profilRef = useRef(null);
+  const profilRef = useRef(null)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profilRef.current && !profilRef.current.contains(event.target)) {
-        closeDropdown();
+        closeDropdown()
       }
-    };
+    }
 
     // Ajouter l'event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
 
     // Nettoyer l'event listener à la fin du cycle de vie
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   // Fonction pour basculer le menu
   const toggleDropdown = () => {
-    setIsProfilOpen((prevState) => !prevState);
-  };
+    setIsProfilOpen((prevState) => !prevState)
+  }
 
   // Fonction pour fermer le menu si l'utilisateur clique ailleurs
   const closeDropdown = () => {
-    setIsProfilOpen(false);
-  };
+    setIsProfilOpen(false)
+  }
 
   return (
     <>
@@ -57,19 +57,19 @@ const Hero = () => {
           <img
             className="desktop"
             src="https://res.cloudinary.com/djxejhaxr/image/upload/cover_qysjoz.jpg"
-            alt=""
+            alt="Van de covoiturage Ecoride stationné en pleine campagne, avec des passagers à l’intérieur et le conducteur adossé nonchalamment au véhicule regardant le ciel"
           />
           <img
             className="mobile"
             src="https://res.cloudinary.com/djxejhaxr/image/upload/hero-MOBILE_yt2oco.jpg"
-            alt=""
+            alt="Van de covoiturage Ecoride stationné en pleine campagne, avec des passagers à l’intérieur et le conducteur adossé nonchalamment au véhicule regardant le ciel"
           />
         </div>
 
         <SearchBlock />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Hero;
+export default Hero

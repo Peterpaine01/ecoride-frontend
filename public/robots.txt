@@ -1,0 +1,12 @@
+# robots.txt pour Ecoride
+
+# Autoriser tous les moteurs de recherche
+User-agent: *
+Allow: /
+
+# Bloquer certains dossiers sensibles (si besoin)
+Disallow: /admin/
+Disallow: /api/
+
+# Indiquer le sitemap pour un meilleur SEO
+Sitemap: https://ecoride-mobility.netlify.app/sitemap.xml
