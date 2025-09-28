@@ -14,7 +14,7 @@ const LitigeCard = ({ litigeData }) => {
     if (litigeData) {
       try {
         const response = await axios.get(`/ride/${litigeData.booking.ride}`)
-        console.log("response.data", response.data)
+        // console.log("response.data", response.data)
 
         setRideDetails(response.data)
       } catch (error) {

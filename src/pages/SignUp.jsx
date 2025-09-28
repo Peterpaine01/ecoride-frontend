@@ -62,7 +62,6 @@ const SignUp = () => {
   }
 
   const checkPassword = (password = "") => {
-    //console.log("password.length -> ", password.length);
     const newValidation = {
       length: password.length >= 9,
       uppercase: /[A-Z]/.test(password),
@@ -112,16 +111,12 @@ const SignUp = () => {
     try {
       const response = await axios.post("/create-user", formData)
 
-      console.log(response.data)
-
       login(formData.email, formData.password)
 
       setIsSubmitted(true)
-
-      console.log(response.data)
     } catch (error) {
-      console.log(error.response.status)
-      console.log(error.message)
+      console.error(error.response.status)
+      console.error(error.message)
       if (error.response && error.response.data) {
         if (error.response.status === 409) {
           setErrorMessage("Cette adresse mail est déjà utilisée.")
@@ -137,8 +132,6 @@ const SignUp = () => {
   useEffect(() => {
     checkPassword(formData.password)
   }, [formData.password])
-
-  console.log("formData -> ", formData)
 
   return (
     <>

@@ -41,7 +41,7 @@ const EditProfil = () => {
     const fetchUser = async () => {
       try {
         const { data } = await axios.get(`/user/${id}`)
-        console.log("data", data)
+        // console.log("data", data)
 
         const driver =
           data.is_driver === true ||
@@ -76,7 +76,7 @@ const EditProfil = () => {
         })
       } catch (error) {
         toast.error("Erreur lors du chargement du profil utilisateur.")
-        console.log(error)
+        console.error(error)
       }
     }
 
@@ -90,7 +90,6 @@ const EditProfil = () => {
       [name]: type === "checkbox" ? checked : value,
     }))
   }
-  console.log("formData", formData)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -101,8 +100,6 @@ const EditProfil = () => {
     if (formData.password) {
       form.append("password", formData.password)
     }
-
-    console.log("formData", formData)
 
     try {
       await axios.patch(`/update-user/${id}`, form, {

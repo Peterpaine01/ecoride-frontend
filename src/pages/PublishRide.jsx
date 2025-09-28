@@ -99,7 +99,7 @@ const PublishRide = () => {
       }
     }
     if (step === 6) {
-      console.log("formData.vehicleId", formData)
+      // console.log("formData.vehicleId", formData)
 
       return !!formData.vehicleId
     }
@@ -134,11 +134,11 @@ const PublishRide = () => {
           console.warn("Erreur géolocalisation :", err)
 
           if (err.code === 2) {
-            console.log(
+            console.error(
               "La géolocalisation est indisponible, veuillez saisir votre adresse manuellement."
             )
           } else {
-            console.log(
+            console.error(
               "Impossible d’obtenir votre position. Essayez de réactiver la géolocalisation."
             )
           }
@@ -182,11 +182,11 @@ const PublishRide = () => {
           console.warn("Erreur géolocalisation :", err)
 
           if (err.code === 2) {
-            console.log(
+            console.error(
               "La géolocalisation est indisponible, veuillez saisir votre adresse manuellement."
             )
           } else {
-            console.log(
+            console.error(
               "Impossible d’obtenir votre position. Essayez de réactiver la géolocalisation."
             )
           }
@@ -216,7 +216,7 @@ const PublishRide = () => {
         setRouteCoords(result.routeCoords)
       } catch (err) {
         console.error(err)
-        console.log("Erreur lors du calcul de l’itinéraire")
+        console.error("Erreur lors du calcul de l’itinéraire")
       }
     }
 
@@ -304,7 +304,7 @@ const PublishRide = () => {
       const response = await axios.post("/create-ride", formData)
 
       if (response.status === 201 || response.status === 200) {
-        console.log("Le ride a bien été créé")
+        console.info("Le ride a bien été créé")
         toast.success("Le trajet a bien été créé")
         navigate("/vos-trajets")
       }
@@ -317,7 +317,7 @@ const PublishRide = () => {
   const fetchVehicles = async () => {
     try {
       const response = await axios.get(`/user-cars/${user.account_id}`)
-      console.log("data cars : ", response.data)
+      console.info("data cars : ", response.data)
 
       setVehicles(response.data)
       if (response.data.length > 0) {
@@ -432,8 +432,6 @@ const PublishRide = () => {
       map.fitBounds(bounds, { padding: [20, 20] })
     }
   }, [map, routeCoords])
-
-  console.log("formData", formData)
 
   return (
     <>

@@ -12,7 +12,7 @@ import AddCarForm from "../components/AddCarForm"
 
 const AddCar = () => {
   const { user, login, logout, isAuthenticated } = useContext(AuthContext)
-  console.log(user)
+  // console.log(user)
   const [userReviewsList, setUserReviewsList] = useState(false)
 
   return (

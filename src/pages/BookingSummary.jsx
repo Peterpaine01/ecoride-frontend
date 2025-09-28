@@ -38,7 +38,7 @@ const BookingSummary = () => {
     setSuccessMessage("")
     const fetchRideDetail = async () => {
       try {
-        console.log("rideId", rideId)
+        // console.log("rideId", rideId)
 
         const response = await axios.get(`/ride/${rideId}`)
         setRideDetail(response.data)

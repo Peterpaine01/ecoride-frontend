@@ -286,7 +286,8 @@ const SearchBlock = () => {
             </div>
           </div>
           <button type="submit" aria-disabled="false">
-            <Search /> <span>Rechercher un trajet</span>
+            <Search />{" "}
+            <span className="visually-hidden">Rechercher un trajet</span>
           </button>
         </form>
       </div>

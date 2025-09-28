@@ -43,7 +43,7 @@ const ReviewForm = () => {
       )
     )
 
-    console.log("updatedFields", updatedFields)
+    // console.log("updatedFields", updatedFields)
 
     try {
       await axios.post(`/create-review/${bookingId}`, {
@@ -55,8 +55,6 @@ const ReviewForm = () => {
       toast.error(error.response?.data?.error || "Erreur lors de la soumission")
     }
   }
-
-  console.log(formData)
 
   return (
     <>

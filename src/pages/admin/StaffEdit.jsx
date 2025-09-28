@@ -82,8 +82,6 @@ const StaffEdit = () => {
       )
     )
 
-    console.log("updatedFields", updatedFields)
-
     try {
       await axios.patch(`/update-staff-member/${id}`, updatedFields)
       toast.success("Staff modifié avec succès")
@@ -92,8 +90,6 @@ const StaffEdit = () => {
       toast.error(err.response?.data?.error || "Erreur lors de la modification")
     }
   }
-
-  console.log(formData)
 
   return (
     <>

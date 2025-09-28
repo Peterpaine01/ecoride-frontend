@@ -11,7 +11,7 @@ import Cover from "../components/Cover"
 
 const EditCar = () => {
   const { user, login, logout, isAuthenticated } = useContext(AuthContext)
-  console.log(user)
+  // console.log(user)
   const [userReviewsList, setUserReviewsList] = useState(false)
 
   return (

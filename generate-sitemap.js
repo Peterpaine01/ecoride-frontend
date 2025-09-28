@@ -24,7 +24,7 @@ async function generateSitemap() {
 
   // Génération du fichier
   await streamToPromise(sitemap)
-    .then(() => console.log("✅ Sitemap généré avec succès !"))
+    .then(() => console.info("✅ Sitemap généré avec succès !"))
     .catch((err) => console.error("❌ Erreur sitemap :", err))
 
   sitemap.pipe(writeStream)

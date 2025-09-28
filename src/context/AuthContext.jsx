@@ -61,7 +61,11 @@ export const AuthProvider = ({ children }) => {
       })
       const { token } = response.data
 
-      Cookies.set("token", token, { expires: 365 })
+      Cookies.set("token", token, {
+        expires: 7, // expiration courte
+        secure: true, // HTTPS only
+        sameSite: "Strict", // anti-CSRF
+      })
       const decodedToken = jwtDecode(token)
       await fetchUser(decodedToken.id)
       return { success: true }

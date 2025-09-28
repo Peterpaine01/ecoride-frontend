@@ -48,8 +48,6 @@ const StaffList = () => {
     }
   }
 
-  console.log("Token dans le cookie :", Cookies.get("token"))
-
   return (
     <>
       <Header />
@@ -71,8 +69,6 @@ const StaffList = () => {
 
             {webmastersList &&
               webmastersList.map((webmaster) => {
-                console.log(webmaster)
-
                 return (
                   <div
                     key={webmaster.id}

@@ -18,7 +18,7 @@ const CarDetails = () => {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        console.log(id)
+        // console.log(id)
         const response = await axios.get(`/car/${id}`)
         setCar(response.data)
       } catch (err) {

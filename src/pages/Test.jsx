@@ -25,7 +25,7 @@
                 },
               }))
             } catch {
-              console.log("Impossible de localiser l’adresse de départ.")
+              console.error("Impossible de localiser l’adresse de départ.")
             }
           }}
         />
@@ -37,7 +37,7 @@
           zoom={13}
           style={{ minHeight: "300px", aspectRatio: 1 }}
           whenCreated={(mapInstance) => {
-            console.log("Carte initialisée")
+            console.info("Carte initialisée")
             mapRef.current = mapInstance
           }}
         >
@@ -94,7 +94,7 @@
                 },
               }))
             } catch {
-              console.log("Impossible de localiser l’adresse de destination.")
+              console.error("Impossible de localiser l’adresse de destination.")
             }
           }}
         />
@@ -106,7 +106,7 @@
           zoom={13}
           style={{ minHeight: "300px", aspectRatio: 1 }}
           whenCreated={(mapInstance) => {
-            console.log("Carte initialisée")
+            console.info("Carte initialisée")
             mapRef.current = mapInstance
           }}
         >
@@ -164,7 +164,7 @@
           zoom={13}
           style={{ minHeight: "300px", aspectRatio: 1 }}
           whenCreated={(mapInstance) => {
-            console.log("Carte initialisée")
+            console.info("Carte initialisée")
             mapRef.current = mapInstance
           }}
         >
@@ -226,7 +226,7 @@
                   }))
                   setErrors("")
                 } catch {
-                  console.log("Impossible de localiser l’adresse de départ.")
+                  console.error("Impossible de localiser l’adresse de départ.")
                   setErrors("Impossible de localiser l’adresse de départ.")
                 }
               }}
@@ -263,7 +263,7 @@
                   }))
                   setErrors("")
                 } catch {
-                  console.log(
+                  console.error(
                     "Impossible de localiser l’adresse de destination."
                   )
                   setErrors("Impossible de localiser l’adresse de destination.")

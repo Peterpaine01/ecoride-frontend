@@ -23,7 +23,7 @@ const redIcon = new L.Icon({
 })
 
 const MapMarker = ({ position, label }) => {
-  console.log("position", position)
+  // console.log("position", position)
 
   if (!position || position.length === 0) {
     return null

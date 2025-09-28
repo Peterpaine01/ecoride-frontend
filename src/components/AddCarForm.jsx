@@ -74,7 +74,7 @@ const AddCarForm = ({
       ? formData.first_registration_date.toISOString().split("T")[0]
       : ""
 
-    console.log("formattedDate", formattedDate)
+    // console.log("formattedDate", formattedDate)
 
     const payload = {
       ...formData,
@@ -111,7 +111,7 @@ const AddCarForm = ({
 
   const handleDateChange = (date) => {
     const dateObj = new Date(date)
-    console.log("dateObj", dateObj)
+    // console.log("dateObj", dateObj)
 
     if (!isNaN(dateObj)) {
       setFormData({ ...formData, first_registration_date: dateObj })

@@ -36,7 +36,7 @@ const RideDetails = () => {
 
         setIsLoading(false)
       } catch (error) {
-        console.log(error.message)
+        console.error(error.message)
       }
     }
 
@@ -47,7 +47,7 @@ const RideDetails = () => {
 
         setIsLoading(false)
       } catch (error) {
-        console.log(error.message)
+        console.error(error.message)
       }
     }
     fetchData()
@@ -99,8 +99,6 @@ const RideDetails = () => {
                     {bookingsList.length > 0 ? (
                       <div className="flex-row justify-start align-center gap-15">
                         {bookingsList.map((booking) => {
-                          console.log(booking)
-
                           return (
                             <div key={booking._id}>
                               <div className="driver-infos flex-row space-between align-center gap-15">

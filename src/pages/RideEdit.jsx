@@ -114,7 +114,7 @@ const RideEdit = () => {
         setRouteCoords(result.routeCoords)
       } catch (err) {
         console.error(err)
-        console.log("Erreur lors du calcul de l’itinéraire")
+        console.error("Erreur lors du calcul de l’itinéraire")
       }
     }
     if (
@@ -210,13 +210,10 @@ const RideEdit = () => {
     })
   }
 
-  console.log("formData", formData)
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
       const res = await axios.patch(`/update-ride/${id}`, formData)
-      console.log(res.data)
     } catch (err) {
       console.error(err)
       setErrors("Erreur lors de la mise à jour du trajet.")
@@ -305,7 +302,7 @@ const RideEdit = () => {
 
                         setGeolocErrors("")
                       } catch {
-                        console.log(
+                        console.error(
                           "Impossible de localiser l’adresse d’arrivée."
                         )
                         setGeolocErrors(
@@ -354,7 +351,7 @@ const RideEdit = () => {
 
                         setGeolocErrors("")
                       } catch {
-                        console.log(
+                        console.error(
                           "Impossible de localiser l’adresse de destination."
                         )
                         setGeolocErrors(

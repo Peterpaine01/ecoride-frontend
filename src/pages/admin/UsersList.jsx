@@ -74,8 +74,6 @@ const UserList = () => {
 
             {usersList &&
               usersList.map((user) => {
-                console.log(user)
-
                 return (
                   <div
                     key={user.id}

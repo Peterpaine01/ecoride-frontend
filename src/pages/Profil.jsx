@@ -28,7 +28,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
 const Profil = () => {
   const { user, login, logout, isAuthenticated, token, fetchUser } =
     useContext(AuthContext)
-  console.log(user)
+
   const [userReviewsList, setUserReviewsList] = useState([])
   const [activeTab, setActiveTab] = useState("infos")
   const [isMobile, setIsMobile] = useState(false)

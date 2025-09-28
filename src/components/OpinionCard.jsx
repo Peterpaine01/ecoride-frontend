@@ -45,7 +45,7 @@ const OpinionCard = ({ opinionData }) => {
     fetchPassengerData()
   }, [opinionData])
 
-  console.log("opinion", opinionData)
+  // console.log("opinion", opinionData)
 
   const handlePublish = async () => {
     try {

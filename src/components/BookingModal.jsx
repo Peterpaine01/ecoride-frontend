@@ -40,7 +40,7 @@ const BookingModal = ({ rideDetail, seats }) => {
       })
       setSuccessMessage("Réservation confirmée ! ")
       if (response.status === 201 || response.status === 200) {
-        console.log("La réservation a été validée !")
+        console.info("La réservation a été validée !")
       }
     } catch (error) {
       console.error("Erreur lors de la réservation", error)

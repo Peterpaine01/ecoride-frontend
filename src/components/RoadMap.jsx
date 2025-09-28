@@ -69,7 +69,7 @@ const RoadMap = () => {
 
         setIsLoading(false)
       } catch (error) {
-        console.log(error.message)
+        console.error(error.message)
       }
     }
 
@@ -86,7 +86,7 @@ const RoadMap = () => {
         setRouteCoords(result.routeCoords)
       } catch (err) {
         console.error(err)
-        console.log("Erreur lors du calcul de l’itinéraire")
+        console.error("Erreur lors du calcul de l’itinéraire")
       }
     }
 
@@ -108,11 +108,11 @@ const RoadMap = () => {
             rideDetail.duration
           )
           setDestinationDate(arrival)
-          console.log(destinationDate)
+          // console.log(destinationDate)
         }
       } catch (err) {
         console.error(err)
-        console.log("Erreur lors du calcul de l’itinéraire")
+        console.error("Erreur lors du calcul de l’itinéraire")
       }
     }
 
@@ -126,7 +126,7 @@ const RoadMap = () => {
     }
   }, [rideDetail])
 
-  console.log("rideDetail", rideDetail)
+  // console.log("rideDetail", rideDetail)
 
   useEffect(() => {
     if (map && routeCoords.length > 0) {

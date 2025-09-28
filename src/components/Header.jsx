@@ -28,7 +28,7 @@ const Header = () => {
   // REF
   const profilRef = useRef(null)
 
-  console.log("user >", user)
+  // console.log("user >", user)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -58,8 +58,8 @@ const Header = () => {
 
   if (user && user.accountStatus === "pending") {
     // alert("Pensez à aciver votre compte. Rendez-vous sur votre boite mail.");
-    console.log(
-      "Compte inactif. Pensez à aciver votre compte. Rendez-vous sur votre boite mail."
+    console.info(
+      "Compte inactif. Pensez à activer votre compte. Rendez-vous sur votre boite mail."
     )
   }
   // console.log("cookie token", Cookies.get("token"));

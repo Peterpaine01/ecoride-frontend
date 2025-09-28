@@ -139,7 +139,7 @@ const Filters = ({
             <div className="flex-row space-between align-center gap-5">
               <TollOutlinedIcon sx={{ color: "#f7c134", fontSize: 28 }} />
               <div className="flex-column ">
-                <label>Prix maximum</label>
+                <label htmlFor="maxPrice">Prix maximum</label>
                 <small>(en crédits)</small>
               </div>
             </div>
@@ -160,13 +160,14 @@ const Filters = ({
                 <AccessTimeOutlinedIcon
                   sx={{ color: "#f7c134", fontSize: 28 }}
                 />
-                <label>Durée maximum</label>
+                <label htmlFor="maxDuration">Durée maximum</label>
               </div>
             </div>
 
             <input
               type="time"
               name="maxDuration"
+              id="maxDuration"
               value={maxDuration}
               onChange={(e) => setMaxDuration(e.target.value)}
               step="60"
@@ -181,11 +182,12 @@ const Filters = ({
               <StarOutlineOutlinedIcon
                 sx={{ color: "#f7c134", fontSize: 28 }}
               />
-              <label>Note minimal</label>
+              <label htmlFor="minRating">Note minimal</label>
             </div>
 
             <Counter
               name="minRating"
+              id="minRating"
               value={minRating}
               minValue={0}
               maxValue={5}
@@ -198,9 +200,9 @@ const Filters = ({
               <TransgenderOutlinedIcon
                 sx={{ color: "#f7c134", fontSize: 28 }}
               />
-              <label>Genre</label>
+              <label htmlFor="gender">Genre</label>
             </div>
-            <select className="custom-select-minimal" name="gender">
+            <select className="custom-select-minimal" name="gender" id="gender">
               <option value="all">Indifférent</option>
               <option value="male">Homme</option>
               <option value="female">Femme</option>
@@ -217,13 +219,13 @@ const Filters = ({
                 sx={{ color: "#f7c134", fontSize: 28 }}
               />
               <div className="flex-column ">
-                <label>Voyage écologique</label>
+                <label htmlFor="isElectric">Voyage écologique</label>
                 <small>(Voiture électrique)</small>
               </div>
             </div>
 
             <label className="switch">
-              <input type="checkbox" name="isElectric" />
+              <input type="checkbox" name="isElectric" id="isElectric" />
               <span className="slider"></span>
             </label>
           </div>
@@ -233,10 +235,10 @@ const Filters = ({
               <SmokingRoomsOutlinedIcon
                 sx={{ color: "#f7c134", fontSize: 28 }}
               />
-              <label>Véhicule fumeur</label>
+              <label htmlFor="acceptSmoking">Véhicule fumeur</label>
             </div>
             <label className="switch">
-              <input type="checkbox" name="acceptSmoking" />
+              <input type="checkbox" name="acceptSmoking" id="acceptSmoking" />
               <span className="slider"></span>
             </label>
           </div>
@@ -244,10 +246,10 @@ const Filters = ({
           <div className="criteria toggle  flex-row space-between align-center gap-5 mb-20">
             <div className="flex-row space-between align-center gap-5">
               <PetsOutlinedIcon sx={{ color: "#f7c134", fontSize: 28 }} />
-              <label>Animaux acceptés</label>
+              <label htmlFor="acceptAnimals">Animaux acceptés</label>
             </div>
             <label className="switch">
-              <input type="checkbox" name="acceptAnimals" />
+              <input type="checkbox" name="acceptAnimals" id="acceptAnimals" />
               <span className="slider"></span>
             </label>
           </div>

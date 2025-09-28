@@ -79,7 +79,7 @@ const RidesList = () => {
         const fuzzyResponse = await axios.get("/search-rides", {
           params: fuzzyParams,
         })
-        console.log("fuzzyResponse.data.rides", fuzzyResponse.data.rides)
+        // console.log("fuzzyResponse.data.rides", fuzzyResponse.data.rides)
 
         setFuzzyRides(fuzzyResponse.data.rides || [])
         setShowFuzzy(false)

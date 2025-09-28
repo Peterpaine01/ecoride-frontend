@@ -89,13 +89,13 @@ const Footer = () => {
             <div className="social-wrapper">
               <p>Nous suivre</p>
               <div className="social-icons flex-row align-center">
-                <Link to="/">
+                <Link to="/" aria-label="Suivez-nous sur Instagram">
                   <Instagram size={45} />
                 </Link>
-                <Link to="/">
+                <Link to="/" aria-label="Suivez-nous sur Facebook">
                   <Facebook size={45} />
                 </Link>
-                <Link to="/">
+                <Link to="/" aria-label="Suivez-nous sur Linkedin">
                   <Linkedin size={45} />
                 </Link>
               </div>

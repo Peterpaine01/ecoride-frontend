@@ -47,8 +47,6 @@ const StaffDetails = () => {
     }
   }
 
-  console.log(staff)
-
   return (
     <>
       <Header />

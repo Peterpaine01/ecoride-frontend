@@ -78,8 +78,6 @@ const UserDetails = () => {
     }
   }
 
-  console.log(user)
-
   return (
     <>
       <Header />

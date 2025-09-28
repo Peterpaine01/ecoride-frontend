@@ -20,7 +20,7 @@ const PhotoProfil = ({ setFormData }) => {
     }
   }, [user])
 
-  console.log("avatarUrl.current", avatarUrl.current)
+  // console.log("avatarUrl.current", avatarUrl.current)
 
   return (
     <div className="flex-column align-center mb-40">
