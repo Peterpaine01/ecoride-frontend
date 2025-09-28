@@ -38,7 +38,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ["react", "react-dom"],
-          material: ["@material-ui/core", "@material-ui/icons"],
           mapbox: ["mapbox-gl", "@mapbox/mapbox-sdk"],
         },
       },

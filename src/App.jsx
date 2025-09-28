@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Routes, Route } from "react-router-dom"
 import { useContext, Suspense, lazy } from "react"
 import "./App.scss"
 import "react-image-crop/dist/ReactCrop.css"
