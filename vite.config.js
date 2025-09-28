@@ -1,5 +1,6 @@
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
+import { visualizer } from "rollup-plugin-visualizer"
 
 export default defineConfig({
   server: {
@@ -12,7 +13,15 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    visualizer({
+      filename: "bundle-report.html",
+      template: "treemap", // possible: sunburst, treemap, network
+      gzipSize: true,
+      brotliSize: true,
+    }),
+  ],
 
   optimizeDeps: {
     include: ["@mapbox/mapbox-sdk", "mapbox-gl"],
@@ -22,5 +31,18 @@ export default defineConfig({
     alias: {
       "mapbox-gl": "mapbox-gl/dist/mapbox-gl.js",
     },
+  },
+
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          material: ["@material-ui/core", "@material-ui/icons"],
+          mapbox: ["mapbox-gl", "@mapbox/mapbox-sdk"],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 800, // optionnel : augmente la limite avant warning
   },
 })
